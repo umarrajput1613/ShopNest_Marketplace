@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      background:  url('../assets/images/bg-cart.png') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: #fff;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border-radius: 1.25rem;
+      box-shadow: 0 0 30px rgba(0,0,0,0.2);
+      padding: 3rem 2rem;
+    }
+    .form-control {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+    }
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .form-control:focus {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: #a5b4fc;
+      color: #fff;
+      box-shadow: none;
+    }
+    .btn-light-indigo {
+      background-color: #fff;
+      color: #4f46e5;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .btn-light-indigo:hover {
+      transform: scale(1.02);
+    }
+  </style>
+ 
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center align-items-center g-4">
+      <div class="col-md-6 glass-card">
+        <h2 class="fw-semibold mb-2">Create Account</h2>
+        <p class="text-white-50 mb-4">Join us — it's quick and easy.</p>
+
+        <form id="createAccForm">
+          <div class="mb-3">
+            <label class="form-label small text-white-90">Full Name</label>
+            <input id="signup-name" class="form-control" placeholder="Your full name" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small text-white-90">Email</label>
+            <input id="signup-email" type="email" class="form-control" placeholder="you@example.com" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small text-white-90">Password</label>
+            <input id="signup-password" type="password" class="form-control" placeholder="••••••••" required />
+          </div>
+          <div class="mb-4">
+            <label class="form-label small text-white-90">Confirm Password</label>
+            <input id="confirm-password" type="password" class="form-control" placeholder="Confirm password" required />
+          </div>
+
+          <button type="submit" class="btn btn-light-indigo w-100 py-2 rounded-3">Create account</button>
+        </form>
+
+        <p class="mt-4 text-white-50 small">
+          Already a member? <a href="login.html" class="text-decoration-underline text-white">Log in</a>
+        </p>
+      </div>
+
+      <div class="col-md-5 d-none d-md-flex align-items-center justify-content-center">
+        <div class="text-white">
+          <h3 class="fs-4 fw-semibold mb-2">Why join?</h3>
+          <ul class="list-unstyled ps-3">
+            <li>Secure authentication with Firebase</li>
+            <li>Your profile saved in Firestore</li>
+            <li>Easy to extend later</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</body>
+</html>

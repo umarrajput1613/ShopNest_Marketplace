@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShopNest — Home</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <meta name="description" content="ShopNest - Your one-stop online shop for the best products at unbeatable prices.">
+  <meta name="keywords" content="ShopNest, online shopping, e-commerce, buy online, best deals, discounts">
+  <meta name="author" content="ShopNest Team">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+  <!-- Bootstrap Icons (for bi bi-* classes) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css">
+
+  <!-- Font Awesome (latest, no integrity to avoid mismatch error) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Google Fonts (optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../assets/css/contact.css">
+  <link rel="stylesheet" href="../assets/css/home.css">
+  
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="home.html">ShopNest</a>
+      <form class="d-none d-lg-flex mx-3">
+        <input class="form-control form-control-sm me-2" type="search" placeholder="Search products...">
+        <button class="btn btn-outline-light btn-sm">Search</button>
+      </form>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="./home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="./shop.html">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="./about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="./contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="cart.html"><i class="fa fa-shopping-cart"></i></a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-heart"></i></a></li>
+          <li class="nav-item"><a class="btn btn-outline-light btn-sm ms-2" href="login.html">Login</a></li>
+          <li class="nav-item"><a class="btn btn-primary btn-sm ms-2" href="signup.html">Register</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- heroSection -->
+    <header 
+  class="text-white text-center py-5" 
+  style="min-height:420px; display:flex; align-items:center; 
+         background-image: url('https://picsum.photos/1600/900'); 
+         background-size: cover; 
+         background-position: center; 
+         background-repeat: no-repeat; 
+         width:100%;">
+  <div class="container">
+    <h1 class="display-3 fw-bold text-stroke-2">Get in Touch With ShopNest</h1>
+    <p class="lead text-stroke-1">We’d love to hear from you. Whether you have a question, feedback, or need support, our team is here to help</p>
+    <a href="../pages/contact.html#generalForm" class="btn btn-primary btn-lg me-2">Contact Us Now</a>
+    <a href="../pages/shop.html" class="btn btn-outline-light btn-lg">Shop Collection</a>
+  </div>
+</header>
+
+  
+  <!-- Forms Other -->
+  <section class="container-fluid py-5 bg-light">
+  <div class="container">
+    <h1 class="text-center mb-4" style="color: var(--sn-accent-blue); font-weight: 700;">Get In Touch With ShopNest</h1>
+    <p class="lead text-center text-muted mb-5">
+      We're here to assist you — whether you want to connect, sell, buy, or manage payments easily.
+    </p>
+
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs justify-content-center mb-4" id="contactTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active fw-bold" id="general-tab" data-bs-toggle="tab" data-bs-target="#generalForm" type="button" role="tab">General Inquiry</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold" id="seller-tab" data-bs-toggle="tab" data-bs-target="#sellerForm" type="button" role="tab">Become a Seller</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold" id="buyer-tab" data-bs-toggle="tab" data-bs-target="#buyerForm" type="button" role="tab">Buyer Account</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold" id="payment-tab" data-bs-toggle="tab" data-bs-target="#paymentForm" type="button" role="tab">Payment Details</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold" id="transfer-tab" data-bs-toggle="tab" data-bs-target="#transferForm" type="button" role="tab">Buy & Sell Fund Transfer</button>
+      </li>
+    </ul>
+
+    <!-- Tabs Content -->
+    <div class="tab-content" id="contactTabsContent">
+
+      <!-- General Inquiry -->
+      <div class="tab-pane fade show active" id="generalForm" role="tabpanel">
+        <div class="row g-5">
+          <div class="bg-white p-4 rounded shadow-sm">
+            <h3 class="mb-4 text-primary fw-bold">Send Us a Message</h3>
+            <form id="form-general">
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label for="gName" class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="gName" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="gEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="gEmail" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="gSubject" class="form-label">Subject</label>
+                <select class="form-select" id="gSubject">
+                  <option>Complaint</option>
+                  <option>Suggestion</option>
+                  <option>Inquiry</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="mb-4">
+                <label for="gMessage" class="form-label">Message</label>
+                <textarea class="form-control" id="gMessage" rows="5" required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 fw-bold">
+                Submit Inquiry <i class="bi bi-send-fill ms-2"></i>
+              </button>
+            </form>
+          </div>
+
+        
+        </div>
+      </div>
+
+      <!-- Seller Registration -->
+      <div class="tab-pane fade" id="sellerForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Become a Seller</h3>
+          <form id="form-seller">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Business Name</label>
+                <input type="text" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Business Category</label>
+                <select class="form-select">
+                  <option>Fashion</option>
+                  <option>Electronics</option>
+                  <option>Grocery</option>
+                  <option>Home Decor</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Upload Documents</label>
+              <input type="file" class="form-control" multiple>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Bank Account Details</label>
+              <input type="text" class="form-control" placeholder="Account Title, Bank Name, IBAN" required>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 fw-bold">Submit Seller Application</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Buyer Account -->
+      <div class="tab-pane fade" id="buyerForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Create Buyer Account</h3>
+          <form id="form-buyer">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Shipping Address</label>
+              <textarea class="form-control" rows="3" required></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 fw-bold">Register Buyer Account</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Payment Details -->
+      <div class="tab-pane fade" id="paymentForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Debit / Credit Card Payment</h3>
+          <form id="form-payment">
+            <div class="mb-3">
+              <label class="form-label">Card Holder Name</label>
+              <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Card Number</label>
+              <input type="text" class="form-control" maxlength="19" required>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Expiry (MM/YY)</label>
+                <input type="text" class="form-control" placeholder="MM/YY" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">CVV</label>
+                <input type="password" class="form-control" maxlength="3" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Billing Address</label>
+              <textarea class="form-control" rows="2" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 fw-bold">Submit Payment</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Fund Transfer -->
+      <div class="tab-pane fade" id="transferForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Buy & Sell Fund Transfer</h3>
+          <form id="form-transfer">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Transaction ID</label>
+                <input type="text" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Amount (PKR)</label>
+                <input type="number" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Buyer Name</label>
+                <input type="text" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Seller Name</label>
+                <input type="text" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Seller Bank Details</label>
+              <input type="text" class="form-control" placeholder="Account Title, IBAN, Bank Name" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Upload Proof (optional)</label>
+              <input type="file" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 fw-bold">Submit Transfer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Map Section -->
+ <section class="container-fluid">
+            <div class="contact-card shadow-sm d-flex flex-column flex-lg-row p-4 bg-white rounded gap-4 justify-content-around">
+               <div> <h4 class="mb-4">Direct Contact Information</h4>
+                
+                <div class="info-item">
+                    <i class="bi bi-envelope-fill"></i>
+                    <strong>Email:</strong> <a href="mailto:support@shopnest.com" class="text-secondary">support@shopnest.com</a>
+                </div>
+                
+                <div class="info-item">
+                    <i class="bi bi-telephone-fill"></i>
+                    <strong>Phone:</strong> <a href="tel:+15551234567" class="text-secondary">+1 (555) 123-4567</a>
+                </div>
+
+                <div class="info-item">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <strong>Address:</strong>
+                    <p class="text-secondary small mb-0">ShopNest Corporate HQ <br>123 Commerce Drive, Suite 500, City, State 10001</p>
+                </div>
+                
+                </div>
+<div class="c-left-border-i">
+     <div>
+                <h4 class="mb-3">Find Our Location</h4>
+                <div style="height: 60%; background-color: #ced4da; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #495057;">
+                   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.1148760772285!2d3.343598074132851!3d6.632652321887054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b93761e3f8ac9%3A0x48192ab478903046!2sShopNest%20Africa!5e0!3m2!1sen!2s!4v1759406352147!5m2!1sen!2s"  style="border:0; width: 100%; height:auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div> </div> </div>
+            </div>
+          </section>
+
+   <!-- FAQs Section -->
+<section id="faqs" class="py-5 bg-white">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4">Frequently Asked Questions</h2>
+    <div class="accordion" id="faqAccordion">
+
+      <!-- Q1 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq1">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+            1. How can I place an order?
+          </button>
+        </h2>
+        <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            To place an order, simply browse our shop, add items to your cart, and proceed to checkout.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq2">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+            2. What payment methods do you accept?
+          </button>
+        </h2>
+        <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            We accept credit/debit cards, mobile wallets, and bank transfers for a secure and smooth experience.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq3">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+            3. How long does delivery take?
+          </button>
+        </h2>
+        <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Orders are usually delivered within 3–5 working days depending on your location.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq4">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+            4. Can I track my order?
+          </button>
+        </h2>
+        <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes! Once your order is shipped, you’ll receive a tracking link via email or SMS.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq5">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+            5. Do you offer free shipping?
+          </button>
+        </h2>
+        <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes, free shipping is available on selected products and orders above a certain value.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq6">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+            6. What if I receive a damaged product?
+          </button>
+        </h2>
+        <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="faq6" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            If you receive a damaged product, contact our support team immediately for a free replacement or return.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq7">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse7" aria-expanded="false" aria-controls="collapse7">
+            7. Do you offer returns or refunds?
+          </button>
+        </h2>
+        <div id="collapse7" class="accordion-collapse collapse" aria-labelledby="faq7" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes, we offer hassle-free returns within 7 days of delivery. Refunds are processed quickly after inspection.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq8">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8" aria-expanded="false" aria-controls="collapse8">
+            8. Are my payments secure?
+          </button>
+        </h2>
+        <div id="collapse8" class="accordion-collapse collapse" aria-labelledby="faq8" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Absolutely! We use advanced encryption and trusted gateways to secure all your transactions.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq9">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse9" aria-expanded="false" aria-controls="collapse9">
+            9. Do you deliver nationwide?
+          </button>
+        </h2>
+        <div id="collapse9" class="accordion-collapse collapse" aria-labelledby="faq9" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes, we deliver to all major cities across Pakistan.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq10">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse10" aria-expanded="false" aria-controls="collapse10">
+            10. How can I contact customer support?
+          </button>
+        </h2>
+        <div id="collapse10" class="accordion-collapse collapse" aria-labelledby="faq10" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            You can reach us via our contact form, email, or 24/7 helpline mentioned on the Contact page.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="contact-info" class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold mb-3">Get in Touch</h2>
+      <p class="text-muted fs-5">
+        We’re always here to help! Reach out to ShopNest through any of the following contact points.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Address -->
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm text-center p-4 h-100">
+          <div class="text-primary mb-3">
+            <i class="bi bi-geo-alt-fill fs-1"></i>
+          </div>
+          <h5 class="fw-semibold">Head Office</h5>
+          <p class="text-muted mb-0">
+            ShopNest HQ, 45 Mall Road, Lahore, Pakistan
+          </p>
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm text-center p-4 h-100">
+          <div class="text-success mb-3">
+            <i class="bi bi-telephone-fill fs-1"></i>
+          </div>
+          <h5 class="fw-semibold">Call Us</h5>
+          <p class="text-muted mb-0">
+            +92 300 1234567 <br> +92 42 111 999 888
+          </p>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm text-center p-4 h-100">
+          <div class="text-danger mb-3">
+            <i class="bi bi-envelope-fill fs-1"></i>
+          </div>
+          <h5 class="fw-semibold">Email Support</h5>
+          <p class="text-muted mb-0">
+            support@shopnest.pk <br> sales@shopnest.pk
+          </p>
+        </div>
+      </div>
+
+      <!-- Working Hours -->
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm text-center p-4 h-100">
+          <div class="text-warning mb-3">
+            <i class="bi bi-clock-fill fs-1"></i>
+          </div>
+          <h5 class="fw-semibold">Working Hours</h5>
+          <p class="text-muted mb-0">
+            Mon – Sat: 9:00 AM – 8:00 PM <br>
+            Sunday: Closed
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer  -->
+ <footer class="app-footer">
+    <div class="container">
+      <div class="row g-0">
+        <div class="col-md-4 mb-3">
+          <h5 class="text-light fw-bold">ShopNest</h5>
+           ShopNest is Pakistan’s trusted online shopping destination, bringing you quality products at affordable prices with secure delivery nationwide.  
+    </p>
+          <p class="text-light small">&copy; 2024 ShopNest, Inc. All rights reserved.</p>
+        </div>
+        <div class="col-md-2 mb-3">
+          <h6 class="text-light fw-bold">Company</h6>
+          <ul class="list-unstyled">
+            <li><a href="./about.html">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2 mb-3">
+          <h6 class="text-light fw-bold">Help</h6>
+          <ul class="list-unstyled">
+            <li><a href="./contact.html">Contact</a></li>
+            <li><a href="../pages/contact.html#faqs">FAQs</a></li>
+            <li><a href="#">Shipping</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="text-light fw-bold">Connect</h6>
+          <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-light"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll("#faqs .accordion-button");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", function () {
+        // sab se pehle sabse class hatao
+        buttons.forEach(b => b.classList.remove("custom-active"));
+        
+        // phir check karo agar ye collapse nahi hai (matlab open hai)
+        setTimeout(() => {
+          if (!this.classList.contains("collapsed")) {
+            this.classList.add("custom-active");
+          }
+        }, 150); // thoda delay taake bootstrap ka collapse apply ho jaye
+      });
+    });
+  });
+</script>
+<!-- Auto-open tab based on URL hash -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // === 1️⃣ Auto-open Bootstrap tab based on hash ===
+  const hash = window.location.hash;
+  if (hash) {
+    const targetTab = document.querySelector(`button[data-bs-target="${hash}"]`);
+    if (targetTab) {
+      // Open tab if found
+      const tab = new bootstrap.Tab(targetTab);
+      tab.show();
+
+      // Delay scroll a bit so tab content loads first
+      setTimeout(() => {
+        const section = document.querySelector(hash);
+        if (section) {
+          const header = document.querySelector('header');
+          const offset = header ? header.offsetHeight : 0;
+          const topPos = section.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top: topPos, behavior: 'smooth' });
+        }
+      }, 300);
+    }
+  }
+
+  // === 2️⃣ Smooth scroll for all internal links ===
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href.length > 1) { // Skip empty #
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          const header = document.querySelector('header');
+          const offset = header ? header.offsetHeight : 0;
+          const topPos = target.getBoundingClientRect().top + window.scrollY - offset;
+
+          // For Android smoothness compatibility
+          try {
+            window.scrollTo({ top: topPos, behavior: 'smooth' });
+          } catch {
+            // fallback for old browsers
+            window.scrollTo(0, topPos);
+          }
+
+          // Update hash in URL
+          history.pushState(null, '', href);
+        }
+      }
+    });
+  });
+
+});
+</script>
+
+
+</body>
+</html>

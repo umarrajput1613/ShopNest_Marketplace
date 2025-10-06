@@ -1,0 +1,114 @@
+:root {
+  --sn-primary-blue: #0d6efd;
+  --sn-accent-blue: #0056b3;
+  --sn-light-bg: #f5f7fa;
+  --sn-text-dark: #343a40;
+}
+
+body {
+  background-color: var(--sn-light-bg);
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  color: var(--sn-text-dark);
+}
+
+h1, h4, h5 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+.main-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar {
+  background-color: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.product-card {
+  height: 100%;
+  border: 1px solid #e9ecef;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+.product-card img {
+  transition: transform 0.3s;
+}
+.product-card:hover img {
+  transform: scale(1.05);
+}
+.product-title {
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+.product-price {
+  color: var(--sn-accent-blue);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.btn-add-to-cart {
+  background-color: var(--sn-primary-blue);
+  border-color: var(--sn-primary-blue);
+}
+.btn-add-to-cart:hover {
+  background-color: var(--sn-accent-blue);
+}
+
+.promo-banner {
+  background: linear-gradient(135deg, #0d6efd, #0056b3);
+  color: white;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  margin: 50px 0;
+}
+
+.trust-strip {
+  background-color: #f8f9fa;
+  padding: 20px 0;
+  text-align: center;
+}
+.trust-strip i {
+  color: var(--sn-primary-blue);
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.newsletter {
+  background: var(--sn-primary-blue);
+  color: white;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 50px 0;
+}
+.newsletter input {
+  border-radius: 30px;
+  padding: 10px 20px;
+}
+
+.app-footer {
+  background-color: #212529;
+  color: white;
+  padding: 30px 0;
+}
+.app-footer a {
+  color: #adb5bd;
+  text-decoration: none;
+}
+.app-footer a:hover {
+  color: var(--sn-primary-blue);
+}
+.index-10 {
+  z-index: 10 !important;
+
+}

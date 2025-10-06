@@ -1,0 +1,24 @@
+.px-6 {
+    padding: 6rem;
+}
+.bg-aqua-c {
+    background-color: rgb(224, 247, 250);
+}
+/* Background Image Setup */
+body {
+  background: url("../images/bg-cart.png") no-repeat center center/cover;
+  min-height: 100vh;
+  background-attachment: fixed; /* optional par pro look deta hai */
+}
+
+/* Optional Overlay (agar text readability chahiye ho) */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* dark overlay for readability */
+  z-index: -1;
+}

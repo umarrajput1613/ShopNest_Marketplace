@@ -1,0 +1,61 @@
+:root {
+      --sn-primary-blue: #0d6efd;
+      --sn-accent-blue: #0056b3;
+        --sn-bg-blue: linear-gradient(135deg, #e3f2fd, #ffffff);
+    }
+    body {
+      background: var(--sn-bg-blue); 
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      /* padding-top: 0px; */
+    }
+    .main-content {
+      /* background-color: white; */
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    .contact-card {
+        background-color: #f8f9fa; /* Light grey background for information box */
+        border-left: 5px solid var(--sn-primary-blue);
+        padding: 25px;
+        border-radius: 8px;
+        height: 100%;
+    }
+    .contact-card h4 {
+        color: var(--sn-accent-blue);
+        font-weight: 600;
+    }
+    .info-item {
+        margin-bottom: 15px;
+    }
+    .info-item i {
+        color: var(--sn-primary-blue);
+        margin-right: 10px;
+        font-size: 1.25rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--sn-primary-blue);
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    .btn-primary {
+        background-color: var(--sn-accent-blue);
+        border-color: var(--sn-accent-blue);
+        transition: background-color 0.2s;
+    }
+    .btn-primary:hover {
+        background-color: #003c80;
+        border-color: #003c80;
+    }
+    #faqs .accordion-button.custom-active {
+  background-color: var(--sn-primary-blue) !important;
+  color: #fff !important;
+  box-shadow: none !important; /* bootstrap ka blue border remove */
+  border-radius: 0.5rem !important;
+}
+.c-left-border-i {
+        border-left: 4px solid var(--sn-primary-blue) !important;
+        padding-left: 8rem !important;
+        padding-top: 7px !important;
+        padding-bottom: 7px !important;
+    }
