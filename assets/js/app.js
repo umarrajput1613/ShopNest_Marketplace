@@ -1,127 +1,115 @@
-/* ===== Helper: show simple alerts ===== */
+/* ============================
+   Local Storage Auth System
+   ============================ */
+
+// Utility: show alert
 function showMsg(msg) {
   alert(msg);
 }
 
-/* ===== Signup ===== */
+/* ===== Signup Logic ===== */
 function signupFunc(e) {
-  if (e) e.preventDefault();
+  e.preventDefault();
 
-  const nameEl = document.getElementById("signup-name");
-  const emailEl = document.getElementById("signup-email");
-  const passwordEl = document.getElementById("signup-password");
-  const confirmEl = document.getElementById("confirm-password");
+  const name = document.getElementById("signup-name")?.value.trim();
+  const email = document.getElementById("signup-email")?.value.trim();
+  const password = document.getElementById("signup-password")?.value;
+  const confirm = document.getElementById("confirm-password")?.value;
 
-  const name = nameEl?.value?.trim();
-  const email = emailEl?.value?.trim();
-  const password = passwordEl?.value;
-  const confirm = confirmEl?.value;
-
-  // Step 1: Validation - check empty fields
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !confirm) {
     showMsg("Please fill all fields.");
     return;
   }
 
-  // Step 2: Validation - check password match
   if (password !== confirm) {
-    showMsg("Password and Confirm Password do not match.");
+    showMsg("Passwords do not match.");
     return;
   }
 
-  // Step 3: Check if user already exists
-  const existingUser = JSON.parse(localStorage.getItem("userData"));
-  if (existingUser && existingUser.email === email) {
-    showMsg("User already exists! Please login instead.");
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+  // Check if user already exists
+  if (users.some((u) => u.email === email)) {
+    showMsg("User already exists! Please login.");
     window.location.href = "login.html";
     return;
   }
 
-  // Step 4: Create user object
-  const user = {
-    name: name,
-    email: email,
-    password: password,
-    createdAt: new Date().toISOString(),
-  };
+  // Add new user
+  const newUser = { name, email, password };
+  users.push(newUser);
+  localStorage.setItem("users", JSON.stringify(users));
 
-  // Step 5: Save to localStorage
-  localStorage.setItem("userData", JSON.stringify(user));
-
-  showMsg("Signup successful — you can now login.");
-
-  // Step 6: Clear form
-  nameEl.value = emailEl.value = passwordEl.value = confirmEl.value = "";
-
-  // Step 7: Redirect to login
+  showMsg("Account created successfully!");
+  e.target.reset();
   window.location.href = "login.html";
 }
 
-/* ===== Login ===== */
+/* ===== Login Logic ===== */
 function loginFunc(e) {
-  if (e) e.preventDefault();
+  e.preventDefault();
 
-  const email = document.getElementById("login-email")?.value?.trim();
+  const email = document.getElementById("login-email")?.value.trim();
   const password = document.getElementById("login-password")?.value;
 
-  // Step 1: Check if fields are empty
   if (!email || !password) {
-    showMsg("Enter email and password.");
+    showMsg("Please enter email and password.");
     return;
   }
 
-  // Step 2: Get user data from localStorage
-  const storedUser = JSON.parse(localStorage.getItem("userData"));
-  if (!storedUser) {
-    showMsg("No account found. Please sign up first.");
-    window.location.href = "signup.html";
-    return;
-  }
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const user = users.find((u) => u.email === email && u.password === password);
 
-  // Step 3: Match credentials
-  if (storedUser.email === email && storedUser.password === password) {
-    localStorage.setItem("isLoggedIn", "true");
-    showMsg("Login successful!");
-    window.location.href = "index.html";
-  } else {
+  if (!user) {
     showMsg("Invalid email or password.");
+    return;
   }
+
+  // Save logged in user
+  localStorage.setItem("loggedInUser", JSON.stringify(user));
+  showMsg(`Welcome, ${user.name}!`);
+  window.location.href = "home.html";
 }
 
-/* ===== Logout ===== */
+/* ===== Logout Logic ===== */
 function logoutFunc() {
-  localStorage.removeItem("isLoggedIn");
-  showMsg("Logged out successfully!");
+  localStorage.removeItem("loggedInUser");
+  showMsg("You have been logged out.");
   window.location.href = "login.html";
 }
 
-/* ===== Auth state listener (like onAuthStateChanged) ===== */
-document.addEventListener("DOMContentLoaded", () => {
-  const onAuthPages =
-    !!document.getElementById("login-form") ||
-    !!document.getElementById("createAccForm");
-  const onHomePage = !!document.getElementById("homePage");
+/* ===== Auth Guard ===== */
+function checkAuth() {
+  const loggedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const currentPage = window.location.pathname.split("/").pop();
 
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const authPages = ["login.html", "signup.html"];
+  const protectedPages = [
+    "home.html",
+    "cart.html",
+    "contact.html",
+    "about.html",
+    "shop.html"
+  ];
 
-  // If on home page and not logged in -> redirect to login
-  if (!isLoggedIn && onHomePage) {
+  // If not logged in & on protected page → redirect to login
+  if (!loggedUser && protectedPages.includes(currentPage)) {
     window.location.href = "login.html";
   }
 
-  // If logged in and currently on login/signup, redirect to home
-  if (isLoggedIn && onAuthPages) {
-    window.location.href = "index.html";
+  // If logged in & on auth page → redirect to home
+  if (loggedUser && authPages.includes(currentPage)) {
+    window.location.href = "home.html";
   }
 
-  // If on home page and logged in, show user info
-  if (isLoggedIn && onHomePage && userData) {
-    const el = document.getElementById("userEmail");
-    if (el) el.textContent = userData.name || userData.email || "";
+  // Display username on home page if logged in
+  if (loggedUser && document.getElementById("userEmail")) {
+    document.getElementById("userEmail").textContent = loggedUser.name;
   }
+}
 
-  // ===== Attach form listeners =====
+/* ===== Event Listeners ===== */
+document.addEventListener("DOMContentLoaded", () => {
   const createForm = document.getElementById("createAccForm");
   if (createForm) createForm.addEventListener("submit", signupFunc);
 
@@ -130,4 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) logoutBtn.addEventListener("click", logoutFunc);
+
+  checkAuth(); // Always run on load
 });
