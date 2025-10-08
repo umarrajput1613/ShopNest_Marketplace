@@ -33,11 +33,10 @@
 
   <script>
 (async function () {
-  // Utility to show small message (optional)
+  
   function showMsg(m) { console.log("[redirect] " + m); }
 
-  // Helper: load users from localStorage (supports plain "users" array)
-  // If you use encrypted storage (users_enc), replace this function with your decrypt loader.
+ 
   function getUsersPlain() {
     try {
       const raw = localStorage.getItem("users");
@@ -49,57 +48,47 @@
     }
   }
 
-  // If you saved only encrypted users (users_enc), implement an async loader here:
-  // async function getUsersEncrypted() { ... decrypt and return array ... }
-  // Then call await getUsersEncrypted();
-
-  // 1) If user already logged in (sessionStorage), immediately go to home.
+ 
   const sessionUser = (() => {
     try { return JSON.parse(sessionStorage.getItem("loggedInUser") || "null"); } catch (e) { return null; }
   })();
   if (sessionUser) {
     showMsg("Session exists — redirect to home now.");
-    // immediate redirect
+   
     window.location.href = "./pages/home.html";
     return;
   }
 
-  // 2) Load users array (change to encrypted loader if needed)
-  const users = getUsersPlain(); // <- swap this line if you use encrypted loader
-  // const users = await getUsersEncrypted(); // if using encrypted storage
-
-  // 3) No users registered at all -> go to signup
+ 
+  const users = getUsersPlain(); 
   if (!users || users.length === 0) {
     showMsg("No accounts found — redirecting to signup.");
     window.location.href = "./pages/signup.html";
     return;
   }
 
-  // 4) There are users. Decide first-time vs returning device.
-  // We'll check a per-email visit flag in localStorage so it persists across sessions.
-  // Use the most-relevant user email to create a key. If you have multiple users,
-  // you can adapt logic to check for a "lastActiveEmail" or similar.
+ 
   const primaryEmail = (users[0] && users[0].email) ? users[0].email : "default";
-  // sanitize email for key name (replace @ and . to avoid weird keys)
+ 
   const safeEmailKey = primaryEmail.replace(/[@.]/g, "_");
   const visitFlagKey = `shopnest_visit_${safeEmailKey}`;
 
-  // If this device has NOT seen the welcome for this email -> mark and send to home after delay
+  
   if (!localStorage.getItem(visitFlagKey)) {
-    // mark that we've shown welcome once for this user on this device
+   
     localStorage.setItem(visitFlagKey, new Date().toISOString());
 
-    // optional: show a small welcome toast instead of immediate redirect (you can update UI)
+   
     showMsg("First visit for this account on this device — showing welcome, then redirecting to home.");
 
-    // delay then go to home
+   
     setTimeout(() => {
       window.location.href = "./pages/home.html";
-    }, 2000); // 2 seconds
+    }, 2000);
     return;
   }
 
-  // Otherwise (visitFlag exists) -> force user to login
+ 
   showMsg("Returning visitor detected — redirecting to login for authentication.");
   window.location.href = "./pages/login.html";
 })();
