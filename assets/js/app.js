@@ -181,3 +181,93 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(syncUserData, 30000);
   window.addEventListener("beforeunload", syncUserData);
 });
+//sectionforapifetch
+document.addEventListener("DOMContentLoaded", async () => {
+  // ====== Best Sellers (Fake API) ======
+  const bestSellerContainer = document.getElementById("best-sellers");
+
+  try {
+    const res = await fetch("https://fakestoreapi.com/products?limit=8");
+    const products = await res.json();
+
+    bestSellerContainer.innerHTML = products
+      .map(
+        (p) => `
+      <div class="col">
+        <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+          <img src="${p.image}" class="card-img-top" alt="${p.title}" style="height:180px; object-fit:contain; background:#f8f9fa;">
+          <div class="card-body text-center">
+            <p class="mb-1 small text-primary fw-bold">${p.category}</p>
+            <h5 class="product-title">${p.title}</h5>
+            <p class="small text-muted">${p.description.substring(0, 70)}...</p>
+            <p class="product-price fw-bold text-success mb-1">$${p.price}</p>
+            <p class="mb-2">⭐ ${(Math.random() * 2 + 3).toFixed(1)} / 5</p>
+            <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+              <i class="bi bi-cart-fill me-1"></i> Add to Cart
+            </a>
+          </div>
+        </div>
+      </div>`
+      )
+      .join("");
+  } catch (err) {
+    console.error("Best sellers load error:", err);
+    bestSellerContainer.innerHTML =
+      `<p class="text-center text-danger w-100">Failed to load products.</p>`;
+  }
+
+  // ====== New Arrivals (From Firebase user document) ======
+  const newArrivalsContainer = document.getElementById("new-arrivals");
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) {
+    newArrivalsContainer.innerHTML =
+      `<p class="text-center text-muted w-100">Please log in to see your personalized products.</p>`;
+    return;
+  }
+
+  try {
+    // Example Firebase logic (adjust according to your setup)
+    const userId = user.uid;
+    const userDocRef = doc(db, "users", userId);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      const products = userData.products || []; // your array field in Firestore
+
+      if (products.length === 0) {
+        newArrivalsContainer.innerHTML =
+          `<p class="text-center text-muted w-100">No products yet.</p>`;
+      } else {
+        newArrivalsContainer.innerHTML = products
+          .map(
+            (p) => `
+            <div class="col">
+              <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+                <img src="${p.image}" class="card-img-top" alt="${p.title}" style="height:180px; object-fit:contain; background:#f8f9fa;">
+                <div class="card-body text-center">
+                  <p class="mb-1 small text-primary fw-bold">${p.category}</p>
+                  <h5 class="product-title">${p.title}</h5>
+                  <p class="small text-muted">${p.description}</p>
+                  <p class="product-price fw-bold text-success mb-1">$${p.price}</p>
+                  <p class="mb-2">⭐ ${p.rating || 4.5} / 5</p>
+                  <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+                    <i class="bi bi-cart-fill me-1"></i> Add to Cart
+                  </a>
+                </div>
+              </div>
+            </div>`
+          )
+          .join("");
+      }
+    } else {
+      newArrivalsContainer.innerHTML =
+        `<p class="text-center text-danger w-100">User data not found.</p>`;
+    }
+  } catch (err) {
+    console.error("Firebase new arrivals error:", err);
+    newArrivalsContainer.innerHTML =
+      `<p class="text-center text-danger w-100">Failed to load your products.</p>`;
+  }
+});
