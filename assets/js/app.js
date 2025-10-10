@@ -10,6 +10,11 @@ function showMsg(msg) {
   alert(msg);
 }
 
+/* ===== Path-Safe Redirect Helper ===== */
+function goTo(page) {
+  window.location.href = `../pages/${page}`;
+}
+
 /* ===== Default Template ===== */
 const defaultUserData = {
   favorites: [],
@@ -48,7 +53,7 @@ async function signupFunc(e) {
     }));
 
     showMsg("Account created successfully!");
-    window.location.href = "home.html";
+    goTo("home.html"); // ✅ Correct redirect
   } catch (err) {
     console.error(err);
     showMsg(err.message);
@@ -75,7 +80,7 @@ async function loginFunc(e) {
     }
 
     showMsg("Login successful!");
-    window.location.href = "home.html";
+    goTo("home.html"); // ✅ Correct redirect
   } catch (err) {
     console.error(err);
     showMsg(err.message);
@@ -87,7 +92,7 @@ async function logoutFunc() {
   await signOut(auth);
   localStorage.removeItem("userData");
   showMsg("Logged out.");
-  window.location.href = "login.html";
+  goTo("login.html"); // ✅ Correct redirect
 }
 
 /* ===== Sync Local → Firestore ===== */
@@ -109,7 +114,7 @@ async function syncUserData() {
   }
 }
 
-/* ===== Restore Data from Firestore (If Missing) ===== */
+/* ===== Restore Data from Firestore ===== */
 async function restoreUserData(user) {
   try {
     const ref = doc(db, "users", user.uid);
@@ -130,12 +135,12 @@ onAuthStateChanged(auth, async (user) => {
   const protectedPages = ["home.html", "cart.html", "about.html", "contact.html", "shop.html"];
 
   if (!user && protectedPages.includes(page)) {
-    window.location.href = "login.html";
+    goTo("login.html");
     return;
   }
 
   if (user && authPages.includes(page)) {
-    window.location.href = "home.html";
+    goTo("home.html");
     return;
   }
 
