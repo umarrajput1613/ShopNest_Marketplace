@@ -53,7 +53,7 @@ async function signupFunc(e) {
     }));
 
     showMsg("Account created successfully!");
-    goTo("home.html"); // ✅ Correct redirect
+    goTo("home.html");
   } catch (err) {
     console.error(err);
     showMsg(err.message);
@@ -80,7 +80,7 @@ async function loginFunc(e) {
     }
 
     showMsg("Login successful!");
-    goTo("home.html"); // ✅ Correct redirect
+    goTo("home.html");
   } catch (err) {
     console.error(err);
     showMsg(err.message);
@@ -92,7 +92,7 @@ async function logoutFunc() {
   await signOut(auth);
   localStorage.removeItem("userData");
   showMsg("Logged out.");
-  goTo("login.html"); // ✅ Correct redirect
+  goTo("login.html");
 }
 
 /* ===== Sync Local → Firestore ===== */
@@ -134,6 +134,23 @@ onAuthStateChanged(auth, async (user) => {
   const authPages = ["login.html", "signup.html"];
   const protectedPages = ["home.html", "cart.html", "about.html", "contact.html", "shop.html"];
 
+  // ✅ 1. Handle index.html logic
+  if (page === "index.html" || page === "") {
+    const localUser = localStorage.getItem("userData");
+
+    if (user) {
+      goTo("home.html");
+    } else if (!localUser) {
+      // first-time visitor → signup
+      setTimeout(() => goTo("signup.html"), 2000);
+    } else {
+      // returning visitor → login
+      setTimeout(() => goTo("login.html"), 2000);
+    }
+    return;
+  }
+
+  // ✅ 2. Handle protected + auth pages
   if (!user && protectedPages.includes(page)) {
     goTo("login.html");
     return;
@@ -144,6 +161,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  // ✅ 3. Auto-restore user data
   if (user) {
     if (!localStorage.getItem("userData")) {
       await restoreUserData(user);
@@ -160,9 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("login-form")?.addEventListener("submit", loginFunc);
   document.getElementById("logoutBtn")?.addEventListener("click", logoutFunc);
 
-  // Sync every 30 seconds
   setInterval(syncUserData, 30000);
-
-  // Final sync before closing window
   window.addEventListener("beforeunload", syncUserData);
 });
