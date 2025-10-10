@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const bestSellerContainer = document.getElementById("best-sellers");
 
   try {
-    const res = await fetch("https://fakestoreapi.com/products?limit=8");
+    const res = await fetch("https://fakestoreapi.com/products");
     const products = await res.json();
 
     bestSellerContainer.innerHTML = products
