@@ -182,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("beforeunload", syncUserData);
 });
 //sectionforapifetch
+/*========================sectionforapifetcsystemfunctionality=====================================*/
 document.addEventListener("DOMContentLoaded", async () => {
   // ====== Best Sellers (Fake API) ======
   const bestSellerContainer = document.getElementById("best-sellers");
