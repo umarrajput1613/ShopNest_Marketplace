@@ -183,36 +183,33 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 //sectionforapifetch
 /*========================sectionforapifetcsystemfunctionality=====================================*/
-document.addEventListener("DOMContentLoaded", async () => {
-  // ====== Best Sellers (Fake API) ======
-  const bestSellerContainer = document.getElementById("best-sellers");
-  let allProducts = [];
-  let currentIndex = 0;
-  const batchSize = 12; // show 12 products at once
 
+document.addEventListener("DOMContentLoaded", async () => {
+  const bestSellerContainer = document.getElementById("best-sellers");
+  const categoryCards = document.querySelectorAll(".category-card");
+  let allProducts = [];
+  let currentCategory = "all";
+
+  // ===== Fetch Products from Fake API =====
   try {
     const res = await fetch("https://fakestoreapi.com/products?limit=30");
     allProducts = await res.json();
-    renderNextProducts(); // show first batch
-
-    // ===== Infinite Scroll =====
-    window.addEventListener("scroll", () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
-        renderNextProducts();
-      }
-    });
+    renderProducts(allProducts); // show all by default
   } catch (err) {
     console.error("Best sellers load error:", err);
     bestSellerContainer.innerHTML = `<p class="text-center text-danger w-100">Failed to load products.</p>`;
   }
 
-  // ====== Render next batch ======
-  function renderNextProducts() {
-    const nextBatch = allProducts.slice(currentIndex, currentIndex + batchSize);
-    if (nextBatch.length === 0) return;
+  // ===== Render Products =====
+  function renderProducts(products) {
+    if (!products.length) {
+      bestSellerContainer.innerHTML = `<p class="text-center text-muted w-100">No products found for this category.</p>`;
+      return;
+    }
 
-    const newCards = nextBatch.map(
-      (p) => `
+    bestSellerContainer.innerHTML = products
+      .map(
+        (p) => `
       <div class="col">
         <div class="card product-card h-100 shadow-sm border-1 rounded-4">
           <img src="${p.image}" class="card-img-top" alt="${p.title}"
@@ -229,63 +226,29 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         </div>
       </div>`
-    ).join("");
-
-    bestSellerContainer.insertAdjacentHTML("beforeend", newCards);
-    currentIndex += batchSize;
+      )
+      .join("");
   }
 
-  // ====== New Arrivals (From Firebase user document) ======
-  const newArrivalsContainer = document.getElementById("new-arrivals");
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (!user) {
-    newArrivalsContainer.innerHTML =
-      `<p class="text-center text-muted w-100">Please log in to see your personalized products.</p>`;
-    return;
-  }
+  // ===== Category Filter Logic =====
+  categoryCards.forEach((card) => {
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
+      const selectedCategory = card.querySelector("h5").textContent.trim().toLowerCase();
+      currentCategory = selectedCategory;
 
-  try {
-    const userId = user.uid;
-    const userDocRef = doc(db, "users", userId);
-    const userDocSnap = await getDoc(userDocRef);
-
-    if (userDocSnap.exists()) {
-      const userData = userDocSnap.data();
-      const products = userData.products || [];
-
-      if (products.length === 0) {
-        newArrivalsContainer.innerHTML =
-          `<p class="text-center text-muted w-100">No products yet.</p>`;
+      if (selectedCategory === "all" || selectedCategory === "") {
+        renderProducts(allProducts);
       } else {
-        newArrivalsContainer.innerHTML = products
-          .map(
-            (p) => `
-            <div class="col">
-              <div class="card product-card h-100 shadow-sm border-1 rounded-4">
-                <img src="${p.image}" class="card-img-top" alt="${p.title}"
-                     style="height:180px; object-fit:contain; background:#f8f9fa;">
-                <div class="card-body text-center">
-                  <p class="mb-1 small text-primary fw-bold">${p.category}</p>
-                  <h5 class="product-title">${p.title}</h5>
-                  <p class="small text-muted">${p.description}</p>
-                  <p class="product-price fw-bold text-success mb-1">$${p.price}</p>
-                  <p class="mb-2">⭐ ${p.rating || 4.5} / 5</p>
-                  <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
-                    <i class="bi bi-cart-fill me-1"></i> Add to Cart
-                  </a>
-                </div>
-              </div>
-            </div>`
-          )
-          .join("");
+        // match API product category with clicked category
+        const filtered = allProducts.filter((p) =>
+          p.category.toLowerCase().includes(selectedCategory)
+        );
+        renderProducts(filtered);
       }
-    } else {
-      newArrivalsContainer.innerHTML =
-        `<p class="text-center text-danger w-100">User data not found.</p>`;
-    }
-  } catch (err) {
-    console.error("Firebase new arrivals error:", err);
-    newArrivalsContainer.innerHTML =
-      `<p class="text-center text-danger w-100">Failed to load your products.</p>`;
-  }
+
+      // Smooth scroll to product section
+      document.querySelector("#best-sellers-section").scrollIntoView({ behavior: "smooth" });
+    });
+  });
 });
