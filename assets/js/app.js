@@ -1,114 +1,131 @@
-/* ============================
-   Local Storage Auth System
-   ============================ */
 
-// Utility: show alert
+import { db, auth } from "./firebase.js";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  updateProfile
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  addDoc,
+  collection,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+/* ===== Helper: show simple alerts ===== */
 function showMsg(msg) {
   alert(msg);
 }
 
-/* ===== Signup Logic ===== */
-function signupFunc(e) {
-  e.preventDefault();
+/* ===== Signup ===== */
+async function signupFunc(e) {
+  if (e) e.preventDefault();
 
-  const name = document.getElementById("signup-name")?.value.trim();
-  const email = document.getElementById("signup-email")?.value.trim();
-  const password = document.getElementById("signup-password")?.value;
-  const confirm = document.getElementById("confirm-password")?.value;
+  const nameEl = document.getElementById("signup-name");
+  const emailEl = document.getElementById("signup-email");
+  const passwordEl = document.getElementById("signup-password");
+  const confirmEl = document.getElementById("confirm-password");
 
-  if (!name || !email || !password || !confirm) {
+  const name = nameEl?.value?.trim();
+  const email = emailEl?.value?.trim();
+  const password = passwordEl?.value;
+  const confirm = confirmEl?.value;
+
+  if (!name || !email || !password) {
     showMsg("Please fill all fields.");
     return;
   }
-
   if (password !== confirm) {
-    showMsg("Passwords do not match.");
+    showMsg("Password and Confirm Password do not match.");
     return;
   }
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-  // Check if user already exists
-  if (users.some((u) => u.email === email)) {
-    showMsg("User already exists! Please login.");
+   
+    await updateProfile(user, {
+      displayName: name
+    });
+
+   
+    await addDoc(collection(db, "users"), {
+      uid: user.uid,
+      name,
+      email,
+      createdAt: serverTimestamp()
+    });
+
+    showMsg("Signup successful — you can now login.");
+    // clear form
+    nameEl.value = emailEl.value = passwordEl.value = confirmEl.value = "";
+    // redirect to login
     window.location.href = "login.html";
-    return;
+  } catch (err) {
+    console.error(err);
+    showMsg(err.message || "Signup failed");
   }
-
-  // Add new user
-  const newUser = { name, email, password };
-  users.push(newUser);
-  localStorage.setItem("users", JSON.stringify(users));
-
-  showMsg("Account created successfully!");
-  e.target.reset();
-  window.location.href = "login.html";
 }
 
-/* ===== Login Logic ===== */
-function loginFunc(e) {
-  e.preventDefault();
+/* ===== Login ===== */
+async function loginFunc(e) {
+  if (e) e.preventDefault();
 
-  const email = document.getElementById("login-email")?.value.trim();
+  const email = document.getElementById("login-email")?.value?.trim();
   const password = document.getElementById("login-password")?.value;
 
   if (!email || !password) {
-    showMsg("Please enter email and password.");
+    showMsg("Enter email and password.");
     return;
   }
 
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users.find((u) => u.email === email && u.password === password);
-
-  if (!user) {
-    showMsg("Invalid email or password.");
-    return;
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    showMsg("Login successful");
+    window.location.href = "index.html";
+  } catch (err) {
+    console.error(err);
+    showMsg(err.message || "Login failed");
   }
-
-  // Save logged in user
-  localStorage.setItem("loggedInUser", JSON.stringify(user));
-  showMsg(`Welcome, ${user.name}!`);
-  window.location.href = "home.html";
 }
 
-/* ===== Logout Logic ===== */
-function logoutFunc() {
-  localStorage.removeItem("loggedInUser");
-  showMsg("You have been logged out.");
-  window.location.href = "login.html";
+/* ===== Logout ===== */
+async function logoutFunc() {
+  try {
+    await signOut(auth);
+    showMsg("Logged out");
+    window.location.href = "login.html";
+  } catch (err) {
+    console.error(err);
+    showMsg("Logout failed");
+  }
 }
 
-/* ===== Auth Guard ===== */
-function checkAuth() {
-  const loggedUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  const currentPage = window.location.pathname.split("/").pop();
+/* ===== Auth state listener ===== */
+onAuthStateChanged(auth, (user) => {
+  const onAuthPages = !!document.getElementById("login-form") || !!document.getElementById("createAccForm");
+  const onHomePage = !!document.getElementById("homePage");
 
-  const authPages = ["login.html", "signup.html"];
-  const protectedPages = [
-    "home.html",
-    "cart.html",
-    "contact.html",
-    "about.html",
-    "shop.html"
-  ];
-
-  // If not logged in & on protected page → redirect to login
-  if (!loggedUser && protectedPages.includes(currentPage)) {
+  // If on home and not logged in -> send to login
+  if (!user && onHomePage) {
     window.location.href = "login.html";
   }
 
-  // If logged in & on auth page → redirect to home
-  if (loggedUser && authPages.includes(currentPage)) {
-    window.location.href = "home.html";
+  // If logged in and currently on login/signup, redirect to home
+  if (user && onAuthPages) {
+    window.location.href = "index.html";
   }
 
-  // Display username on home page if logged in
-  if (loggedUser && document.getElementById("userEmail")) {
-    document.getElementById("userEmail").textContent = loggedUser.name;
+  // If on home page and user exists, show email/name
+  if (user && onHomePage) {
+    const el = document.getElementById("userEmail");
+    if (el) el.textContent = user.displayName || user.email || "";
   }
-}
+});
 
-/* ===== Event Listeners ===== */
+/* ===== Attach event listeners ===== */
 document.addEventListener("DOMContentLoaded", () => {
   const createForm = document.getElementById("createAccForm");
   if (createForm) createForm.addEventListener("submit", signupFunc);
@@ -118,6 +135,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) logoutBtn.addEventListener("click", logoutFunc);
-
-  checkAuth(); // Always run on load
 });
