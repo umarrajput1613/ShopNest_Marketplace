@@ -186,17 +186,37 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", async () => {
   // ====== Best Sellers (Fake API) ======
   const bestSellerContainer = document.getElementById("best-sellers");
+  let allProducts = [];
+  let currentIndex = 0;
+  const batchSize = 12; // show 12 products at once
 
   try {
-    const res = await fetch("https://fakestoreapi.com/products");
-    const products = await res.json();
+    const res = await fetch("https://fakestoreapi.com/products?limit=30");
+    allProducts = await res.json();
+    renderNextProducts(); // show first batch
 
-    bestSellerContainer.innerHTML = products
-      .map(
-        (p) => `
+    // ===== Infinite Scroll =====
+    window.addEventListener("scroll", () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+        renderNextProducts();
+      }
+    });
+  } catch (err) {
+    console.error("Best sellers load error:", err);
+    bestSellerContainer.innerHTML = `<p class="text-center text-danger w-100">Failed to load products.</p>`;
+  }
+
+  // ====== Render next batch ======
+  function renderNextProducts() {
+    const nextBatch = allProducts.slice(currentIndex, currentIndex + batchSize);
+    if (nextBatch.length === 0) return;
+
+    const newCards = nextBatch.map(
+      (p) => `
       <div class="col">
         <div class="card product-card h-100 shadow-sm border-1 rounded-4">
-          <img src="${p.image}" class="card-img-top" alt="${p.title}" style="height:180px; object-fit:contain; background:#f8f9fa;">
+          <img src="${p.image}" class="card-img-top" alt="${p.title}"
+               style="height:180px; object-fit:contain; background:#f8f9fa;">
           <div class="card-body text-center">
             <p class="mb-1 small text-primary fw-bold">${p.category}</p>
             <h5 class="product-title">${p.title}</h5>
@@ -209,17 +229,14 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         </div>
       </div>`
-      )
-      .join("");
-  } catch (err) {
-    console.error("Best sellers load error:", err);
-    bestSellerContainer.innerHTML =
-      `<p class="text-center text-danger w-100">Failed to load products.</p>`;
+    ).join("");
+
+    bestSellerContainer.insertAdjacentHTML("beforeend", newCards);
+    currentIndex += batchSize;
   }
 
   // ====== New Arrivals (From Firebase user document) ======
   const newArrivalsContainer = document.getElementById("new-arrivals");
-
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
     newArrivalsContainer.innerHTML =
@@ -228,14 +245,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    // Example Firebase logic (adjust according to your setup)
     const userId = user.uid;
     const userDocRef = doc(db, "users", userId);
     const userDocSnap = await getDoc(userDocRef);
 
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
-      const products = userData.products || []; // your array field in Firestore
+      const products = userData.products || [];
 
       if (products.length === 0) {
         newArrivalsContainer.innerHTML =
@@ -246,7 +262,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             (p) => `
             <div class="col">
               <div class="card product-card h-100 shadow-sm border-1 rounded-4">
-                <img src="${p.image}" class="card-img-top" alt="${p.title}" style="height:180px; object-fit:contain; background:#f8f9fa;">
+                <img src="${p.image}" class="card-img-top" alt="${p.title}"
+                     style="height:180px; object-fit:contain; background:#f8f9fa;">
                 <div class="card-body text-center">
                   <p class="mb-1 small text-primary fw-bold">${p.category}</p>
                   <h5 class="product-title">${p.title}</h5>
