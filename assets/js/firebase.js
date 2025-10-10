@@ -1,12 +1,22 @@
+// assets/js/firebase.js
 
-
-
+// Import Firebase SDK modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-// import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js"; // optional
+import { 
+  getAuth, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  getDoc, 
+  updateDoc 
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-// Your Firebase configuration
+// ================================
+// ✅ Your Firebase Configuration
+// ================================
 const firebaseConfig = {
   apiKey: "AIzaSyCZUQ5Y5NrUw8O8qhN8EuNgV32AqAG13pA",
   authDomain: "auth-signupflow.firebaseapp.com",
@@ -17,13 +27,12 @@ const firebaseConfig = {
   measurementId: "G-NYSQ6GN7RE"
 };
 
-// Initialize Firebase
+// ================================
+// 🔥 Initialize Firebase
+// ================================
 const app = initializeApp(firebaseConfig);
-
-// Firebase services
 const auth = getAuth(app);
 const db = getFirestore(app);
-// const analytics = getAnalytics(app); // only if needed
 
-// Export services for use in other files
-export { app, auth, db };
+// Export everything for use
+export { app, auth, db, doc, setDoc, getDoc, updateDoc, onAuthStateChanged };
