@@ -2,16 +2,20 @@
 
 // Import Firebase SDK modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { 
-  getAuth, 
-  onAuthStateChanged 
+import {
+  getAuth,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-import { 
-  getFirestore, 
-  doc, 
-  setDoc, 
-  getDoc, 
-  updateDoc 
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 // ================================
@@ -34,5 +38,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Export everything for use
-export { app, auth, db, doc, setDoc, getDoc, updateDoc, onAuthStateChanged };
+// ================================
+// ✅ Export everything needed
+// ================================
+export {
+  app,
+  auth,
+  db,
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile
+};
