@@ -181,8 +181,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(syncUserData, 30000);
   window.addEventListener("beforeunload", syncUserData);
 });
-//sectionforapifetch
-/*========================sectionforapifetcsystemfunctionality=====================================*/
+// Section for API Fetch
+/*======================== sectionforapifetcsystemfunctionality =====================================*/
 
 document.addEventListener("DOMContentLoaded", async () => {
   const bestSellerContainer = document.getElementById("best-sellers");
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <img src="${p.image}" class="card-img-top" alt="${p.title}"
                style="height:180px; object-fit:contain; background:#f8f9fa;">
           <div class="card-body text-center">
-            <p class="mb-1 small text-primary fw-bold">${p.category}</p>
+            <p class="mb-1 small text-primary fw-bold text-capitalize">${p.category}</p>
             <h5 class="product-title">${p.title}</h5>
             <p class="small text-muted">${p.description.substring(0, 70)}...</p>
             <p class="product-price fw-bold text-success mb-1">$${p.price}</p>
@@ -234,16 +234,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   categoryCards.forEach((card) => {
     card.addEventListener("click", (e) => {
       e.preventDefault();
+
       const selectedCategory = card.querySelector("h5").textContent.trim().toLowerCase();
       currentCategory = selectedCategory;
 
-      if (selectedCategory === "all" || selectedCategory === "") {
+      // handle jewelry spelling variants
+      const normalizeCategory = (cat) => {
+        if (cat.includes("jewelery") || cat.includes("jewelry")) return "jewelery";
+        return cat;
+      };
+     
+
+      const normalizedSelected = normalizeCategory(selectedCategory);
+
+      if (normalizedSelected === "all" || normalizedSelected === "") {
         renderProducts(allProducts);
       } else {
-        // match API product category with clicked category
-        const filtered = allProducts.filter((p) =>
-          p.category.toLowerCase().includes(selectedCategory)
-        );
+        const filtered = allProducts.filter((p) => {
+          const normalizedAPIcat = normalizeCategory(p.category.toLowerCase());
+          return normalizedAPIcat.includes(normalizedSelected);
+        });
         renderProducts(filtered);
       }
 
