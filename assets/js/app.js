@@ -184,9 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
 // Section for API Fetch
 /*======================== sectionforapifetcsystemfunctionality =====================================*/
 
-// Section for API Fetch
-/*======================== sectionforapifetcsystemfunctionality =====================================*/
-
 document.addEventListener("DOMContentLoaded", async () => {
   const bestSellerContainer = document.getElementById("best-sellers");
   const categoryCards = document.querySelectorAll(".category-card");
@@ -195,8 +192,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ===== Fetch All Products from Fake API =====
   try {
-    const res = await fetch("https://dummyjson.com/products"); // no limit
-    allProducts = await res.json();
+    const res = await fetch("https://dummyjson.com/products?limit=200");
+    const data = await res.json();
+    allProducts = data.products;
     renderProducts(allProducts); // show all initially
   } catch (err) {
     console.error("Best sellers load error:", err);
@@ -215,7 +213,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         (p) => `
       <div class="col">
         <div class="card product-card h-100 shadow-sm border-1 rounded-4">
-          <img src="${p.image}" class="card-img-top" alt="${p.title}"
+          <img src="${p.thumbnail}" class="card-img-top" alt="${p.title}"
                style="height:180px; object-fit:contain; background:#f8f9fa;">
           <div class="card-body text-center">
             <p class="mb-1 small text-primary fw-bold text-capitalize">${p.category}</p>
@@ -259,7 +257,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderProducts(filtered);
       }
 
-      // Smooth scroll to product section
+      // Smooth scroll
       document.querySelector("#best-sellers-section").scrollIntoView({ behavior: "smooth" });
     });
   });
