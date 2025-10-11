@@ -134,23 +134,21 @@ onAuthStateChanged(auth, async (user) => {
   const authPages = ["login.html", "signup.html"];
   const protectedPages = ["home.html", "cart.html", "about.html", "contact.html", "shop.html"];
 
-  // ✅ 1. Handle index.html logic
+  // ✅ Handle index.html logic
   if (page === "index.html" || page === "") {
     const localUser = localStorage.getItem("userData");
 
     if (user) {
       goTo("home.html");
     } else if (!localUser) {
-      // first-time visitor → signup
       setTimeout(() => goTo("signup.html"), 2000);
     } else {
-      // returning visitor → login
       setTimeout(() => goTo("login.html"), 2000);
     }
     return;
   }
 
-  // ✅ 2. Handle protected + auth pages
+  // ✅ Handle protected + auth pages
   if (!user && protectedPages.includes(page)) {
     goTo("login.html");
     return;
@@ -161,7 +159,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // ✅ 3. Auto-restore user data
+  // ✅ Auto-restore user data
   if (user) {
     if (!localStorage.getItem("userData")) {
       await restoreUserData(user);
@@ -178,24 +176,32 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("login-form")?.addEventListener("submit", loginFunc);
   document.getElementById("logoutBtn")?.addEventListener("click", logoutFunc);
 
+  // Prevent login page "?" reload
+  const loginForm = document.getElementById("login-form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      loginFunc(e);
+    });
+  }
+
   setInterval(syncUserData, 30000);
   window.addEventListener("beforeunload", syncUserData);
 });
-// Section for API Fetch
-/*======================== sectionforapifetcsystemfunctionality =====================================*/
 
+/* ======== API Fetch + Category Filter Logic ======== */
 document.addEventListener("DOMContentLoaded", async () => {
   const bestSellerContainer = document.getElementById("best-sellers");
   const categoryCards = document.querySelectorAll(".category-card");
   let allProducts = [];
   let currentCategory = "all";
 
-  // ===== Fetch All Products from Fake API =====
+  // ===== Fetch All Products =====
   try {
     const res = await fetch("https://dummyjson.com/products?limit=200");
     const data = await res.json();
     allProducts = data.products;
-    renderProducts(allProducts); // show all initially
+    renderProducts(allProducts);
   } catch (err) {
     console.error("Best sellers load error:", err);
     bestSellerContainer.innerHTML = `<p class="text-center text-danger w-100">Failed to load products.</p>`;
@@ -231,56 +237,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       .join("");
   }
 
-  // ===== Category Filter Logic =====
-  
-
-      document.addEventListener("DOMContentLoaded", async () => {
-  const bestSellerContainer = document.getElementById("best-sellers");
-  const categoryCards = document.querySelectorAll(".category-card");
-  let allProducts = [];
-  let currentCategory = "all";
-
-  // ===== Fetch Products =====
-  try {
-    const res = await fetch("https://dummyjson.com/products?limit=0");
-    const data = await res.json();
-    allProducts = data.products; // IMPORTANT ✅
-    renderProducts(allProducts);
-  } catch (err) {
-    console.error("Error fetching:", err);
-    bestSellerContainer.innerHTML = `<p class="text-center text-danger">Failed to load products.</p>`;
-  }
-
-  // ===== Render Products =====
-  function renderProducts(products) {
-    if (!products.length) {
-      bestSellerContainer.innerHTML = `<p class="text-center text-muted">No products found.</p>`;
-      return;
-    }
-
-    bestSellerContainer.innerHTML = products
-      .map(
-        (p) => `
-      <div class="col">
-        <div class="card product-card h-100 shadow-sm border-1 rounded-4">
-          <img src="${p.thumbnail}" class="card-img-top" alt="${p.title}"
-               style="height:180px; object-fit:contain; background:#f8f9fa;">
-          <div class="card-body text-center">
-            <p class="mb-1 small text-primary fw-bold text-capitalize">${p.category}</p>
-            <h5 class="product-title">${p.title}</h5>
-            <p class="small text-muted">${p.description.substring(0, 70)}...</p>
-            <p class="product-price fw-bold text-success mb-1">$${p.price}</p>
-            <p class="mb-2">⭐ ${(Math.random() * 2 + 3).toFixed(1)} / 5</p>
-            <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
-              <i class="bi bi-cart-fill me-1"></i> Add to Cart
-            </a>
-          </div>
-        </div>
-      </div>`
-      )
-      .join("");
-  }
-
   // ===== Category Filter Logic (Upgraded) =====
   categoryCards.forEach((card) => {
     card.addEventListener("click", (e) => {
@@ -289,7 +245,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const selectedCategory = card.querySelector("h5").textContent.trim().toLowerCase();
       currentCategory = selectedCategory;
 
-      // ===== Category Group Mapping =====
       const categoryMap = {
         "electronics & gadgets": ["smartphones", "laptops", "mobile-accessories"],
         "men's collection": ["mens-shirts", "mens-shoes", "mens-watches"],
@@ -322,12 +277,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           const normalizedAPIcat = normalizeCategory(p.category.toLowerCase());
           return categoriesToShow.includes(normalizedAPIcat);
         });
-
         renderProducts(filtered);
       }
 
       document.querySelector("#best-sellers-section").scrollIntoView({ behavior: "smooth" });
     });
   });
-}); // ✅ Yeh last closing bracket zaroori hai!
-
+}); // ✅ Final closing bracket
