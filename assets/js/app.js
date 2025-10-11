@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ===== Fetch All Products from Fake API =====
   try {
-    const res = await fetch("https://fakestoreapi.com/products"); // no limit
+    const res = await fetch("https://dummyjson.com/products"); // no limit
     allProducts = await res.json();
     renderProducts(allProducts); // show all initially
   } catch (err) {
