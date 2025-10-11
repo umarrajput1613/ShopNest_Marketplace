@@ -232,33 +232,56 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ===== Category Filter Logic =====
-  categoryCards.forEach((card) => {
-    card.addEventListener("click", (e) => {
-      e.preventDefault();
+  
 
-      const selectedCategory = card.querySelector("h5").textContent.trim().toLowerCase();
-      currentCategory = selectedCategory;
+    // ===== Category Filter Logic (Upgraded) =====
+categoryCards.forEach((card) => {
+  card.addEventListener("click", (e) => {
+    e.preventDefault();
 
-      // Normalize spelling (handle "jewelery" vs "jewelry")
-      const normalizeCategory = (cat) => {
-        if (cat.includes("jewelery") || cat.includes("jewelry")) return "jewelery";
-        return cat;
-      };
+    const selectedCategory = card.querySelector("h5").textContent.trim().toLowerCase();
+    currentCategory = selectedCategory;
 
-      const normalizedSelected = normalizeCategory(selectedCategory);
+    // ===== Category Group Mapping =====
+    const categoryMap = {
+      "electronics & gadgets": ["smartphones", "laptops", "mobile-accessories"],
+      "men's collection": ["mens-shirts", "mens-shoes", "mens-watches"],
+      "women's collection": [
+        "womens-dresses",
+        "womens-bags",
+        "womens-shoes",
+        "womens-jewellery",
+        "womens-watches"
+      ],
+      "home & furniture": ["furniture", "home-decoration", "kitchen-accessories"],
+      "beauty & care": ["beauty", "skin-care", "fragrances"],
+      "sports & vehicles": ["sports-accessories", "motorcycle", "vehicle"],
+      "groceries": ["groceries"],
+      "fashionwear": ["tops"]
+    };
 
-      if (normalizedSelected === "all" || normalizedSelected === "") {
-        renderProducts(allProducts);
-      } else {
-        const filtered = allProducts.filter((p) => {
-          const normalizedAPIcat = normalizeCategory(p.category.toLowerCase());
-          return normalizedAPIcat.includes(normalizedSelected);
-        });
-        renderProducts(filtered);
-      }
+    // ===== Normalize (handle spelling variations like jewelry/jewelery) =====
+    const normalizeCategory = (cat) => {
+      if (cat.includes("jewelery") || cat.includes("jewelry")) return "womens-jewellery";
+      return cat;
+    };
 
-      // Smooth scroll
-      document.querySelector("#best-sellers-section").scrollIntoView({ behavior: "smooth" });
-    });
+    const normalizedSelected = normalizeCategory(selectedCategory);
+
+    // ===== Filter Logic =====
+    if (normalizedSelected === "all" || normalizedSelected === "") {
+      renderProducts(allProducts);
+    } else {
+      const categoriesToShow = categoryMap[normalizedSelected] || [normalizedSelected];
+      const filtered = allProducts.filter((p) => {
+        const normalizedAPIcat = normalizeCategory(p.category.toLowerCase());
+        return categoriesToShow.includes(normalizedAPIcat);
+      });
+
+      renderProducts(filtered);
+    }
+
+    // ===== Smooth Scroll to Products Section =====
+    document.querySelector("#best-sellers-section").scrollIntoView({ behavior: "smooth" });
   });
 });
