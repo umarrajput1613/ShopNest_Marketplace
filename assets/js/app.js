@@ -184,17 +184,20 @@ document.addEventListener("DOMContentLoaded", () => {
 // Section for API Fetch
 /*======================== sectionforapifetcsystemfunctionality =====================================*/
 
+// Section for API Fetch
+/*======================== sectionforapifetcsystemfunctionality =====================================*/
+
 document.addEventListener("DOMContentLoaded", async () => {
   const bestSellerContainer = document.getElementById("best-sellers");
   const categoryCards = document.querySelectorAll(".category-card");
   let allProducts = [];
   let currentCategory = "all";
 
-  // ===== Fetch Products from Fake API =====
+  // ===== Fetch All Products from Fake API =====
   try {
-    const res = await fetch("https://fakestoreapi.com/products?limit=200");
+    const res = await fetch("https://fakestoreapi.com/products"); // no limit
     allProducts = await res.json();
-    renderProducts(allProducts); // show all by default
+    renderProducts(allProducts); // show all initially
   } catch (err) {
     console.error("Best sellers load error:", err);
     bestSellerContainer.innerHTML = `<p class="text-center text-danger w-100">Failed to load products.</p>`;
@@ -238,12 +241,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       const selectedCategory = card.querySelector("h5").textContent.trim().toLowerCase();
       currentCategory = selectedCategory;
 
-      // handle jewelry spelling variants
+      // Normalize spelling (handle "jewelery" vs "jewelry")
       const normalizeCategory = (cat) => {
         if (cat.includes("jewelery") || cat.includes("jewelry")) return "jewelery";
         return cat;
       };
-     
 
       const normalizedSelected = normalizeCategory(selectedCategory);
 
