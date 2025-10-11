@@ -234,54 +234,100 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ===== Category Filter Logic =====
   
 
-    // ===== Category Filter Logic (Upgraded) =====
-categoryCards.forEach((card) => {
-  card.addEventListener("click", (e) => {
-    e.preventDefault();
+      document.addEventListener("DOMContentLoaded", async () => {
+  const bestSellerContainer = document.getElementById("best-sellers");
+  const categoryCards = document.querySelectorAll(".category-card");
+  let allProducts = [];
+  let currentCategory = "all";
 
-    const selectedCategory = card.querySelector("h5").textContent.trim().toLowerCase();
-    currentCategory = selectedCategory;
+  // ===== Fetch Products =====
+  try {
+    const res = await fetch("https://dummyjson.com/products?limit=0");
+    const data = await res.json();
+    allProducts = data.products; // IMPORTANT ✅
+    renderProducts(allProducts);
+  } catch (err) {
+    console.error("Error fetching:", err);
+    bestSellerContainer.innerHTML = `<p class="text-center text-danger">Failed to load products.</p>`;
+  }
 
-    // ===== Category Group Mapping =====
-    const categoryMap = {
-      "electronics & gadgets": ["smartphones", "laptops", "mobile-accessories"],
-      "men's collection": ["mens-shirts", "mens-shoes", "mens-watches"],
-      "women's collection": [
-        "womens-dresses",
-        "womens-bags",
-        "womens-shoes",
-        "womens-jewellery",
-        "womens-watches"
-      ],
-      "home & furniture": ["furniture", "home-decoration", "kitchen-accessories"],
-      "beauty & care": ["beauty", "skin-care", "fragrances"],
-      "sports & vehicles": ["sports-accessories", "motorcycle", "vehicle"],
-      "groceries": ["groceries"],
-      "fashionwear": ["tops"]
-    };
-
-    // ===== Normalize (handle spelling variations like jewelry/jewelery) =====
-    const normalizeCategory = (cat) => {
-      if (cat.includes("jewelery") || cat.includes("jewelry")) return "womens-jewellery";
-      return cat;
-    };
-
-    const normalizedSelected = normalizeCategory(selectedCategory);
-
-    // ===== Filter Logic =====
-    if (normalizedSelected === "all" || normalizedSelected === "") {
-      renderProducts(allProducts);
-    } else {
-      const categoriesToShow = categoryMap[normalizedSelected] || [normalizedSelected];
-      const filtered = allProducts.filter((p) => {
-        const normalizedAPIcat = normalizeCategory(p.category.toLowerCase());
-        return categoriesToShow.includes(normalizedAPIcat);
-      });
-
-      renderProducts(filtered);
+  // ===== Render Products =====
+  function renderProducts(products) {
+    if (!products.length) {
+      bestSellerContainer.innerHTML = `<p class="text-center text-muted">No products found.</p>`;
+      return;
     }
 
-    // ===== Smooth Scroll to Products Section =====
-    document.querySelector("#best-sellers-section").scrollIntoView({ behavior: "smooth" });
+    bestSellerContainer.innerHTML = products
+      .map(
+        (p) => `
+      <div class="col">
+        <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+          <img src="${p.thumbnail}" class="card-img-top" alt="${p.title}"
+               style="height:180px; object-fit:contain; background:#f8f9fa;">
+          <div class="card-body text-center">
+            <p class="mb-1 small text-primary fw-bold text-capitalize">${p.category}</p>
+            <h5 class="product-title">${p.title}</h5>
+            <p class="small text-muted">${p.description.substring(0, 70)}...</p>
+            <p class="product-price fw-bold text-success mb-1">$${p.price}</p>
+            <p class="mb-2">⭐ ${(Math.random() * 2 + 3).toFixed(1)} / 5</p>
+            <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+              <i class="bi bi-cart-fill me-1"></i> Add to Cart
+            </a>
+          </div>
+        </div>
+      </div>`
+      )
+      .join("");
+  }
+
+  // ===== Category Filter Logic (Upgraded) =====
+  categoryCards.forEach((card) => {
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const selectedCategory = card.querySelector("h5").textContent.trim().toLowerCase();
+      currentCategory = selectedCategory;
+
+      // ===== Category Group Mapping =====
+      const categoryMap = {
+        "electronics & gadgets": ["smartphones", "laptops", "mobile-accessories"],
+        "men's collection": ["mens-shirts", "mens-shoes", "mens-watches"],
+        "women's collection": [
+          "womens-dresses",
+          "womens-bags",
+          "womens-shoes",
+          "womens-jewellery",
+          "womens-watches"
+        ],
+        "home & furniture": ["furniture", "home-decoration", "kitchen-accessories"],
+        "beauty & care": ["beauty", "skin-care", "fragrances"],
+        "sports & vehicles": ["sports-accessories", "motorcycle", "vehicle"],
+        "groceries": ["groceries"],
+        "fashionwear": ["tops"]
+      };
+
+      const normalizeCategory = (cat) => {
+        if (cat.includes("jewelery") || cat.includes("jewelry")) return "womens-jewellery";
+        return cat;
+      };
+
+      const normalizedSelected = normalizeCategory(selectedCategory);
+
+      if (normalizedSelected === "all" || normalizedSelected === "") {
+        renderProducts(allProducts);
+      } else {
+        const categoriesToShow = categoryMap[normalizedSelected] || [normalizedSelected];
+        const filtered = allProducts.filter((p) => {
+          const normalizedAPIcat = normalizeCategory(p.category.toLowerCase());
+          return categoriesToShow.includes(normalizedAPIcat);
+        });
+
+        renderProducts(filtered);
+      }
+
+      document.querySelector("#best-sellers-section").scrollIntoView({ behavior: "smooth" });
+    });
   });
-});
+}); // ✅ Yeh last closing bracket zaroori hai!
+
