@@ -105,7 +105,7 @@ function renderPagination() {
 }
 
 // ===== Initialize =====
-fetchProducts();
+
 // ===== Filter Logic =====
 const priceRange = document.getElementById("priceRange");
 const currentPrice = document.getElementById("currentPrice");
@@ -187,4 +187,4 @@ function renderFilteredProducts(filtered) {
     productList.appendChild(div);
   });
 }
-fetchProducts()
+fetchProducts();
