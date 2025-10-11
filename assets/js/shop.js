@@ -1,4 +1,4 @@
-<script>
+
     const productList = document.getElementById('productList');
     const pagination = document.getElementById('pagination');
     let products = [];
@@ -81,4 +81,4 @@
     }
 
     fetchProducts();
-  </script>
+  
