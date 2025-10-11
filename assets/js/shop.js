@@ -187,3 +187,4 @@ function renderFilteredProducts(filtered) {
     productList.appendChild(div);
   });
 }
+fetchProducts()
