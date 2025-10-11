@@ -80,52 +80,67 @@
       
       <div class="row g-4">
         <!-- Sidebar Filters -->
-        <div class="col-lg-3">
-          <div class="sidebar sticky-top index-10">
-            <h4 class="mb-3"><i class="bi bi-sliders me-2 text-primary"></i>Filters</h4>
-            
-            <h6 class="fw-bold small text-muted">Category</h6>
-            <div class="form-check small">
-              <input class="form-check-input" type="checkbox" id="catElectronics" checked>
-              <label class="form-check-label" for="catElectronics">Electronics</label>
-            </div>
-            <div class="form-check small">
-              <input class="form-check-input" type="checkbox" id="catApparel">
-              <label class="form-check-label" for="catApparel">Apparel</label>
-            </div>
-            <hr>
+       <div class="col-lg-3">
+  <div class="sidebar sticky-top shadow-sm p-3 bg-white rounded-4 border">
+    <h4 class="mb-3 text-primary"><i class="bi bi-sliders me-2"></i>Filters</h4>
 
-            <h6 class="fw-bold small text-muted">Brands</h6>
-            <div class="form-check small">
-              <input class="form-check-input" type="checkbox" id="brand1">
-              <label class="form-check-label" for="brand1">Apple</label>
-            </div>
-            <div class="form-check small">
-              <input class="form-check-input" type="checkbox" id="brand2">
-              <label class="form-check-label" for="brand2">Nike</label>
-            </div>
-            <div class="form-check small">
-              <input class="form-check-input" type="checkbox" id="brand3">
-              <label class="form-check-label" for="brand3">Samsung</label>
-            </div>
-            <hr>
+    <!-- ===== Category Filter ===== -->
+    <h6 class="fw-bold small text-muted mt-3">Category</h6>
+    <div class="form-check small mb-1">
+      <input class="form-check-input" type="checkbox" id="catElectronics" checked>
+      <label class="form-check-label" for="catElectronics">Electronics & Gadgets</label>
+    </div>
+    <div class="form-check small mb-1">
+      <input class="form-check-input" type="checkbox" id="catMen">
+      <label class="form-check-label" for="catMen">Men's Collection</label>
+    </div>
+    <div class="form-check small mb-1">
+      <input class="form-check-input" type="checkbox" id="catWomen">
+      <label class="form-check-label" for="catWomen">Women's Collection</label>
+    </div>
+    <div class="form-check small mb-1">
+      <input class="form-check-input" type="checkbox" id="catHome">
+      <label class="form-check-label" for="catHome">Home & Furniture</label>
+    </div>
+    <div class="form-check small mb-1">
+      <input class="form-check-input" type="checkbox" id="catBeauty">
+      <label class="form-check-label" for="catBeauty">Beauty & Care</label>
+    </div>
+    <div class="form-check small mb-1">
+      <input class="form-check-input" type="checkbox" id="catSports">
+      <label class="form-check-label" for="catSports">Sports & Vehicles</label>
+    </div>
+    <div class="form-check small mb-1">
+      <input class="form-check-input" type="checkbox" id="catGroceries">
+      <label class="form-check-label" for="catGroceries">Groceries</label>
+    </div>
+    <div class="form-check small mb-1">
+      <input class="form-check-input" type="checkbox" id="catFashion">
+      <label class="form-check-label" for="catFashion">Fashionwear</label>
+    </div>
+    <hr>
 
-            <h6 class="fw-bold small text-muted">Price Range</h6>
-            <input type="range" class="form-range" min="0" max="1500" step="50" id="priceRange">
-            <small>Max: $<span id="currentPrice">1500</span></small>
-            <hr>
+    <!-- ===== Price Range ===== -->
+    <h6 class="fw-bold small text-muted">Price Range</h6>
+    <input type="range" class="form-range" min="0" max="1500" step="50" id="priceRange">
+    <small class="text-muted">Max: $<span id="currentPrice">1500</span></small>
+    <hr>
 
-            <h6 class="fw-bold small text-muted">Sort By</h6>
-            <select class="form-select form-select-sm">
-              <option selected>Best Match</option>
-              <option>Price: Low to High</option>
-              <option>Newest Arrivals</option>
-              <option>Rating</option>
-            </select>
+    <!-- ===== Sort By ===== -->
+    <h6 class="fw-bold small text-muted">Sort By</h6>
+    <select class="form-select form-select-sm" id="sortSelect">
+      <option selected value="default">Best Match</option>
+      <option value="low-high">Price: Low to High</option>
+      <option value="high-low">Price: High to Low</option>
+      <option value="rating">Rating</option>
+      <option value="newest">Newest Arrivals</option>
+    </select>
 
-            <button class="btn btn-sm btn-primary w-100 mt-3">Apply Filters</button>
-          </div>
-        </div>
+    <button id="applyFilters" class="btn btn-sm btn-primary w-100 mt-3">
+      <i class="bi bi-funnel-fill me-1"></i> Apply Filters
+    </button>
+  </div>
+</div>
 
         <!-- Product Grid -->
         <div class="col-lg-9">
