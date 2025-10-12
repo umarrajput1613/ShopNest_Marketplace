@@ -103,88 +103,87 @@ function renderPagination() {
   };
   pagination.appendChild(nextBtn);
 }
-
+fetchProducts();
 // ===== Initialize =====
 
 // ===== Filter Logic =====
-const priceRange = document.getElementById("priceRange");
-const currentPrice = document.getElementById("currentPrice");
-const sortSelect = document.getElementById("sortSelect");
-const applyFilters = document.getElementById("applyFilters");
 
-// Price range display
-priceRange.addEventListener("input", () => {
-  currentPrice.textContent = priceRange.value;
-});
+// ===== Filter Logic =====
+if (document.getElementById("priceRange")) {
+  const priceRange = document.getElementById("priceRange");
+  const currentPrice = document.getElementById("currentPrice");
+  const sortSelect = document.getElementById("sortSelect");
+  const applyFilters = document.getElementById("applyFilters");
 
-applyFilters.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  const selectedCats = [];
-
-  if (document.getElementById("catElectronics").checked) selectedCats.push("smartphones", "laptops");
-  if (document.getElementById("catMen").checked) selectedCats.push("mens-shirts", "mens-shoes", "mens-watches");
-  if (document.getElementById("catWomen").checked) selectedCats.push("womens-dresses", "womens-shoes", "womens-bags");
-  if (document.getElementById("catHome").checked) selectedCats.push("furniture", "home-decoration");
-  if (document.getElementById("catBeauty").checked) selectedCats.push("beauty", "fragrances");
-  if (document.getElementById("catSports").checked) selectedCats.push("sports-accessories", "motorcycle");
-  if (document.getElementById("catGroceries").checked) selectedCats.push("groceries");
-  if (document.getElementById("catFashion").checked) selectedCats.push("tops");
-
-  const maxPrice = parseInt(priceRange.value);
-  const sortType = sortSelect.value;
-
-  // Filter logic
-  let filtered = products.filter((p) => {
-    const inCategory = selectedCats.length === 0 || selectedCats.includes(p.category.toLowerCase());
-    const inPrice = p.price <= maxPrice;
-    return inCategory && inPrice;
+  // Price range display
+  priceRange.addEventListener("input", () => {
+    currentPrice.textContent = priceRange.value;
   });
 
-  // Sorting logic
-  if (sortType === "low-high") {
-    filtered.sort((a, b) => a.price - b.price);
-  } else if (sortType === "high-low") {
-    filtered.sort((a, b) => b.price - a.price);
-  } else if (sortType === "rating") {
-    filtered.sort((a, b) => b.rating - a.rating);
-  } else if (sortType === "newest") {
-    filtered.sort((a, b) => b.id - a.id);
-  }
+  applyFilters.addEventListener("click", (e) => {
+    e.preventDefault();
 
-  // Render filtered products (disable pagination)
-  document.getElementById("pagination").innerHTML = "";
-  renderFilteredProducts(filtered);
-});
+    const selectedCats = [];
 
-// ===== Render Filtered Products =====
-function renderFilteredProducts(filtered) {
-  productList.innerHTML = "";
+    if (document.getElementById("catElectronics").checked) selectedCats.push("smartphones", "laptops");
+    if (document.getElementById("catMen").checked) selectedCats.push("mens-shirts", "mens-shoes", "mens-watches");
+    if (document.getElementById("catWomen").checked) selectedCats.push("womens-dresses", "womens-shoes", "womens-bags");
+    if (document.getElementById("catHome").checked) selectedCats.push("furniture", "home-decoration");
+    if (document.getElementById("catBeauty").checked) selectedCats.push("beauty", "fragrances");
+    if (document.getElementById("catSports").checked) selectedCats.push("sports-accessories", "motorcycle");
+    if (document.getElementById("catGroceries").checked) selectedCats.push("groceries");
+    if (document.getElementById("catFashion").checked) selectedCats.push("tops");
 
-  if (filtered.length === 0) {
-    productList.innerHTML = `<p class="text-center text-muted py-5">No products match your filters.</p>`;
-    return;
-  }
+    const maxPrice = parseInt(priceRange.value);
+    const sortType = sortSelect.value;
 
-  filtered.forEach((p) => {
-    const div = document.createElement("div");
-    div.classList.add("col");
-    div.innerHTML = `
-      <div class="card product-card h-100 shadow-sm border-1 rounded-4">
-        <img src="${p.thumbnail}" class="card-img-top" alt="${p.title}"
-             style="height:180px; object-fit:contain; background:#f8f9fa;">
-        <div class="card-body text-center">
-          <p class="mb-1 small text-primary fw-bold">${p.category}</p>
-          <h5 class="product-title">${p.title}</h5>
-          <p class="small text-muted">${p.description.slice(0, 70)}...</p>
-          <p class="product-price fw-bold text-success mb-1">$${p.price}</p>
-          <p class="mb-2">⭐ ${p.rating} / 5</p>
-          <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
-            <i class="bi bi-cart-fill me-1"></i> Add to Cart
-          </a>
-        </div>
-      </div>`;
-    productList.appendChild(div);
+    let filtered = products.filter((p) => {
+      const inCategory = selectedCats.length === 0 || selectedCats.includes(p.category.toLowerCase());
+      const inPrice = p.price <= maxPrice;
+      return inCategory && inPrice;
+    });
+
+    if (sortType === "low-high") filtered.sort((a, b) => a.price - b.price);
+    else if (sortType === "high-low") filtered.sort((a, b) => b.price - a.price);
+    else if (sortType === "rating") filtered.sort((a, b) => b.rating - a.rating);
+    else if (sortType === "newest") filtered.sort((a, b) => b.id - a.id);
+
+    document.getElementById("pagination").innerHTML = "";
+    renderFilteredProducts(filtered);
   });
+
+  function renderFilteredProducts(filtered) {
+    const productList = document.getElementById("productList");
+    if (!productList) return;
+
+    productList.innerHTML = "";
+
+    if (filtered.length === 0) {
+      productList.innerHTML = `<p class="text-center text-muted py-5">No products match your filters.</p>`;
+      return;
+    }
+
+    filtered.forEach((p) => {
+      const div = document.createElement("div");
+      div.classList.add("col");
+      div.innerHTML = `
+        <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+          <img src="${p.thumbnail}" class="card-img-top" alt="${p.title}"
+               style="height:180px; object-fit:contain; background:#f8f9fa;">
+          <div class="card-body text-center">
+            <p class="mb-1 small text-primary fw-bold">${p.category}</p>
+            <h5 class="product-title">${p.title}</h5>
+            <p class="small text-muted">${p.description.slice(0, 70)}...</p>
+            <p class="product-price fw-bold text-success mb-1">$${p.price}</p>
+            <p class="mb-2">⭐ ${p.rating} / 5</p>
+            <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+              <i class="bi bi-cart-fill me-1"></i> Add to Cart
+            </a>
+          </div>
+        </div>`;
+      productList.appendChild(div);
+    });
+  }
 }
-fetchProducts();
+
+
