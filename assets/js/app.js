@@ -154,7 +154,100 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize withdraw table if present
   initWithdrawFeature();
 });
+document.addEventListener("DOMContentLoaded", async () => {
+  const bestSellerContainer = document.getElementById("best-sellers");
+  const categoryCards = document.querySelectorAll(".category-card");
+  let allProducts = [];
+  let currentCategory = "all";
 
+  // ===== Fetch All Products =====
+  try {
+    const res = await fetch("https://dummyjson.com/products?limit=200");
+    const data = await res.json();
+    allProducts = data.products;
+    renderProducts(allProducts);
+  } catch (err) {
+    console.error("Best sellers load error:", err);
+    bestSellerContainer.innerHTML = `<p class="text-center text-danger w-100">Failed to load products.</p>`;
+  }
+
+  // ===== Render Products =====
+  function renderProducts(products) {
+    if (!products.length) {
+      bestSellerContainer.innerHTML = `<p class="text-center text-muted w-100">No products found for this category.</p>`;
+      return;
+    }
+
+    bestSellerContainer.innerHTML = products
+      .map(
+        (p) => `
+      <div class="col">
+        <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+          <img src="${p.thumbnail}" class="card-img-top" alt="${p.title}"
+               style="height:180px; object-fit:contain; background:#f8f9fa;">
+          <div class="card-body text-center">
+            <p class="mb-1 small text-primary fw-bold text-capitalize">${p.category}</p>
+            <h5 class="product-title">${p.title}</h5>
+            <p class="small text-muted">${p.description.substring(0, 70)}...</p>
+            <p class="product-price fw-bold text-success mb-1">$${p.price}</p>
+            <p class="mb-2">⭐ ${(Math.random() * 2 + 3).toFixed(1)} / 5</p>
+            <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+              <i class="bi bi-cart-fill me-1"></i> Add to Cart
+            </a>
+          </div>
+        </div>
+      </div>`
+      )
+      .join("");
+  }
+
+  // ===== Category Filter Logic (Upgraded) =====
+  categoryCards.forEach((card) => {
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const selectedCategory = card.querySelector("h5").textContent.trim().toLowerCase();
+      currentCategory = selectedCategory;
+
+      const categoryMap = {
+        "electronics & gadgets": ["smartphones", "laptops", "mobile-accessories"],
+        "men's collection": ["mens-shirts", "mens-shoes", "mens-watches"],
+        "women's collection": [
+          "womens-dresses",
+          "womens-bags",
+          "womens-shoes",
+          "womens-jewellery",
+          "womens-watches"
+        ],
+        "home & furniture": ["furniture", "home-decoration", "kitchen-accessories"],
+        "beauty & care": ["beauty", "skin-care", "fragrances"],
+        "sports & vehicles": ["sports-accessories", "motorcycle", "vehicle"],
+        "groceries": ["groceries"],
+        "fashionwear": ["tops"]
+      };
+
+      const normalizeCategory = (cat) => {
+        if (cat.includes("jewelery") || cat.includes("jewelry")) return "womens-jewellery";
+        return cat;
+      };
+
+      const normalizedSelected = normalizeCategory(selectedCategory);
+
+      if (normalizedSelected === "all" || normalizedSelected === "") {
+        renderProducts(allProducts);
+      } else {
+        const categoriesToShow = categoryMap[normalizedSelected] || [normalizedSelected];
+        const filtered = allProducts.filter((p) => {
+          const normalizedAPIcat = normalizeCategory(p.category.toLowerCase());
+          return categoriesToShow.includes(normalizedAPIcat);
+        });
+        renderProducts(filtered);
+      }
+
+      document.querySelector("#best-sellers-section").scrollIntoView({ behavior: "smooth" });
+    });
+  });
+}); // ✅ Final closing bracket
 /* =========================================================
    SHOP: Fetch products, render grid, filters & pagination
    ========================================================= */
