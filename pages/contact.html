@@ -201,7 +201,7 @@
       <!-- Buyer Account -->
       <div class="tab-pane fade" id="buyerForm" role="tabpanel">
         <div class="bg-white p-4 rounded shadow-sm">
-          <h3 class="mb-4 text-primary fw-bold">Create Buyer Account</h3>
+          <h3 class="mb-4 text-primary fw-bold">Wallet</h3>
           <form id="form-buyer">
             <div class="row g-3 mb-3">
               <div class="col-md-6">
@@ -237,7 +237,38 @@
 
             <button type="submit" class="btn btn-primary w-100 fw-bold">Register Buyer Account</button>
           </form>
+          
         </div>
+        <!-- ===== Withdraw Section (Seller Wallet) ===== -->
+<section id="withdrawSection" class="container py-5" style="display:none;">
+  <h3 class="fw-bold mb-4 text-center text-primary">💰 Wallet & Withdraw</h3>
+
+  <!-- Total Balance -->
+  <div class="alert alert-success text-center fw-semibold mb-4">
+    Total Balance: <span id="walletBalance">0</span> PKR
+  </div>
+
+  <!-- Transactions Table -->
+  <div class="table-responsive shadow-sm rounded-3">
+    <table class="table align-middle text-center">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Buyer</th>
+          <th>Amount (PKR)</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="walletTableBody">
+        <!-- Wallet transactions will be inserted here dynamically -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
       </div>
 
       <!-- Payment Details -->
