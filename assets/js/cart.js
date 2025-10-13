@@ -1,29 +1,65 @@
-import { auth, db, doc, getDoc, updateDoc } from "./firebase.js";
+// =======================================================
+// ✅ cart.js — Per-User Cart System (Fully Fixed)
+// =======================================================
+
+import { auth, db, doc, getDoc, setDoc, updateDoc, onAuthStateChanged } from "./firebase.js";
 
 /* ===== Helper ===== */
 function showMsg(msg) {
   alert(msg);
 }
 
-/* ===== Get Logged-In User Data ===== */
+/* ===== Local User Data ===== */
 function getLocalUser() {
   return JSON.parse(localStorage.getItem("userData") || "{}");
 }
+function setLocalUser(data) {
+  localStorage.setItem("userData", JSON.stringify(data));
+}
+function clearLocalUser() {
+  localStorage.removeItem("userData");
+}
 
-/* ===== Save to Local + Firestore ===== */
+/* ===== Sync Firestore → Local ===== */
+async function syncUserData() {
+  const user = auth.currentUser;
+  if (!user) return clearLocalUser();
+
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    const data = { ...snap.data(), uid: user.uid };
+    setLocalUser(data);
+  } else {
+    // If new user — create blank doc
+    await setDoc(ref, {
+      email: user.email,
+      cart: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    setLocalUser({ uid: user.uid, email: user.email, cart: [] });
+  }
+}
+
+/* ===== Save Cart to Local + Firestore ===== */
 async function saveCart(updatedCart) {
   const user = auth.currentUser;
   if (!user) return showMsg("Login required.");
 
   const userRef = doc(db, "users", user.uid);
-  await updateDoc(userRef, { cart: updatedCart, updatedAt: new Date().toISOString() });
+  await updateDoc(userRef, {
+    cart: updatedCart,
+    updatedAt: new Date().toISOString(),
+  });
 
   const local = getLocalUser();
   local.cart = updatedCart;
-  localStorage.setItem("userData", JSON.stringify(local));
+  setLocalUser(local);
 }
 
-/* ===== Render Cart ===== */
+/* ===== Render Cart Table ===== */
 function renderCart() {
   const cartTable = document.getElementById("cart-table-body");
   const summary = document.getElementById("order-summary");
@@ -65,7 +101,7 @@ function renderCart() {
     <button id="proceedBtn" class="btn btn-primary w-100 mt-2">Proceed to Checkout</button>
   `;
 
-  // Update quantity
+  // --- Update Quantity ---
   document.querySelectorAll(".qty-input").forEach(inp => {
     inp.addEventListener("change", async (e) => {
       const index = e.target.dataset.index;
@@ -76,7 +112,7 @@ function renderCart() {
     });
   });
 
-  // Remove item
+  // --- Remove Item ---
   document.querySelectorAll(".remove-item").forEach(btn => {
     btn.addEventListener("click", async (e) => {
       const index = e.target.dataset.index;
@@ -87,14 +123,14 @@ function renderCart() {
     });
   });
 
-  // Proceed button
+  // --- Proceed Button ---
   document.getElementById("proceedBtn").addEventListener("click", () => {
     localStorage.setItem("checkoutTotal", total.toFixed(2));
     window.location.href = "../pages/contact.html#transferForm";
   });
 }
 
-/* ===== Add To Cart Logic (called from app.js) ===== */
+/* ===== Add To Cart (called from app.js) ===== */
 export async function addToCart(product) {
   const user = auth.currentUser;
   if (!user) return showMsg("Please log in to add products.");
@@ -119,9 +155,20 @@ export async function addToCart(product) {
   showMsg("Added to cart ✅");
 }
 
-/* ===== Initialize Cart Page ===== */
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("cart-table-body")) {
-    renderCart();
+/* ===== Auth State Sync (Main Fix) ===== */
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    console.log("✅ Logged in:", user.email);
+    await syncUserData();
+    if (document.getElementById("cart-table-body")) renderCart();
+  } else {
+    console.log("🚪 Logged out");
+    clearLocalUser();
+    if (document.getElementById("cart-table-body")) renderCart();
   }
+});
+
+/* ===== Initialize on Load ===== */
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("cart-table-body")) renderCart();
 });
