@@ -187,3 +187,44 @@ if (document.getElementById("priceRange")) {
 }
 
 
+// ====== 🛒 ADD TO CART SYSTEM ======
+
+// --- Local Cart Helpers ---
+function setLocalCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+function getLocalCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+
+// --- Add Product to Cart ---
+function addToCart(product) {
+  const cart = getLocalCart();
+  const exists = cart.find((item) => item.id === product.id);
+  if (exists) {
+    alert("This product is already in your cart!");
+    return;
+  }
+  cart.push({ ...product, qty: 1 });
+  setLocalCart(cart);
+  alert("✅ Added to Cart Successfully!");
+}
+
+// --- Attach Event Listeners after render ---
+function setupAddToCartButtons() {
+  const buttons = document.querySelectorAll(".btn-add-to-cart");
+  buttons.forEach((btn, index) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const productCards = document.querySelectorAll(".product-card");
+      const card = productCards[index];
+      const title = card.querySelector(".product-title").textContent;
+      const price = parseFloat(
+        card.querySelector(".product-price").textContent.replace("$", "")
+      );
+      const img = card.querySelector("img").src;
+      const product = { id: index + 1, title, price, thumbnail: img };
+      addToCart(product);
+    });
+  });
+}
