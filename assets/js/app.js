@@ -604,7 +604,7 @@ function initWithdrawFeature() {
         <td>${d.buyerName || "-"}</td>
         <td>${d.amount || 0}</td>
         <td><span class="badge ${status.toLowerCase()==="pending" ? "bg-warning text-dark" : "bg-success"}">${status}</span></td>
-        <td>${d.createdAt ? new Date(d.createdAt.seconds*1000).toLocaleDateString() : "-"}</td>
+        <td>${d.createdAt ? new Date(d.createdAt.seconds * 1000).toLocaleString() : "-"}</td>
         <td>${status.toLowerCase()==="pending" ? `<button class="btn btn-sm btn-primary" onclick="withdrawMoney('${docSnap.id}')">Withdraw</button>` : "-"}</td>
       </tr>`;
     });
@@ -614,6 +614,9 @@ function initWithdrawFeature() {
 
   // wire auth state to load the table
   onAuthStateChanged(auth, user => { if (user) window.loadWithdrawTable(); else { withdrawSection.style.display = "none"; } });
+        
+    
+
 }
 
 /* =========================================================
