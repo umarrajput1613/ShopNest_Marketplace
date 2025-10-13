@@ -95,6 +95,11 @@
       </div>
     </div>
   </div>
+<script type="module">
+  import { auth, db } from "../js/firebase.js";
+  window.auth = auth;
+  window.db = db;
+</script>
 
   <script type="module" src="../assets/js/app.js"></script>
 </body>
