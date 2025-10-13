@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword,
   signOut, updateProfile, onAuthStateChanged
 } from "./firebase.js";
+import { addToCart } from "./cart.js";
 
 /* ===== Helper Alert ===== */
 function showMsg(msg) {
