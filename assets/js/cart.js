@@ -229,3 +229,155 @@ onAuthStateChanged(auth, async (user) => {
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("cart-table-body")) renderCart();
 });
+
+
+
+// ✅ Save cart in localStorage per user
+function saveCart(cartData) {
+  const user = JSON.parse(localStorage.getItem("loggedUser"));
+  if (!user || !user.email) {
+    console.error("❌ No logged-in user found!");
+    return;
+  }
+
+  const userKey = `cart_${user.email}`; // Unique key per user
+  localStorage.setItem(userKey, JSON.stringify(cartData));
+  console.log("✅ Cart saved for:", user.email);
+}
+
+// ✅ Load cart when user opens cart page
+function loadCart() {
+  const user = JSON.parse(localStorage.getItem("loggedUser"));
+  if (!user || !user.email) return [];
+
+  const userKey = `cart_${user.email}`;
+  const storedCart = JSON.parse(localStorage.getItem(userKey)) || [];
+  console.log("📦 Loaded cart for:", user.email);
+  return storedCart;
+}
+
+
+
+
+
+
+
+// ✅ Save cart in localStorage per user
+function saveCart(cartData) {
+  const user = JSON.parse(localStorage.getItem("loggedUser"));
+  if (!user || !user.email) {
+    console.error("❌ No logged-in user found!");
+    return;
+  }
+
+  const userKey = `cart_${user.email}`; // Unique key per user
+  localStorage.setItem(userKey, JSON.stringify(cartData));
+  console.log("✅ Cart saved for:", user.email);
+}
+
+// ✅ Load cart when user opens cart page
+function loadCart() {
+  const user = JSON.parse(localStorage.getItem("loggedUser"));
+  if (!user || !user.email) return [];
+
+  const userKey = `cart_${user.email}`;
+  const storedCart = JSON.parse(localStorage.getItem(userKey)) || [];
+  console.log("📦 Loaded cart for:", user.email);
+  return storedCart;
+}
+
+
+
+
+
+    // ✅ Populate cart table
+function displayCart() {
+  const cart = loadCart();
+  const tableBody = document.querySelector("#yourCollection tbody");
+  tableBody.innerHTML = "";
+
+  let subtotal = 0;
+
+  cart.forEach((item, index) => {
+    const itemTotal = item.price * item.quantity;
+    subtotal += itemTotal;
+
+    const row = `
+      <tr>
+        <td>
+          <div class="d-flex align-items-center">
+            <img src="${item.image}" width="80" class="me-3 rounded" alt="">
+            <span>${item.name}</span>
+          </div>
+        </td>
+        <td>Rs. ${item.price.toLocaleString()}</td>
+        <td><input type="number" value="${item.quantity}" min="1" class="form-control w-50 qty-input" data-index="${index}"></td>
+        <td>Rs. ${itemTotal.toLocaleString()}</td>
+        <td><button class="btn btn-sm btn-outline-danger delete-item" data-index="${index}">
+          <i class="bi bi-trash"></i></button>
+        </td>
+      </tr>`;
+    tableBody.insertAdjacentHTML("beforeend", row);
+  });
+
+  updateOrderSummary(subtotal);
+  setupQuantityListeners();
+  setupDeleteListeners();
+}
+
+function setupQuantityListeners() {
+  document.querySelectorAll(".qty-input").forEach(input => {
+    input.addEventListener("change", (e) => {
+      const index = e.target.dataset.index;
+      const cart = loadCart();
+      cart[index].quantity = parseInt(e.target.value);
+      saveCart(cart);
+      displayCart(); // refresh UI
+    });
+  });
+}
+
+function setupDeleteListeners() {
+  document.querySelectorAll(".delete-item").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const index = e.target.closest("button").dataset.index;
+      const cart = loadCart();
+      cart.splice(index, 1);
+      saveCart(cart);
+      displayCart();
+    });
+  });
+}
+
+
+
+
+
+
+document.querySelector("#Coupon form").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const code = e.target.querySelector("input").value.trim();
+  const success = document.querySelector("#couponSuccess");
+  const error = document.querySelector("#couponError");
+
+  success.classList.add("d-none");
+  error.classList.add("d-none");
+
+  if (code.toLowerCase() === "rajput15") {
+    localStorage.setItem("discountPercent", "15");
+    success.classList.remove("d-none");
+    displayCart(); // refresh totals
+  } else {
+    localStorage.removeItem("discountPercent");
+    error.classList.remove("d-none");
+  }
+});
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  displayCart();
+});
+
