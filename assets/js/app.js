@@ -237,6 +237,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       )
       .join("");
   }
+// ===== Add To Cart Button Click =====
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".btn-add-to-cart")) {
+    e.preventDefault();
+    const card = e.target.closest(".product-card");
+    const title = card.querySelector(".product-title").textContent;
+    const price = Number(card.querySelector(".product-price").textContent.replace("$", ""));
+    const thumbnail = card.querySelector("img").src;
+    const id = Date.now();
+
+    addToCart({ id, title, price, thumbnail });
+  }
+});
 
   // ===== Category Filter Logic (Upgraded) =====
   categoryCards.forEach((card) => {
