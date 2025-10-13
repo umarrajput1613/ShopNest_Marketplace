@@ -1,5 +1,5 @@
 // =======================================================
-// ✅ cart.js — Error-Free & Secure Version
+// ✅ cart.js — Firestore + LocalStorage Synced Final Version
 // =======================================================
 
 import {
@@ -9,7 +9,7 @@ import {
   getDoc,
   setDoc,
   updateDoc,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from "./firebase.js";
 
 /* ===== Helper ===== */
@@ -28,7 +28,7 @@ function clearLocalUser() {
   localStorage.removeItem("userData");
 }
 
-/* ===== Sync Firestore → Local ===== */
+/* ===== Firestore → Local Sync ===== */
 async function syncUserData() {
   const user = auth.currentUser;
   if (!user) return clearLocalUser();
@@ -37,19 +37,18 @@ async function syncUserData() {
   setLocalUser({
     uid: user.uid,
     email: user.email,
-    cart: cartSnap
+    cart: cartSnap,
   });
 }
 
-/* ===== Fetch Cart Subcollection ===== */
+/* ===== Fetch Cart (Firestore Subcollection) ===== */
 async function getUserCart(uid) {
   const cartItems = [];
   try {
-    const { getDocs, collection, setDoc, doc } = await import(
+    const { getDocs, collection } = await import(
       "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
     );
 
-    // Ensure user doc exists
     const userRef = doc(db, "users", uid);
     const userSnap = await getDoc(userRef);
     if (!userSnap.exists()) {
@@ -67,7 +66,7 @@ async function getUserCart(uid) {
   return cartItems;
 }
 
-/* ===== Save Cart (Array → Subcollection) ===== */
+/* ===== Save Cart (Firestore + LocalStorage Both) ===== */
 async function saveCart(updatedCart) {
   const user = auth.currentUser;
   if (!user) return showMsg("Login required.");
@@ -83,13 +82,13 @@ async function saveCart(updatedCart) {
       "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
     );
 
-    // Delete all old cart docs
+    // --- Delete old items ---
     const oldSnap = await getDocs(collection(db, "users", user.uid, "cart"));
     const promises = [];
     oldSnap.forEach((d) => promises.push(deleteDoc(d.ref)));
     await Promise.all(promises);
 
-    // Add each item back (force string id)
+    // --- Save new items ---
     for (const item of updatedCart) {
       const itemId = String(item.id || Date.now());
       const ref = subDoc(db, "users", user.uid, "cart", itemId);
@@ -104,24 +103,39 @@ async function saveCart(updatedCart) {
       });
     }
 
+    // --- Save Locally Too ---
+    const userKey = `cart_${user.email}`;
+    localStorage.setItem(userKey, JSON.stringify(updatedCart));
+
     const local = getLocalUser();
     local.cart = updatedCart;
     setLocalUser(local);
+
   } catch (error) {
     console.error("❌ Save cart error:", error);
     showMsg("Failed to save cart. Check console.");
   }
 }
 
+/* ===== Load Cart From Local (for Speed) ===== */
+function loadLocalCart() {
+  const user = auth.currentUser;
+  if (!user) return [];
+  const userKey = `cart_${user.email}`;
+  return JSON.parse(localStorage.getItem(userKey) || "[]");
+}
+
 /* ===== Render Cart Table ===== */
 function renderCart() {
   const cartTable = document.getElementById("cart-table-body");
   const summary = document.getElementById("order-summary");
+
   const local = getLocalUser();
-  const cart = local.cart || [];
+  const cart = local.cart?.length ? local.cart : loadLocalCart();
 
   if (!cart.length) {
-    cartTable.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Your cart is empty.</td></tr>`;
+    cartTable.innerHTML =
+      `<tr><td colspan="5" class="text-center text-muted">Your cart is empty.</td></tr>`;
     summary.innerHTML = "";
     return;
   }
@@ -132,15 +146,15 @@ function renderCart() {
       const total = item.price * item.qty;
       subtotal += total;
       return `
-      <tr>
-        <td>${item.title}</td>
-        <td>$${item.price}</td>
-        <td>
-          <input type="number" min="1" value="${item.qty}" data-index="${i}" class="form-control qty-input" style="width:70px;">
-        </td>
-        <td>$${total.toFixed(2)}</td>
-        <td><button class="btn btn-sm btn-danger remove-item" data-index="${i}">Delete</button></td>
-      </tr>`;
+        <tr>
+          <td>${item.title}</td>
+          <td>$${item.price}</td>
+          <td>
+            <input type="number" min="1" value="${item.qty}" data-index="${i}" class="form-control qty-input" style="width:70px;">
+          </td>
+          <td>$${total.toFixed(2)}</td>
+          <td><button class="btn btn-sm btn-danger remove-item" data-index="${i}">Delete</button></td>
+        </tr>`;
     })
     .join("");
 
@@ -157,13 +171,12 @@ function renderCart() {
     <button id="proceedBtn" class="btn btn-primary w-100 mt-2">Proceed to Checkout</button>
   `;
 
-  // --- Update Quantity ---
+  // --- Quantity Update ---
   document.querySelectorAll(".qty-input").forEach((inp) => {
     inp.addEventListener("change", async (e) => {
       const index = e.target.dataset.index;
-      const cartData = getLocalUser().cart || [];
-      cartData[index].qty = parseInt(e.target.value) || 1;
-      await saveCart(cartData);
+      cart[index].qty = parseInt(e.target.value) || 1;
+      await saveCart(cart);
       renderCart();
     });
   });
@@ -172,9 +185,8 @@ function renderCart() {
   document.querySelectorAll(".remove-item").forEach((btn) => {
     btn.addEventListener("click", async (e) => {
       const index = e.target.dataset.index;
-      const cartData = getLocalUser().cart || [];
-      cartData.splice(index, 1);
-      await saveCart(cartData);
+      cart.splice(index, 1);
+      await saveCart(cart);
       renderCart();
     });
   });
@@ -195,10 +207,8 @@ export async function addToCart(product) {
   const cart = local.cart || [];
 
   const existing = cart.find((p) => String(p.id) === String(product.id));
-
-  if (existing) {
-    existing.qty += 1;
-  } else {
+  if (existing) existing.qty += 1;
+  else
     cart.push({
       id: String(product.id || Date.now()),
       title: product.title,
@@ -206,178 +216,25 @@ export async function addToCart(product) {
       thumbnail: product.thumbnail,
       qty: 1,
     });
-  }
 
   await saveCart(cart);
   showMsg("Added to cart ✅");
 }
 
-/* ===== Auth State Sync ===== */
+/* ===== Auth State ===== */
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("✅ Logged in:", user.email);
     await syncUserData();
-    if (document.getElementById("cart-table-body")) renderCart();
+    renderCart();
   } else {
     console.log("🚪 Logged out");
     clearLocalUser();
-    if (document.getElementById("cart-table-body")) renderCart();
+    renderCart();
   }
 });
 
-/* ===== Initialize ===== */
+/* ===== Init ===== */
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("cart-table-body")) renderCart();
 });
-
-
-
-// ✅ Save cart in localStorage per user
-function saveCart(cartData) {
-  const user = JSON.parse(localStorage.getItem("loggedUser"));
-  if (!user || !user.email) {
-    console.error("❌ No logged-in user found!");
-    return;
-  }
-
-  const userKey = `cart_${user.email}`; // Unique key per user
-  localStorage.setItem(userKey, JSON.stringify(cartData));
-  console.log("✅ Cart saved for:", user.email);
-}
-
-// ✅ Load cart when user opens cart page
-function loadCart() {
-  const user = JSON.parse(localStorage.getItem("loggedUser"));
-  if (!user || !user.email) return [];
-
-  const userKey = `cart_${user.email}`;
-  const storedCart = JSON.parse(localStorage.getItem(userKey)) || [];
-  console.log("📦 Loaded cart for:", user.email);
-  return storedCart;
-}
-
-
-
-
-
-
-
-// ✅ Save cart in localStorage per user
-function saveCart(cartData) {
-  const user = JSON.parse(localStorage.getItem("loggedUser"));
-  if (!user || !user.email) {
-    console.error("❌ No logged-in user found!");
-    return;
-  }
-
-  const userKey = `cart_${user.email}`; // Unique key per user
-  localStorage.setItem(userKey, JSON.stringify(cartData));
-  console.log("✅ Cart saved for:", user.email);
-}
-
-// ✅ Load cart when user opens cart page
-function loadCart() {
-  const user = JSON.parse(localStorage.getItem("loggedUser"));
-  if (!user || !user.email) return [];
-
-  const userKey = `cart_${user.email}`;
-  const storedCart = JSON.parse(localStorage.getItem(userKey)) || [];
-  console.log("📦 Loaded cart for:", user.email);
-  return storedCart;
-}
-
-
-
-
-
-    // ✅ Populate cart table
-function displayCart() {
-  const cart = loadCart();
-  const tableBody = document.querySelector("#yourCollection tbody");
-  tableBody.innerHTML = "";
-
-  let subtotal = 0;
-
-  cart.forEach((item, index) => {
-    const itemTotal = item.price * item.quantity;
-    subtotal += itemTotal;
-
-    const row = `
-      <tr>
-        <td>
-          <div class="d-flex align-items-center">
-            <img src="${item.image}" width="80" class="me-3 rounded" alt="">
-            <span>${item.name}</span>
-          </div>
-        </td>
-        <td>Rs. ${item.price.toLocaleString()}</td>
-        <td><input type="number" value="${item.quantity}" min="1" class="form-control w-50 qty-input" data-index="${index}"></td>
-        <td>Rs. ${itemTotal.toLocaleString()}</td>
-        <td><button class="btn btn-sm btn-outline-danger delete-item" data-index="${index}">
-          <i class="bi bi-trash"></i></button>
-        </td>
-      </tr>`;
-    tableBody.insertAdjacentHTML("beforeend", row);
-  });
-
-  updateOrderSummary(subtotal);
-  setupQuantityListeners();
-  setupDeleteListeners();
-}
-
-function setupQuantityListeners() {
-  document.querySelectorAll(".qty-input").forEach(input => {
-    input.addEventListener("change", (e) => {
-      const index = e.target.dataset.index;
-      const cart = loadCart();
-      cart[index].quantity = parseInt(e.target.value);
-      saveCart(cart);
-      displayCart(); // refresh UI
-    });
-  });
-}
-
-function setupDeleteListeners() {
-  document.querySelectorAll(".delete-item").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const index = e.target.closest("button").dataset.index;
-      const cart = loadCart();
-      cart.splice(index, 1);
-      saveCart(cart);
-      displayCart();
-    });
-  });
-}
-
-
-
-
-
-
-document.querySelector("#Coupon form").addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const code = e.target.querySelector("input").value.trim();
-  const success = document.querySelector("#couponSuccess");
-  const error = document.querySelector("#couponError");
-
-  success.classList.add("d-none");
-  error.classList.add("d-none");
-
-  if (code.toLowerCase() === "rajput15") {
-    localStorage.setItem("discountPercent", "15");
-    success.classList.remove("d-none");
-    displayCart(); // refresh totals
-  } else {
-    localStorage.removeItem("discountPercent");
-    error.classList.remove("d-none");
-  }
-});
-
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  displayCart();
-});
-
