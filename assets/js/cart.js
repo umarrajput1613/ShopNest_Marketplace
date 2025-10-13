@@ -44,20 +44,39 @@ async function syncUserData() {
 }
 
 /* ===== Save Cart to Local + Firestore ===== */
+/* ===== Save Cart to Local + Firestore ===== */
 async function saveCart(updatedCart) {
   const user = auth.currentUser;
   if (!user) return showMsg("Login required.");
 
   const userRef = doc(db, "users", user.uid);
-  await updateDoc(userRef, {
-    cart: updatedCart,
-    updatedAt: new Date().toISOString(),
-  });
+
+  try {
+    // Try updating existing user document
+    await updateDoc(userRef, {
+      cart: updatedCart,
+      updatedAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    // If document doesn't exist, create new one
+    if (error.code === "not-found") {
+      await setDoc(userRef, {
+        email: user.email,
+        cart: updatedCart,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    } else {
+      console.error("❌ Save cart error:", error);
+      return showMsg("Failed to save cart. Check console for details.");
+    }
+  }
 
   const local = getLocalUser();
   local.cart = updatedCart;
   setLocalUser(local);
 }
+
 
 /* ===== Render Cart Table ===== */
 function renderCart() {
