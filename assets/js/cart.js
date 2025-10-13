@@ -1,5 +1,5 @@
 // =======================================================
-// ✅ cart.js — Per-User Cart System (Fully Fixed & Secure)
+// ✅ cart.js — Error-Free & Secure Version
 // =======================================================
 
 import {
@@ -43,21 +43,24 @@ async function syncUserData() {
 
 /* ===== Fetch Cart Subcollection ===== */
 async function getUserCart(uid) {
-  const cartRef = doc(db, "users", uid);
   const cartItems = [];
   try {
-    const res = await getDoc(cartRef);
-    if (!res.exists()) {
-      // Create parent user doc if missing
-      await setDoc(cartRef, {
+    const { getDocs, collection, setDoc, doc } = await import(
+      "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
+    );
+
+    // Ensure user doc exists
+    const userRef = doc(db, "users", uid);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
         email: auth.currentUser.email,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       });
     }
-    // Get all cart docs under this user
-    const { getDocs, collection } = await import("https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js");
-    const snap = await getDocs(collection(db, "users", uid, "cart"));
-    snap.forEach(d => cartItems.push({ id: d.id, ...d.data() }));
+
+    const cartSnap = await getDocs(collection(db, "users", uid, "cart"));
+    cartSnap.forEach((d) => cartItems.push({ id: d.id, ...d.data() }));
   } catch (err) {
     console.error("❌ Fetch cart error:", err);
   }
@@ -70,24 +73,34 @@ async function saveCart(updatedCart) {
   if (!user) return showMsg("Login required.");
 
   try {
-    const { setDoc, deleteDoc, collection, doc: subDoc, getDocs } = await import("https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js");
+    const {
+      setDoc,
+      deleteDoc,
+      collection,
+      doc: subDoc,
+      getDocs,
+    } = await import(
+      "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
+    );
 
-    // Clear old cart
+    // Delete all old cart docs
     const oldSnap = await getDocs(collection(db, "users", user.uid, "cart"));
     const promises = [];
-    oldSnap.forEach(d => promises.push(deleteDoc(d.ref)));
+    oldSnap.forEach((d) => promises.push(deleteDoc(d.ref)));
     await Promise.all(promises);
 
-    // Write new cart items
+    // Add each item back (force string id)
     for (const item of updatedCart) {
-      const ref = subDoc(db, "users", user.uid, "cart", item.id);
+      const itemId = String(item.id || Date.now());
+      const ref = subDoc(db, "users", user.uid, "cart", itemId);
       await setDoc(ref, {
-        title: item.title,
-        price: item.price,
-        thumbnail: item.thumbnail,
-        qty: item.qty,
+        id: itemId,
+        title: item.title || "Untitled",
+        price: Number(item.price) || 0,
+        thumbnail: item.thumbnail || "",
+        qty: Number(item.qty) || 1,
         updatedAt: new Date().toISOString(),
-        userId: user.uid
+        userId: user.uid,
       });
     }
 
@@ -114,10 +127,11 @@ function renderCart() {
   }
 
   let subtotal = 0;
-  cartTable.innerHTML = cart.map((item, i) => {
-    const total = item.price * item.qty;
-    subtotal += total;
-    return `
+  cartTable.innerHTML = cart
+    .map((item, i) => {
+      const total = item.price * item.qty;
+      subtotal += total;
+      return `
       <tr>
         <td>${item.title}</td>
         <td>$${item.price}</td>
@@ -127,7 +141,8 @@ function renderCart() {
         <td>$${total.toFixed(2)}</td>
         <td><button class="btn btn-sm btn-danger remove-item" data-index="${i}">Delete</button></td>
       </tr>`;
-  }).join("");
+    })
+    .join("");
 
   const shipping = subtotal > 0 ? 10 : 0;
   const tax = subtotal * 0.05;
@@ -143,7 +158,7 @@ function renderCart() {
   `;
 
   // --- Update Quantity ---
-  document.querySelectorAll(".qty-input").forEach(inp => {
+  document.querySelectorAll(".qty-input").forEach((inp) => {
     inp.addEventListener("change", async (e) => {
       const index = e.target.dataset.index;
       const cartData = getLocalUser().cart || [];
@@ -154,7 +169,7 @@ function renderCart() {
   });
 
   // --- Remove Item ---
-  document.querySelectorAll(".remove-item").forEach(btn => {
+  document.querySelectorAll(".remove-item").forEach((btn) => {
     btn.addEventListener("click", async (e) => {
       const index = e.target.dataset.index;
       const cartData = getLocalUser().cart || [];
@@ -178,17 +193,18 @@ export async function addToCart(product) {
 
   const local = getLocalUser();
   const cart = local.cart || [];
-  const existing = cart.find(p => p.id === product.id);
+
+  const existing = cart.find((p) => String(p.id) === String(product.id));
 
   if (existing) {
     existing.qty += 1;
   } else {
     cart.push({
-      id: product.id,
+      id: String(product.id || Date.now()),
       title: product.title,
-      price: product.price,
+      price: Number(product.price),
       thumbnail: product.thumbnail,
-      qty: 1
+      qty: 1,
     });
   }
 
