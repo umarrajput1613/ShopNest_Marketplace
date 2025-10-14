@@ -111,23 +111,22 @@ function mergeCart(cart) {
 /* ===== Render Order Summary + Coupon ===== */
 /* ===== Render Order Summary + Coupon ===== */
 /* ===== Render Order Summary + Coupon (Crash-Proof) ===== */
+/* ===== Order Summary + Coupon System ===== */
 function renderOrderSummary() {
-  // Elements
   const subtotalEl = document.getElementById("subtotal");
   const shippingEl = document.getElementById("shipping");
   const taxEl = document.getElementById("tax");
   const totalEl = document.getElementById("totalAmount");
 
-  // if summary not rendered yet, retry after short delay
   if (!subtotalEl || !shippingEl || !taxEl || !totalEl) {
-    setTimeout(renderOrderSummary, 200);
+    setTimeout(renderOrderSummary, 300);
     return;
   }
 
-  const local = getLocalUser();
+  const local = JSON.parse(localStorage.getItem("userData") || "{}");
   const cart = Array.isArray(local.cart) ? local.cart : [];
 
-  // 🧾 Calculations
+  // 🧾 Calculate subtotal
   let subtotal = 0;
   cart.forEach((item) => {
     subtotal += (Number(item.price) || 0) * (Number(item.qty) || 1);
@@ -136,20 +135,22 @@ function renderOrderSummary() {
   const shipping = cart.length ? 250 : 0;
   const tax = cart.length ? 150 : 0;
 
+  // 🎟️ Coupon
   const appliedCoupon = (localStorage.getItem("appliedCoupon") || "").toUpperCase();
-  let discount = 0;
-  if (appliedCoupon === "SAVE10") discount = (subtotal + shipping + tax) * 0.1;
-  if (appliedCoupon === "SAVE15") discount = (subtotal + shipping + tax) * 0.15;
+  const coupons = { SAVE10: 10, SAVE15: 15, SAVE20: 20 };
+  const discountPercent = coupons[appliedCoupon] || 0;
 
-  const total = subtotal + shipping + tax - discount;
+  const totalBeforeDiscount = subtotal + shipping + tax;
+  const discount = totalBeforeDiscount * (discountPercent / 100);
+  const total = totalBeforeDiscount - discount;
 
-  // Update UI
+  // 🧮 Update UI
   subtotalEl.textContent = `PKR ${subtotal.toLocaleString()}`;
   shippingEl.textContent = `PKR ${shipping.toLocaleString()}`;
   taxEl.textContent = `PKR ${tax.toLocaleString()}`;
   totalEl.textContent = `PKR ${total.toLocaleString()}`;
 
-  // If discount applied, show line under subtotal (optional UI)
+  // 🟢 Discount row handling
   let discountRow = document.getElementById("discountRow");
   if (discount > 0 && !discountRow) {
     const subtotalRow = subtotalEl.closest(".d-flex");
@@ -159,25 +160,26 @@ function renderOrderSummary() {
     discountRow.innerHTML = `<span>Discount (${appliedCoupon}):</span><span>-PKR ${discount.toFixed(0)}</span>`;
     subtotalRow.insertAdjacentElement("afterend", discountRow);
   } else if (discountRow) {
-    discount > 0
-      ? (discountRow.innerHTML = `<span>Discount (${appliedCoupon}):</span><span>-PKR ${discount.toFixed(0)}</span>`)
-      : discountRow.remove();
+    if (discount > 0) {
+      discountRow.innerHTML = `<span>Discount (${appliedCoupon}):</span><span>-PKR ${discount.toFixed(0)}</span>`;
+    } else {
+      discountRow.remove();
+    }
   }
 
-  // 💬 Coupon logic — wait till form exists
+  // 💬 Coupon form logic
   setTimeout(() => {
     const form = document.getElementById("couponForm");
     const input = document.getElementById("couponInput");
     const successMsg = document.getElementById("couponSuccess");
     const errorMsg = document.getElementById("couponError");
 
-    if (!form || !input) return; // still not loaded
+    if (!form || !input) return;
 
-    form.addEventListener("submit", (e) => {
+    form.onsubmit = (e) => {
       e.preventDefault();
       const code = input.value.trim().toUpperCase();
-      const valid = ["SAVE10", "SAVE15"];
-      if (valid.includes(code)) {
+      if (coupons[code]) {
         localStorage.setItem("appliedCoupon", code);
         successMsg?.classList.remove("d-none");
         errorMsg?.classList.add("d-none");
@@ -186,10 +188,13 @@ function renderOrderSummary() {
         successMsg?.classList.add("d-none");
         errorMsg?.classList.remove("d-none");
       }
-      renderOrderSummary(); // refresh summary
-    });
+      renderOrderSummary();
+    };
   }, 200);
 }
+
+document.addEventListener("DOMContentLoaded", renderOrderSummary);
+
 
 /* ===== Render Cart ===== */
 function renderCart() {
