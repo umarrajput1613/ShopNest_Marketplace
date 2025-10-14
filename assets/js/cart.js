@@ -1,5 +1,5 @@
 // =======================================================
-// ✅ cart.js — Firestore + LocalStorage + Sync + Delete + Merge + Summary + Coupons
+// ✅ cart.js — Firestore + LocalStorage + Sync + Delete + Merge + Summary + Coupons (Fixed)
 // =======================================================
 
 import { auth, db, doc, getDoc, setDoc, onAuthStateChanged } from "./firebase.js";
@@ -65,7 +65,6 @@ async function saveCart(updatedCart) {
     const local = getLocalUser();
     local.cart = updatedCart;
     setLocalUser(local);
-
     localStorage.setItem(`cart_${user.email}`, JSON.stringify(updatedCart));
   } catch (err) {
     console.error("❌ Save cart error:", err);
@@ -110,65 +109,44 @@ function mergeCart(cart) {
 }
 
 /* ===== Render Order Summary + Coupon ===== */
-/* ===== Render Order Summary + Coupon (Final Fixed) ===== */
 function renderOrderSummary() {
   const summary = document.getElementById("orderSummary");
-  if (!summary) return;
+  if (!summary) return; // ✅ no crash if section not found
 
   // 🛒 Get cart from localStorage
-  const local = JSON.parse(localStorage.getItem("userData") || "{}");
+  const local = getLocalUser();
   const cart = Array.isArray(local.cart) ? local.cart : [];
 
   // 🧾 Calculate subtotal
   let subtotal = 0;
   cart.forEach((item) => {
-    const price = Number(item.price) || 0;
-    const qty = Number(item.qty) || 1;
-    subtotal += price * qty;
+    subtotal += (Number(item.price) || 0) * (Number(item.qty) || 1);
   });
 
-  // 📦 Static values
   const shipping = cart.length ? 250 : 0;
   const tax = cart.length ? 150 : 0;
 
-  // 💸 Coupon logic
   const coupon = (localStorage.getItem("appliedCoupon") || "").toUpperCase();
   let discount = 0;
 
   if (coupon === "SAVE10") discount = (subtotal + shipping + tax) * 0.10;
   else if (coupon === "SAVE15") discount = (subtotal + shipping + tax) * 0.15;
 
-  // 💰 Final total
   const total = subtotal + shipping + tax - discount;
 
-  // 🧾 Update summary section
+  // 🧾 Update summary UI
   summary.innerHTML = `
     <h4 class="fw-bold mb-4 text-primary">Order Summary</h4>
-    <div class="d-flex justify-content-between mb-2">
-      <span class="text-muted">Subtotal:</span>
-      <span class="fw-semibold">PKR ${subtotal.toLocaleString()}</span>
-    </div>
-    <div class="d-flex justify-content-between mb-2">
-      <span class="text-muted">Shipping:</span>
-      <span class="fw-semibold">PKR ${shipping.toLocaleString()}</span>
-    </div>
-    <div class="d-flex justify-content-between mb-2">
-      <span class="text-muted">Tax:</span>
-      <span class="fw-semibold">PKR ${tax.toLocaleString()}</span>
-    </div>
+    <div class="d-flex justify-content-between mb-2"><span class="text-muted">Subtotal:</span><span class="fw-semibold">PKR ${subtotal.toLocaleString()}</span></div>
+    <div class="d-flex justify-content-between mb-2"><span class="text-muted">Shipping:</span><span class="fw-semibold">PKR ${shipping.toLocaleString()}</span></div>
+    <div class="d-flex justify-content-between mb-2"><span class="text-muted">Tax:</span><span class="fw-semibold">PKR ${tax.toLocaleString()}</span></div>
     ${discount > 0
-      ? `<div class="d-flex justify-content-between mb-2 text-success">
-          <span>Discount (${coupon}):</span>
-          <span>-PKR ${discount.toFixed(0)}</span>
-        </div>`
+      ? `<div class="d-flex justify-content-between mb-2 text-success"><span>Discount (${coupon}):</span><span>-PKR ${discount.toFixed(0)}</span></div>`
       : ""}
     <hr>
-    <div class="d-flex justify-content-between mb-4">
-      <span class="fw-bold fs-5">Total:</span>
-      <span class="fw-bold fs-5 text-success">PKR ${total.toLocaleString()}</span>
-    </div>
+    <div class="d-flex justify-content-between mb-4"><span class="fw-bold fs-5">Total:</span><span class="fw-bold fs-5 text-success">PKR ${total.toLocaleString()}</span></div>
 
-    <div id="coupon-section" class="mt-3">
+    <section id="coupon-section" class="mt-3">
       <h5 class="fw-bold text-primary mb-2">Apply Coupon</h5>
       <form id="couponForm" class="d-flex gap-2">
         <input type="text" id="couponInput" class="form-control" placeholder="Enter coupon code" value="${coupon}">
@@ -178,13 +156,13 @@ function renderOrderSummary() {
         <small id="couponSuccess" class="text-success d-none">Coupon applied successfully 🎉</small>
         <small id="couponError" class="text-danger d-none">Invalid coupon code ❌</small>
       </div>
-    </div>
+    </section>
 
     <a href="checkout.html" class="btn btn-primary w-100 fw-bold mt-4">Proceed to Checkout</a>
     <a href="shop.html" class="btn btn-outline-secondary w-100 fw-semibold mt-2">Continue Shopping</a>
   `;
 
-  // 🎟️ Coupon form handling
+  // 🎟️ Coupon form
   const form = document.getElementById("couponForm");
   if (form) {
     form.addEventListener("submit", (e) => {
@@ -204,17 +182,16 @@ function renderOrderSummary() {
         success.classList.add("d-none");
       }
 
-      // Re-render summary with new discount
+      // Re-render to update totals
       renderOrderSummary();
     });
   }
 }
 
-
-/* ===== Render Cart (Main Table) ===== */
+/* ===== Render Cart ===== */
 function renderCart() {
   const cartTable = document.getElementById("cart-table-body");
-  if (!cartTable) return;
+  if (!cartTable) return; // ✅ Safe if element not found
 
   const local = getLocalUser();
   let cart = local.cart?.length ? local.cart : [];
@@ -222,16 +199,14 @@ function renderCart() {
 
   if (!cart.length) {
     cartTable.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Your cart is empty.</td></tr>`;
-    renderOrderSummary(0);
+    renderOrderSummary();
     return;
   }
 
-  let subtotal = 0;
   cartTable.innerHTML = cart.map((item, i) => {
     const price = Number(item.price);
     const qty = Number(item.qty);
     const total = price * qty;
-    subtotal += total;
     return `
       <tr>
         <td>${item.title}</td>
@@ -242,8 +217,9 @@ function renderCart() {
       </tr>`;
   }).join("");
 
-  renderOrderSummary(subtotal);
+  renderOrderSummary();
 
+  // 🔄 Update quantity
   document.querySelectorAll(".qty-input").forEach((inp) => {
     inp.addEventListener("change", async (e) => {
       const index = e.target.dataset.index;
@@ -253,6 +229,7 @@ function renderCart() {
     });
   });
 
+  // 🗑 Remove item
   document.querySelectorAll(".remove-item").forEach((btn) => {
     btn.addEventListener("click", async (e) => {
       await deleteCartItem(e.currentTarget.dataset.id);
@@ -273,12 +250,10 @@ function renderUserCollection(cartItems = []) {
   const merged = mergeCart(cartItems);
   tbody.innerHTML = merged.map((item) => `
     <tr>
-      <td>
-        <div class="d-flex align-items-center">
-          <img src="${item.thumbnail || "https://via.placeholder.com/80"}" class="me-3 rounded" width="80">
-          <span>${item.title}</span>
-        </div>
-      </td>
+      <td><div class="d-flex align-items-center">
+        <img src="${item.thumbnail || "https://via.placeholder.com/80"}" class="me-3 rounded" width="80">
+        <span>${item.title}</span>
+      </div></td>
       <td>PKR ${Number(item.price).toLocaleString()}</td>
       <td><input type="number" value="${Number(item.qty)}" class="form-control w-50" readonly></td>
       <td>PKR ${(Number(item.price) * Number(item.qty)).toLocaleString()}</td>
