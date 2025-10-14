@@ -1,5 +1,5 @@
 // =======================================================
-// ✅ cart.js — Firestore + LocalStorage + Sync + Delete + Merge Duplicates
+// ✅ cart.js — Firestore + LocalStorage + Sync + Delete + Merge Duplicates (Final Fixed)
 // =======================================================
 
 import { auth, db, doc, getDoc, setDoc, onAuthStateChanged } from "./firebase.js";
@@ -107,13 +107,15 @@ function loadLocalCart() {
   return JSON.parse(localStorage.getItem(userKey) || "[]");
 }
 
-/* ===== Merge Duplicate Products ===== */
+/* ===== Merge Duplicate Products (Fix Qty + Total) ===== */
 function mergeCart(cart) {
   const merged = [];
   for (const item of cart) {
     const existing = merged.find((p) => String(p.id) === String(item.id));
     if (existing) {
       existing.qty += Number(item.qty);
+      existing.title = existing.title || item.title;
+      existing.price = Number(existing.price || item.price);
     } else {
       merged.push({ ...item, qty: Number(item.qty) });
     }
@@ -233,7 +235,7 @@ function renderUserCollection(cartItems = []) {
   });
 }
 
-/* ===== Add To Cart ===== */
+/* ===== Add To Cart (Final Fixed Version) ===== */
 export async function addToCart(product) {
   const user = auth.currentUser;
   if (!user) return showMsg("Please log in to add products.");
@@ -241,22 +243,26 @@ export async function addToCart(product) {
   const local = getLocalUser();
   const cart = local.cart || [];
 
+  // 🔍 Check if product already exists
   const existing = cart.find((p) => String(p.id) === String(product.id));
-  if (existing) existing.qty += 1;
-  else
+
+  if (existing) {
+    existing.qty += 1; // ✅ increase quantity
+  } else {
     cart.push({
-      id: String(product.id || Date.now()),
+      id: String(product.id), // ✅ fixed: no Date.now()
       title: product.title,
       price: Number(product.price),
-      thumbnail: product.thumbnail,
+      thumbnail: product.thumbnail || "",
       qty: 1,
     });
+  }
 
   const merged = mergeCart(cart);
   await saveCart(merged);
   renderCart();
   renderUserCollection(merged);
-  showMsg("Added to cart ✅");
+  showMsg(existing ? "Quantity updated 🛒" : "Added to cart ✅");
 }
 
 /* ===== Auth State ===== */
