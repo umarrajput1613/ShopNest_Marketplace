@@ -110,58 +110,92 @@ function mergeCart(cart) {
 }
 
 /* ===== Render Order Summary + Coupon ===== */
-function renderOrderSummary(subtotal) {
+/* ===== Render Order Summary + Coupon (Final Fixed) ===== */
+function renderOrderSummary() {
   const summary = document.getElementById("orderSummary");
   if (!summary) return;
 
-  const shipping = subtotal > 0 ? 250 : 0;
-  const tax = subtotal * 0.02;
+  // 🛒 Get cart from localStorage
+  const local = JSON.parse(localStorage.getItem("userData") || "{}");
+  const cart = Array.isArray(local.cart) ? local.cart : [];
+
+  // 🧾 Calculate subtotal
+  let subtotal = 0;
+  cart.forEach((item) => {
+    const price = Number(item.price) || 0;
+    const qty = Number(item.qty) || 1;
+    subtotal += price * qty;
+  });
+
+  // 📦 Static values
+  const shipping = cart.length ? 250 : 0;
+  const tax = cart.length ? 150 : 0;
+
+  // 💸 Coupon logic
+  const coupon = (localStorage.getItem("appliedCoupon") || "").toUpperCase();
   let discount = 0;
 
-  const appliedCoupon = localStorage.getItem("appliedCoupon") || "";
-  if (appliedCoupon === "SAVE10") discount = subtotal * 0.1;
-  if (appliedCoupon === "FREESHIP") discount = shipping;
+  if (coupon === "SAVE10") discount = (subtotal + shipping + tax) * 0.10;
+  else if (coupon === "SAVE15") discount = (subtotal + shipping + tax) * 0.15;
 
+  // 💰 Final total
   const total = subtotal + shipping + tax - discount;
 
+  // 🧾 Update summary section
   summary.innerHTML = `
     <h4 class="fw-bold mb-4 text-primary">Order Summary</h4>
-    <div class="d-flex justify-content-between mb-2"><span>Subtotal:</span><span>PKR ${subtotal.toLocaleString()}</span></div>
-    <div class="d-flex justify-content-between mb-2"><span>Shipping:</span><span>PKR ${shipping}</span></div>
-    <div class="d-flex justify-content-between mb-2"><span>Tax:</span><span>PKR ${tax.toFixed(0)}</span></div>
-    ${discount > 0 ? `<div class="d-flex justify-content-between mb-2 text-success"><span>Coupon Discount:</span><span>-PKR ${discount.toFixed(0)}</span></div>` : ""}
-    <hr>
-    <div class="d-flex justify-content-between mb-4 fw-bold fs-5 text-success">
-      <span>Total:</span><span>PKR ${total.toLocaleString()}</span>
+    <div class="d-flex justify-content-between mb-2">
+      <span class="text-muted">Subtotal:</span>
+      <span class="fw-semibold">PKR ${subtotal.toLocaleString()}</span>
     </div>
-    <a href="checkout.html" class="btn btn-primary w-100 mb-2">Proceed to Checkout</a>
-    <a href="shop.html" class="btn btn-outline-secondary w-100">Continue Shopping</a>
-  `;
+    <div class="d-flex justify-content-between mb-2">
+      <span class="text-muted">Shipping:</span>
+      <span class="fw-semibold">PKR ${shipping.toLocaleString()}</span>
+    </div>
+    <div class="d-flex justify-content-between mb-2">
+      <span class="text-muted">Tax:</span>
+      <span class="fw-semibold">PKR ${tax.toLocaleString()}</span>
+    </div>
+    ${discount > 0
+      ? `<div class="d-flex justify-content-between mb-2 text-success">
+          <span>Discount (${coupon}):</span>
+          <span>-PKR ${discount.toFixed(0)}</span>
+        </div>`
+      : ""}
+    <hr>
+    <div class="d-flex justify-content-between mb-4">
+      <span class="fw-bold fs-5">Total:</span>
+      <span class="fw-bold fs-5 text-success">PKR ${total.toLocaleString()}</span>
+    </div>
 
-  const couponSection = document.getElementById("coupon-section");
-  if (couponSection) {
-    couponSection.innerHTML = `
-      <h5 class="fw-bold mb-3 text-primary">Apply Coupon</h5>
+    <div id="coupon-section" class="mt-3">
+      <h5 class="fw-bold text-primary mb-2">Apply Coupon</h5>
       <form id="couponForm" class="d-flex gap-2">
-        <input type="text" class="form-control" id="couponInput" placeholder="Enter coupon code" value="${appliedCoupon}">
-        <button type="submit" class="btn btn-success fw-bold">Apply</button>
+        <input type="text" id="couponInput" class="form-control" placeholder="Enter coupon code" value="${coupon}">
+        <button class="btn btn-success fw-bold" type="submit">Apply</button>
       </form>
       <div class="mt-2">
-        <small class="text-success d-none" id="couponSuccess">Coupon applied successfully 🎉</small>
-        <small class="text-danger d-none" id="couponError">Invalid coupon.</small>
+        <small id="couponSuccess" class="text-success d-none">Coupon applied successfully 🎉</small>
+        <small id="couponError" class="text-danger d-none">Invalid coupon code ❌</small>
       </div>
-    `;
+    </div>
 
-    const form = document.getElementById("couponForm");
+    <a href="checkout.html" class="btn btn-primary w-100 fw-bold mt-4">Proceed to Checkout</a>
+    <a href="shop.html" class="btn btn-outline-secondary w-100 fw-semibold mt-2">Continue Shopping</a>
+  `;
+
+  // 🎟️ Coupon form handling
+  const form = document.getElementById("couponForm");
+  if (form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const code = document.getElementById("couponInput").value.trim().toUpperCase();
-      const validCoupons = ["SAVE10", "FREESHIP"];
+      const input = document.getElementById("couponInput").value.trim().toUpperCase();
+      const validCoupons = ["SAVE10", "SAVE15"];
       const success = document.getElementById("couponSuccess");
       const error = document.getElementById("couponError");
 
-      if (validCoupons.includes(code)) {
-        localStorage.setItem("appliedCoupon", code);
+      if (validCoupons.includes(input)) {
+        localStorage.setItem("appliedCoupon", input);
         success.classList.remove("d-none");
         error.classList.add("d-none");
       } else {
@@ -169,10 +203,13 @@ function renderOrderSummary(subtotal) {
         error.classList.remove("d-none");
         success.classList.add("d-none");
       }
-      renderCart(); // 🔁 refresh total with new coupon
+
+      // Re-render summary with new discount
+      renderOrderSummary();
     });
   }
 }
+
 
 /* ===== Render Cart (Main Table) ===== */
 function renderCart() {
