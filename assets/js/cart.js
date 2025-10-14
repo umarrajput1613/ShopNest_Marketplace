@@ -109,86 +109,67 @@ function mergeCart(cart) {
 }
 
 /* ===== Render Order Summary + Coupon ===== */
+/* ===== Render Order Summary + Coupon ===== */
 function renderOrderSummary() {
-  const summary = document.getElementById("orderSummary");
-  if (!summary) return; // ✅ no crash if section not found
+  const subtotalEl = document.getElementById("subtotal");
+  const shippingEl = document.getElementById("shipping");
+  const taxEl = document.getElementById("tax");
+  const totalEl = document.getElementById("totalAmount");
+  const couponForm = document.getElementById("couponForm");
+  const couponInput = document.getElementById("couponInput");
+  const successMsg = document.getElementById("couponSuccess");
+  const errorMsg = document.getElementById("couponError");
 
-  // 🛒 Get cart from localStorage
+  if (!subtotalEl || !shippingEl || !taxEl || !totalEl) return; // UI safe guard
+
+  // 🛒 Get cart data from localStorage
   const local = getLocalUser();
   const cart = Array.isArray(local.cart) ? local.cart : [];
 
-  // 🧾 Calculate subtotal
+  // 🧾 Calculate values
   let subtotal = 0;
-  cart.forEach((item) => {
+  cart.forEach(item => {
     subtotal += (Number(item.price) || 0) * (Number(item.qty) || 1);
   });
 
   const shipping = cart.length ? 250 : 0;
   const tax = cart.length ? 150 : 0;
 
-  const coupon = (localStorage.getItem("appliedCoupon") || "").toUpperCase();
+  // 🎟️ Coupon check
+  const appliedCoupon = (localStorage.getItem("appliedCoupon") || "").toUpperCase();
   let discount = 0;
 
-  if (coupon === "SAVE10") discount = (subtotal + shipping + tax) * 0.10;
-  else if (coupon === "SAVE15") discount = (subtotal + shipping + tax) * 0.15;
+  if (appliedCoupon === "SAVE10") discount = (subtotal + shipping + tax) * 0.10;
+  if (appliedCoupon === "SAVE15") discount = (subtotal + shipping + tax) * 0.15;
 
   const total = subtotal + shipping + tax - discount;
 
-  // 🧾 Update summary UI
-  summary.innerHTML = `
-    <h4 class="fw-bold mb-4 text-primary">Order Summary</h4>
-    <div class="d-flex justify-content-between mb-2"><span class="text-muted">Subtotal:</span><span class="fw-semibold">PKR ${subtotal.toLocaleString()}</span></div>
-    <div class="d-flex justify-content-between mb-2"><span class="text-muted">Shipping:</span><span class="fw-semibold">PKR ${shipping.toLocaleString()}</span></div>
-    <div class="d-flex justify-content-between mb-2"><span class="text-muted">Tax:</span><span class="fw-semibold">PKR ${tax.toLocaleString()}</span></div>
-    ${discount > 0
-      ? `<div class="d-flex justify-content-between mb-2 text-success"><span>Discount (${coupon}):</span><span>-PKR ${discount.toFixed(0)}</span></div>`
-      : ""}
-    <hr>
-    <div class="d-flex justify-content-between mb-4"><span class="fw-bold fs-5">Total:</span><span class="fw-bold fs-5 text-success">PKR ${total.toLocaleString()}</span></div>
+  // 🧮 Update UI
+  subtotalEl.textContent = `PKR ${subtotal.toLocaleString()}`;
+  shippingEl.textContent = `PKR ${shipping.toLocaleString()}`;
+  taxEl.textContent = `PKR ${tax.toLocaleString()}`;
+  totalEl.textContent = `PKR ${total.toLocaleString()}`;
 
-    <section id="coupon-section" class="mt-3">
-      <h5 class="fw-bold text-primary mb-2">Apply Coupon</h5>
-      <form id="couponForm" class="d-flex gap-2">
-        <input type="text" id="couponInput" class="form-control" placeholder="Enter coupon code" value="${coupon}">
-        <button class="btn btn-success fw-bold" type="submit">Apply</button>
-      </form>
-      <div class="mt-2">
-        <small id="couponSuccess" class="text-success d-none">Coupon applied successfully 🎉</small>
-        <small id="couponError" class="text-danger d-none">Invalid coupon code ❌</small>
-      </div>
-    </section>
+  // 💬 Coupon form handling
+  if (couponForm) {
+    couponForm.onsubmit = (e) => {
+      e.preventDefault();
+      const input = couponInput.value.trim().toUpperCase();
+      const validCoupons = ["SAVE10", "SAVE15"];
 
-    <a href="checkout.html" class="btn btn-primary w-100 fw-bold mt-4">Proceed to Checkout</a>
-    <a href="shop.html" class="btn btn-outline-secondary w-100 fw-semibold mt-2">Continue Shopping</a>
-  `;
+      if (validCoupons.includes(input)) {
+        localStorage.setItem("appliedCoupon", input);
+        successMsg.classList.remove("d-none");
+        errorMsg.classList.add("d-none");
+      } else {
+        localStorage.removeItem("appliedCoupon");
+        successMsg.classList.add("d-none");
+        errorMsg.classList.remove("d-none");
+      }
 
-  // 🎟️ Coupon form
-setTimeout(() => {
-  const form = document.getElementById("couponForm");
-  if (!form) return;
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const input = document.getElementById("couponInput").value.trim().toUpperCase();
-    const validCoupons = ["SAVE10", "SAVE15"];
-    const success = document.getElementById("couponSuccess");
-    const error = document.getElementById("couponError");
-
-    if (validCoupons.includes(input)) {
-      localStorage.setItem("appliedCoupon", input);
-      success.classList.remove("d-none");
-      error.classList.add("d-none");
-    } else {
-      localStorage.removeItem("appliedCoupon");
-      error.classList.remove("d-none");
-      success.classList.add("d-none");
-    }
-
-    // Re-render to update totals
-    renderOrderSummary();
-  });
-}, 50);
-
+      renderOrderSummary(); // re-calculate totals
+    };
+  }
 }
 
 /* ===== Render Cart ===== */
