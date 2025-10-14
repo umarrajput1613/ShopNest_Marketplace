@@ -110,66 +110,85 @@ function mergeCart(cart) {
 
 /* ===== Render Order Summary + Coupon ===== */
 /* ===== Render Order Summary + Coupon ===== */
+/* ===== Render Order Summary + Coupon (Crash-Proof) ===== */
 function renderOrderSummary() {
+  // Elements
   const subtotalEl = document.getElementById("subtotal");
   const shippingEl = document.getElementById("shipping");
   const taxEl = document.getElementById("tax");
   const totalEl = document.getElementById("totalAmount");
-  const couponForm = document.getElementById("couponForm");
-  const couponInput = document.getElementById("couponInput");
-  const successMsg = document.getElementById("couponSuccess");
-  const errorMsg = document.getElementById("couponError");
 
-  if (!subtotalEl || !shippingEl || !taxEl || !totalEl) return; // UI safe guard
+  // if summary not rendered yet, retry after short delay
+  if (!subtotalEl || !shippingEl || !taxEl || !totalEl) {
+    setTimeout(renderOrderSummary, 200);
+    return;
+  }
 
-  // 🛒 Get cart data from localStorage
   const local = getLocalUser();
   const cart = Array.isArray(local.cart) ? local.cart : [];
 
-  // 🧾 Calculate values
+  // 🧾 Calculations
   let subtotal = 0;
-  cart.forEach(item => {
+  cart.forEach((item) => {
     subtotal += (Number(item.price) || 0) * (Number(item.qty) || 1);
   });
 
   const shipping = cart.length ? 250 : 0;
   const tax = cart.length ? 150 : 0;
 
-  // 🎟️ Coupon check
   const appliedCoupon = (localStorage.getItem("appliedCoupon") || "").toUpperCase();
   let discount = 0;
-
-  if (appliedCoupon === "SAVE10") discount = (subtotal + shipping + tax) * 0.10;
+  if (appliedCoupon === "SAVE10") discount = (subtotal + shipping + tax) * 0.1;
   if (appliedCoupon === "SAVE15") discount = (subtotal + shipping + tax) * 0.15;
 
   const total = subtotal + shipping + tax - discount;
 
-  // 🧮 Update UI
+  // Update UI
   subtotalEl.textContent = `PKR ${subtotal.toLocaleString()}`;
   shippingEl.textContent = `PKR ${shipping.toLocaleString()}`;
   taxEl.textContent = `PKR ${tax.toLocaleString()}`;
   totalEl.textContent = `PKR ${total.toLocaleString()}`;
 
-  // 💬 Coupon form handling
-  if (couponForm) {
-    couponForm.onsubmit = (e) => {
-      e.preventDefault();
-      const input = couponInput.value.trim().toUpperCase();
-      const validCoupons = ["SAVE10", "SAVE15"];
+  // If discount applied, show line under subtotal (optional UI)
+  let discountRow = document.getElementById("discountRow");
+  if (discount > 0 && !discountRow) {
+    const subtotalRow = subtotalEl.closest(".d-flex");
+    discountRow = document.createElement("div");
+    discountRow.className = "d-flex justify-content-between mb-2 text-success";
+    discountRow.id = "discountRow";
+    discountRow.innerHTML = `<span>Discount (${appliedCoupon}):</span><span>-PKR ${discount.toFixed(0)}</span>`;
+    subtotalRow.insertAdjacentElement("afterend", discountRow);
+  } else if (discountRow) {
+    discount > 0
+      ? (discountRow.innerHTML = `<span>Discount (${appliedCoupon}):</span><span>-PKR ${discount.toFixed(0)}</span>`)
+      : discountRow.remove();
+  }
 
-      if (validCoupons.includes(input)) {
-        localStorage.setItem("appliedCoupon", input);
-        successMsg.classList.remove("d-none");
-        errorMsg.classList.add("d-none");
+  // 💬 Coupon logic — wait till form exists
+  setTimeout(() => {
+    const form = document.getElementById("couponForm");
+    const input = document.getElementById("couponInput");
+    const successMsg = document.getElementById("couponSuccess");
+    const errorMsg = document.getElementById("couponError");
+
+    if (!form || !input) return; // still not loaded
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const code = input.value.trim().toUpperCase();
+      const valid = ["SAVE10", "SAVE15"];
+      if (valid.includes(code)) {
+        localStorage.setItem("appliedCoupon", code);
+        successMsg?.classList.remove("d-none");
+        errorMsg?.classList.add("d-none");
       } else {
         localStorage.removeItem("appliedCoupon");
-        successMsg.classList.add("d-none");
-        errorMsg.classList.remove("d-none");
+        successMsg?.classList.add("d-none");
+        errorMsg?.classList.remove("d-none");
       }
-
-      renderOrderSummary(); // re-calculate totals
-    };
-  }
+      renderOrderSummary(); // refresh summary
+    });
+  }, 200);
 }
 
 /* ===== Render Cart ===== */
