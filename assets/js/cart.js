@@ -322,3 +322,81 @@ onAuthStateChanged(auth, async (user) => {
 document.addEventListener("DOMContentLoaded", () => {
   renderCart();
 });
+
+
+
+// --- helper: build order snapshot from current cart UI/localStorage
+function buildOrderSnapshot() {
+  const local = getLocalUser(); // { cart: [...] , ... }
+  const cart = Array.isArray(local.cart) ? local.cart : [];
+
+  // compute numeric subtotal
+  let subtotal = 0;
+  cart.forEach(item => {
+    subtotal += (Number(item.price) || 0) * (Number(item.qty) || 1);
+  });
+
+  const shipping = cart.length ? 250 : 0;
+  const tax = cart.length ? 150 : 0;
+  const coupon = (localStorage.getItem("appliedCoupon") || "").toUpperCase();
+  // if you use percent coupons, compute discount here OR compute later
+  const coupons = { SAVE10: 10, SAVE15: 15, SAVE20: 20 };
+  const totalBeforeDiscount = subtotal + shipping + tax;
+  const discountPercent = coupons[coupon] || 0;
+  const discount = totalBeforeDiscount * (discountPercent / 100);
+  const total = totalBeforeDiscount - discount;
+
+  return {
+    cartItems: cart,
+    subtotal,
+    shipping,
+    tax,
+    coupon: coupon || null,
+    discount,
+    total,
+    createdAt: new Date().toISOString()
+  };
+}
+
+// --- open payment form: save snapshot and navigate
+export function openPaymentForm() {
+  const snapshot = buildOrderSnapshot();
+  localStorage.setItem("pendingCheckout", JSON.stringify(snapshot));
+  // Navigate to contact page payment tab; adjust path as your project
+  window.location.href = "../pages/contact.html#paymentForm";
+}
+
+// --- clear cart after successful checkout
+export async function clearCartAfterCheckout() {
+  // Clear localStorage copies
+  const user = auth.currentUser;
+  // Clear local user cart
+  const local = getLocalUser();
+  local.cart = [];
+  setLocalUser(local);
+  // clear per-user stored key if used
+  if (user && user.email) localStorage.removeItem(`cart_${user.email}`);
+
+  // remove applied coupon and pendingCheckout
+  localStorage.removeItem("appliedCoupon");
+  localStorage.removeItem("pendingCheckout");
+
+  // clear Firestore subcollection (optional: keep for history; otherwise delete)
+  if (user) {
+    try {
+      const { getDocs, collection, deleteDoc } = await import("https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js");
+      const snap = await getDocs(collection(db, "users", user.uid, "cart"));
+      const deletions = [];
+      snap.forEach(d => deletions.push(deleteDoc(d.ref)));
+      await Promise.all(deletions);
+    } catch (err) {
+      console.warn("Could not clear Firestore cart:", err);
+    }
+  }
+
+  // re-render UI
+  renderCart?.();
+  renderUserCollection?.([]);
+  renderOrderSummary?.();
+}
+
