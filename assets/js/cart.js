@@ -1,5 +1,5 @@
 // =======================================================
-// ✅ cart.js — Firestore + LocalStorage + Sync + Delete + Merge + Summary + Coupons (Fixed)
+// ✅ cart.js — Firestore + LocalStorage + Sync + Delete + Merge + Summary + Coupons + Checkout (Fully Fixed)
 // =======================================================
 
 import { auth, db, doc, getDoc, setDoc, onAuthStateChanged } from "./firebase.js";
@@ -108,20 +108,14 @@ function mergeCart(cart) {
   return merged;
 }
 
-/* ===== Render Order Summary + Coupon ===== */
-/* ===== Render Order Summary + Coupon ===== */
 /* ===== Render Order Summary + Coupon (Crash-Proof) ===== */
-/* ===== Order Summary + Coupon System ===== */
 function renderOrderSummary() {
   const subtotalEl = document.getElementById("subtotal");
   const shippingEl = document.getElementById("shipping");
   const taxEl = document.getElementById("tax");
   const totalEl = document.getElementById("totalAmount");
 
-  if (!subtotalEl || !shippingEl || !taxEl || !totalEl) {
-    setTimeout(renderOrderSummary, 300);
-    return;
-  }
+  if (!subtotalEl || !shippingEl || !taxEl || !totalEl) return;
 
   const local = JSON.parse(localStorage.getItem("userData") || "{}");
   const cart = Array.isArray(local.cart) ? local.cart : [];
@@ -152,13 +146,13 @@ function renderOrderSummary() {
 
   // 🟢 Discount row handling
   let discountRow = document.getElementById("discountRow");
-  if (discount > 0 && !discountRow) {
-    const subtotalRow = subtotalEl.closest(".d-flex");
+  const summaryBox = subtotalEl.closest(".d-flex")?.parentElement;
+  if (discount > 0 && !discountRow && summaryBox) {
     discountRow = document.createElement("div");
     discountRow.className = "d-flex justify-content-between mb-2 text-success";
     discountRow.id = "discountRow";
     discountRow.innerHTML = `<span>Discount (${appliedCoupon}):</span><span>-PKR ${discount.toFixed(0)}</span>`;
-    subtotalRow.insertAdjacentElement("afterend", discountRow);
+    summaryBox.insertBefore(discountRow, totalEl.closest(".d-flex"));
   } else if (discountRow) {
     if (discount > 0) {
       discountRow.innerHTML = `<span>Discount (${appliedCoupon}):</span><span>-PKR ${discount.toFixed(0)}</span>`;
@@ -168,14 +162,12 @@ function renderOrderSummary() {
   }
 
   // 💬 Coupon form logic
-  setTimeout(() => {
-    const form = document.getElementById("couponForm");
-    const input = document.getElementById("couponInput");
-    const successMsg = document.getElementById("couponSuccess");
-    const errorMsg = document.getElementById("couponError");
+  const form = document.getElementById("couponForm");
+  const input = document.getElementById("couponInput");
+  const successMsg = document.getElementById("couponSuccess");
+  const errorMsg = document.getElementById("couponError");
 
-    if (!form || !input) return;
-
+  if (form && input) {
     form.onsubmit = (e) => {
       e.preventDefault();
       const code = input.value.trim().toUpperCase();
@@ -190,11 +182,8 @@ function renderOrderSummary() {
       }
       renderOrderSummary();
     };
-  }, 200);
+  }
 }
-
-document.addEventListener("DOMContentLoaded", renderOrderSummary);
-
 
 /* ===== Render Cart ===== */
 function renderCart() {
@@ -321,15 +310,16 @@ onAuthStateChanged(auth, async (user) => {
 /* ===== Init ===== */
 document.addEventListener("DOMContentLoaded", () => {
   renderCart();
+  renderOrderSummary();
 });
 
 
+// =======================================================
+// ✅ Checkout Helpers
+// =======================================================
 
-// ========== Checkout helpers (paste at end of cart.js) ==========
-
-/* ===== helper: build order snapshot from current cart UI/localStorage ===== */
 function buildOrderSnapshot() {
-  const local = getLocalUser(); // assumes this function exists in your file
+  const local = getLocalUser();
   const cart = Array.isArray(local.cart) ? local.cart : [];
 
   let subtotal = 0;
@@ -358,28 +348,22 @@ function buildOrderSnapshot() {
   };
 }
 
-/* ===== open payment form: save snapshot and navigate ===== */
 export function openPaymentForm() {
   const snapshot = buildOrderSnapshot();
   localStorage.setItem("pendingCheckout", JSON.stringify(snapshot));
-  // adjust path if your contact.html is located elsewhere
   window.location.href = "../pages/contact.html#paymentForm";
 }
 
-/* ===== clear cart after successful checkout ===== */
 export async function clearCartAfterCheckout() {
   const user = auth.currentUser;
-  // Clear local user cart
   const local = getLocalUser();
   local.cart = [];
   setLocalUser(local);
   if (user && user.email) localStorage.removeItem(`cart_${user.email}`);
 
-  // remove coupon and pendingCheckout
   localStorage.removeItem("appliedCoupon");
   localStorage.removeItem("pendingCheckout");
 
-  // clear Firestore subcollection (optional)
   if (user) {
     try {
       const { getDocs, collection, deleteDoc } = await import(
@@ -394,12 +378,11 @@ export async function clearCartAfterCheckout() {
     }
   }
 
-  // re-render UI if functions exist
-  if (typeof renderCart === "function") renderCart();
-  if (typeof renderUserCollection === "function") renderUserCollection([]);
-  if (typeof renderOrderSummary === "function") renderOrderSummary();
+  renderCart();
+  renderUserCollection([]);
+  renderOrderSummary();
 }
 
-// If your cart.js is NOT a module, expose to window:
-// window.openPaymentForm = openPaymentForm;
-// window.clearCartAfterCheckout = clearCartAfterCheckout;
+// In case the module system doesn’t auto-expose:
+window.openPaymentForm = openPaymentForm;
+window.clearCartAfterCheckout = clearCartAfterCheckout;
