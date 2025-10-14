@@ -163,29 +163,32 @@ function renderOrderSummary() {
   `;
 
   // 🎟️ Coupon form
+setTimeout(() => {
   const form = document.getElementById("couponForm");
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const input = document.getElementById("couponInput").value.trim().toUpperCase();
-      const validCoupons = ["SAVE10", "SAVE15"];
-      const success = document.getElementById("couponSuccess");
-      const error = document.getElementById("couponError");
+  if (!form) return;
 
-      if (validCoupons.includes(input)) {
-        localStorage.setItem("appliedCoupon", input);
-        success.classList.remove("d-none");
-        error.classList.add("d-none");
-      } else {
-        localStorage.removeItem("appliedCoupon");
-        error.classList.remove("d-none");
-        success.classList.add("d-none");
-      }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const input = document.getElementById("couponInput").value.trim().toUpperCase();
+    const validCoupons = ["SAVE10", "SAVE15"];
+    const success = document.getElementById("couponSuccess");
+    const error = document.getElementById("couponError");
 
-      // Re-render to update totals
-      renderOrderSummary();
-    });
-  }
+    if (validCoupons.includes(input)) {
+      localStorage.setItem("appliedCoupon", input);
+      success.classList.remove("d-none");
+      error.classList.add("d-none");
+    } else {
+      localStorage.removeItem("appliedCoupon");
+      error.classList.remove("d-none");
+      success.classList.add("d-none");
+    }
+
+    // Re-render to update totals
+    renderOrderSummary();
+  });
+}, 50);
+
 }
 
 /* ===== Render Cart ===== */
