@@ -20,7 +20,7 @@ function clearLocalUser() {
   localStorage.removeItem("userData");
 }
 
-/* ===== Fetch Cart ===== */
+/* ===== Fetch Cart (from Firestore) ===== */
 async function getUserCart(uid) {
   const cartItems = [];
   try {
@@ -33,7 +33,7 @@ async function getUserCart(uid) {
   return cartItems;
 }
 
-/* ===== Save Cart ===== */
+/* ===== Save Cart (to Firestore + LocalStorage) ===== */
 async function saveCart(updatedCart) {
   const user = auth.currentUser;
   if (!user) return;
@@ -43,11 +43,13 @@ async function saveCart(updatedCart) {
       "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
     );
 
+    // Delete old docs before saving updated ones
     const oldSnap = await getDocs(collection(db, "users", user.uid, "cart"));
     const deletions = [];
     oldSnap.forEach((d) => deletions.push(deleteDoc(d.ref)));
     await Promise.all(deletions);
 
+    // Save new docs
     for (const item of updatedCart) {
       const ref = subDoc(db, "users", user.uid, "cart", String(item.id));
       await setDoc(ref, {
@@ -60,17 +62,17 @@ async function saveCart(updatedCart) {
       });
     }
 
-    const userKey = `cart_${user.email}`;
-    localStorage.setItem(userKey, JSON.stringify(updatedCart));
     const local = getLocalUser();
     local.cart = updatedCart;
     setLocalUser(local);
+
+    localStorage.setItem(`cart_${user.email}`, JSON.stringify(updatedCart));
   } catch (err) {
     console.error("❌ Save cart error:", err);
   }
 }
 
-/* ===== Delete Single Item ===== */
+/* ===== Delete Single Cart Item ===== */
 async function deleteCartItem(itemId) {
   const user = auth.currentUser;
   if (!user) return;
@@ -79,6 +81,7 @@ async function deleteCartItem(itemId) {
     const { deleteDoc, doc: subDoc } = await import(
       "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
     );
+
     const ref = subDoc(db, "users", user.uid, "cart", itemId);
     await deleteDoc(ref);
 
@@ -100,16 +103,13 @@ function mergeCart(cart) {
   const merged = [];
   for (const item of cart) {
     const existing = merged.find((p) => String(p.id) === String(item.id));
-    if (existing) {
-      existing.qty += Number(item.qty);
-    } else {
-      merged.push({ ...item, qty: Number(item.qty) });
-    }
+    if (existing) existing.qty += Number(item.qty);
+    else merged.push({ ...item, qty: Number(item.qty) });
   }
   return merged;
 }
 
-/* ===== Render Order Summary (with Coupon) ===== */
+/* ===== Render Order Summary + Coupon ===== */
 function renderOrderSummary(subtotal) {
   const summary = document.getElementById("orderSummary");
   if (!summary) return;
@@ -126,31 +126,29 @@ function renderOrderSummary(subtotal) {
 
   summary.innerHTML = `
     <h4 class="fw-bold mb-4 text-primary">Order Summary</h4>
-    <div class="d-flex justify-content-between mb-2"><span class="text-muted">Subtotal:</span><span class="fw-semibold">PKR ${subtotal.toLocaleString()}</span></div>
-    <div class="d-flex justify-content-between mb-2"><span class="text-muted">Shipping:</span><span class="fw-semibold">PKR ${shipping}</span></div>
-    <div class="d-flex justify-content-between mb-2"><span class="text-muted">Tax:</span><span class="fw-semibold">PKR ${tax.toFixed(0)}</span></div>
+    <div class="d-flex justify-content-between mb-2"><span>Subtotal:</span><span>PKR ${subtotal.toLocaleString()}</span></div>
+    <div class="d-flex justify-content-between mb-2"><span>Shipping:</span><span>PKR ${shipping}</span></div>
+    <div class="d-flex justify-content-between mb-2"><span>Tax:</span><span>PKR ${tax.toFixed(0)}</span></div>
     ${discount > 0 ? `<div class="d-flex justify-content-between mb-2 text-success"><span>Coupon Discount:</span><span>-PKR ${discount.toFixed(0)}</span></div>` : ""}
     <hr>
-    <div class="d-flex justify-content-between mb-4">
-      <span class="fw-bold fs-5">Total:</span>
-      <span class="fw-bold fs-5 text-success">PKR ${total.toLocaleString()}</span>
+    <div class="d-flex justify-content-between mb-4 fw-bold fs-5 text-success">
+      <span>Total:</span><span>PKR ${total.toLocaleString()}</span>
     </div>
-    <a href="checkout.html" class="btn btn-primary w-100 fw-bold mb-3">Proceed to Checkout</a>
-    <a href="shop.html" class="btn btn-outline-secondary w-100 fw-semibold">Continue Shopping</a>
+    <a href="checkout.html" class="btn btn-primary w-100 mb-2">Proceed to Checkout</a>
+    <a href="shop.html" class="btn btn-outline-secondary w-100">Continue Shopping</a>
   `;
 
-  // Render coupon section
   const couponSection = document.getElementById("coupon-section");
   if (couponSection) {
     couponSection.innerHTML = `
       <h5 class="fw-bold mb-3 text-primary">Apply Coupon</h5>
       <form id="couponForm" class="d-flex gap-2">
         <input type="text" class="form-control" id="couponInput" placeholder="Enter coupon code" value="${appliedCoupon}">
-        <button type="submit" class="btn btn-success fw-bold px-4">Apply</button>
+        <button type="submit" class="btn btn-success fw-bold">Apply</button>
       </form>
-      <div class="mt-3">
-        <small class="text-success d-none" id="couponSuccess">Coupon applied successfully! 🎉</small>
-        <small class="text-danger d-none" id="couponError">Invalid or expired coupon.</small>
+      <div class="mt-2">
+        <small class="text-success d-none" id="couponSuccess">Coupon applied successfully 🎉</small>
+        <small class="text-danger d-none" id="couponError">Invalid coupon.</small>
       </div>
     `;
 
@@ -171,12 +169,12 @@ function renderOrderSummary(subtotal) {
         error.classList.remove("d-none");
         success.classList.add("d-none");
       }
-      renderCart();
+      renderCart(); // 🔁 refresh total with new coupon
     });
   }
 }
 
-/* ===== Render Cart ===== */
+/* ===== Render Cart (Main Table) ===== */
 function renderCart() {
   const cartTable = document.getElementById("cart-table-body");
   if (!cartTable) return;
@@ -192,22 +190,20 @@ function renderCart() {
   }
 
   let subtotal = 0;
-  cartTable.innerHTML = cart
-    .map((item, i) => {
-      const price = Number(item.price);
-      const qty = Number(item.qty);
-      const total = price * qty;
-      subtotal += total;
-      return `
-        <tr>
-          <td>${item.title}</td>
-          <td>PKR ${price.toLocaleString()}</td>
-          <td><input type="number" min="1" value="${qty}" data-index="${i}" class="form-control qty-input" style="width:70px;"></td>
-          <td>PKR ${total.toLocaleString()}</td>
-          <td><button class="btn btn-sm btn-danger remove-item" data-id="${item.id}">🗑</button></td>
-        </tr>`;
-    })
-    .join("");
+  cartTable.innerHTML = cart.map((item, i) => {
+    const price = Number(item.price);
+    const qty = Number(item.qty);
+    const total = price * qty;
+    subtotal += total;
+    return `
+      <tr>
+        <td>${item.title}</td>
+        <td>PKR ${price.toLocaleString()}</td>
+        <td><input type="number" min="1" value="${qty}" data-index="${i}" class="form-control qty-input" style="width:70px;"></td>
+        <td>PKR ${total.toLocaleString()}</td>
+        <td><button class="btn btn-sm btn-danger remove-item" data-id="${item.id}">🗑</button></td>
+      </tr>`;
+  }).join("");
 
   renderOrderSummary(subtotal);
 
@@ -227,7 +223,7 @@ function renderCart() {
   });
 }
 
-/* ===== Render "Your Collection" ===== */
+/* ===== Render User Collection ===== */
 function renderUserCollection(cartItems = []) {
   const tbody = document.querySelector("#yourCollection tbody");
   if (!tbody) return;
@@ -238,23 +234,20 @@ function renderUserCollection(cartItems = []) {
   }
 
   const merged = mergeCart(cartItems);
-  tbody.innerHTML = merged
-    .map(
-      (item) => `
-      <tr>
-        <td>
-          <div class="d-flex align-items-center">
-            <img src="${item.thumbnail || "https://via.placeholder.com/80"}" class="me-3 rounded" width="80">
-            <span>${item.title}</span>
-          </div>
-        </td>
-        <td>PKR ${Number(item.price).toLocaleString()}</td>
-        <td><input type="number" value="${Number(item.qty)}" class="form-control w-50" readonly></td>
-        <td>PKR ${(Number(item.price) * Number(item.qty)).toLocaleString()}</td>
-        <td><button class="btn btn-sm btn-outline-danger remove-item" data-id="${item.id}"><i class="bi bi-trash"></i></button></td>
-      </tr>`
-    )
-    .join("");
+  tbody.innerHTML = merged.map((item) => `
+    <tr>
+      <td>
+        <div class="d-flex align-items-center">
+          <img src="${item.thumbnail || "https://via.placeholder.com/80"}" class="me-3 rounded" width="80">
+          <span>${item.title}</span>
+        </div>
+      </td>
+      <td>PKR ${Number(item.price).toLocaleString()}</td>
+      <td><input type="number" value="${Number(item.qty)}" class="form-control w-50" readonly></td>
+      <td>PKR ${(Number(item.price) * Number(item.qty)).toLocaleString()}</td>
+      <td><button class="btn btn-sm btn-outline-danger remove-item" data-id="${item.id}"><i class="bi bi-trash"></i></button></td>
+    </tr>
+  `).join("");
 
   tbody.querySelectorAll(".remove-item").forEach((btn) =>
     btn.addEventListener("click", async (e) => {
@@ -270,12 +263,10 @@ export async function addToCart(product) {
 
   const local = getLocalUser();
   const cart = local.cart || [];
-
   const existing = cart.find((p) => String(p.id) === String(product.id));
 
-  if (existing) {
-    existing.qty += 1;
-  } else {
+  if (existing) existing.qty += 1;
+  else {
     cart.push({
       id: String(product.id),
       title: product.title,
@@ -292,7 +283,7 @@ export async function addToCart(product) {
   showMsg(existing ? "Quantity updated 🛒" : "Added to cart ✅");
 }
 
-/* ===== Auth State ===== */
+/* ===== Auth State Sync ===== */
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     const cartItems = await getUserCart(user.uid);
