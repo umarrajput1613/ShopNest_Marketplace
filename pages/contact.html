@@ -675,7 +675,89 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 <script type="module" src="../assets/js/app.js"></script>
-<script scr="../assets/js/contact.js"></script>
-  <script scr="../assets/js/withdraw.js"></script>
+<script type="module">
+import { auth, db, doc, setDoc } from "../assets/js/firebase.js"; // path adjust
+
+document.addEventListener("DOMContentLoaded", () => {
+  // load pending checkout
+  const pending = JSON.parse(localStorage.getItem("pendingCheckout") || "{}");
+
+  // If you want to show summary on the payment tab, populate fields:
+  if (pending && Object.keys(pending).length) {
+    // optional: show in page somewhere
+    const place = document.getElementById("paymentSummary");
+    if (place) {
+      place.innerHTML = `
+        <p>Subtotal: PKR ${Number(pending.subtotal || 0).toLocaleString()}</p>
+        <p>Shipping: PKR ${Number(pending.shipping || 0).toLocaleString()}</p>
+        <p>Tax: PKR ${Number(pending.tax || 0).toLocaleString()}</p>
+        ${pending.discount ? `<p class="text-success">Discount: -PKR ${Math.round(pending.discount)}</p>` : ''}
+        <p class="fw-bold">Total: PKR ${Math.round(pending.total).toLocaleString()}</p>
+      `;
+    }
+  }
+
+  const form = document.getElementById("form-payment");
+  if (!form) return;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Please log in to complete checkout.");
+      return;
+    }
+
+    // collect form fields (accountTitle, iban, bankName, branchCode, cnic)
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    // build order object to save
+    const pendingCheckout = JSON.parse(localStorage.getItem("pendingCheckout") || "{}");
+    const order = {
+      paymentInfo: {
+        // **DO NOT SAVE raw card details** — this is bank/account fields; avoid storing sensitive info if not needed
+        accountTitle: data.accountTitle || null,
+        iban: data.iban ? String(data.iban) : null,
+        bankName: data.bankName || null,
+        branchCode: data.branchCode || null,
+        cnic: data.cnic || null,
+      },
+      orderSummary: pendingCheckout || {},
+      status: "Payment Info Saved",
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      // Save under users/{uid}/orders/{orderId}
+      const orderId = Date.now().toString();
+      await setDoc(doc(db, "users", user.uid, "orders", orderId), order);
+
+      // optional: save also a top-level orders collection for admin
+      await setDoc(doc(db, "orders", orderId), {
+        uid: user.uid,
+        ...order
+      });
+
+      // success: clear cart and local pending
+      // call clear function defined in cart.js — if not available here, implement same logic
+      localStorage.removeItem("pendingCheckout");
+
+      // Clear cart items keys used by your app:
+      const localUser = JSON.parse(localStorage.getItem("userData") || "{}");
+      localUser.cart = [];
+      localStorage.setItem("userData", JSON.stringify(localUser));
+      localStorage.removeItem(`cart_${user.email}`);
+      localStorage.removeItem("appliedCoupon");
+
+      // redirect to confirmation page
+      window.location.href = "../pages/checkout-confirmation.html?orderId=" + orderId;
+    } catch (err) {
+      console.error("Save order failed:", err);
+      alert("Could not save order. Try again.");
+    }
+  });
+});
+</script>
+
 </body>
 </html>
