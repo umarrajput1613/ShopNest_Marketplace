@@ -1,5 +1,5 @@
 // =======================================================
-// ✅ cart.js — Firestore + LocalStorage + Sync + Delete + Collection Display
+// ✅ cart.js — Firestore + LocalStorage + Sync + Delete + Merge Duplicates
 // =======================================================
 
 import { auth, db, doc, getDoc, setDoc, onAuthStateChanged } from "./firebase.js";
@@ -49,7 +49,7 @@ async function saveCart(updatedCart) {
     oldSnap.forEach((d) => deletions.push(deleteDoc(d.ref)));
     await Promise.all(deletions);
 
-    // 💾 Save new cart
+    // 💾 Save new merged cart
     for (const item of updatedCart) {
       const ref = subDoc(db, "users", user.uid, "cart", String(item.id));
       await setDoc(ref, {
@@ -107,6 +107,20 @@ function loadLocalCart() {
   return JSON.parse(localStorage.getItem(userKey) || "[]");
 }
 
+/* ===== Merge Duplicate Products ===== */
+function mergeCart(cart) {
+  const merged = [];
+  for (const item of cart) {
+    const existing = merged.find((p) => String(p.id) === String(item.id));
+    if (existing) {
+      existing.qty += Number(item.qty);
+    } else {
+      merged.push({ ...item, qty: Number(item.qty) });
+    }
+  }
+  return merged;
+}
+
 /* ===== Render Cart (Main Page) ===== */
 function renderCart() {
   const cartTable = document.getElementById("cart-table-body");
@@ -114,7 +128,9 @@ function renderCart() {
   if (!cartTable || !summary) return;
 
   const local = getLocalUser();
-  const cart = local.cart?.length ? local.cart : loadLocalCart();
+  let cart = local.cart?.length ? local.cart : loadLocalCart();
+
+  cart = mergeCart(cart);
 
   if (!cart.length) {
     cartTable.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Your cart is empty.</td></tr>`;
@@ -167,7 +183,7 @@ function renderCart() {
   // --- Delete Buttons ---
   document.querySelectorAll(".remove-item").forEach((btn) => {
     btn.addEventListener("click", async (e) => {
-      const itemId = e.target.dataset.id;
+      const itemId = e.currentTarget.dataset.id;
       await deleteCartItem(itemId);
     });
   });
@@ -184,7 +200,9 @@ function renderUserCollection(cartItems = []) {
     return;
   }
 
-  tableBody.innerHTML = cartItems
+  const mergedItems = mergeCart(cartItems);
+
+  tableBody.innerHTML = mergedItems
     .map(
       (item) => `
       <tr>
@@ -223,7 +241,6 @@ export async function addToCart(product) {
   const local = getLocalUser();
   const cart = local.cart || [];
 
-  // 🔁 If already exists, increase qty
   const existing = cart.find((p) => String(p.id) === String(product.id));
   if (existing) existing.qty += 1;
   else
@@ -235,9 +252,10 @@ export async function addToCart(product) {
       qty: 1,
     });
 
-  await saveCart(cart);
+  const merged = mergeCart(cart);
+  await saveCart(merged);
   renderCart();
-  renderUserCollection(cart);
+  renderUserCollection(merged);
   showMsg("Added to cart ✅");
 }
 
@@ -246,9 +264,10 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("✅ Logged in:", user.email);
     const cartItems = await getUserCart(user.uid);
-    setLocalUser({ uid: user.uid, email: user.email, cart: cartItems });
+    const merged = mergeCart(cartItems);
+    setLocalUser({ uid: user.uid, email: user.email, cart: merged });
     renderCart();
-    renderUserCollection(cartItems);
+    renderUserCollection(merged);
   } else {
     console.log("🚪 Logged out");
     clearLocalUser();
