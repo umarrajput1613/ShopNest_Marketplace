@@ -1,5 +1,5 @@
 // =======================================================
-// ✅ cart.js — Firestore + LocalStorage + Coupon + Sync
+// ✅ cart.js — Firestore + LocalStorage + Coupon + Sync + Your Collection Display
 // =======================================================
 
 import {
@@ -115,7 +115,7 @@ function applyCoupon(subtotal) {
   return subtotal;
 }
 
-/* ===== Render Cart Table ===== */
+/* ===== Render Cart Table (Main Cart Page) ===== */
 function renderCart() {
   const cartTable = document.getElementById("cart-table-body");
   const summary = document.getElementById("order-summary");
@@ -124,6 +124,8 @@ function renderCart() {
 
   const local = getLocalUser();
   const cart = local.cart?.length ? local.cart : loadLocalCart();
+
+  if (!cartTable || !summary) return;
 
   if (!cart.length) {
     cartTable.innerHTML =
@@ -209,6 +211,39 @@ function renderCart() {
   });
 }
 
+/* ===== Render “Your Collection” Section ===== */
+function renderUserCollection(cartItems = []) {
+  const tableBody = document.querySelector("#yourCollection tbody");
+  if (!tableBody) return;
+
+  if (!cartItems.length) {
+    tableBody.innerHTML = `
+      <tr><td colspan="5" class="text-center text-muted py-4">Your collection is empty.</td></tr>`;
+    return;
+  }
+
+  tableBody.innerHTML = cartItems
+    .map((item) => {
+      const price = Number(item.price) || 0;
+      const qty = Number(item.qty) || 1;
+      const subtotal = price * qty;
+      return `
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="${item.thumbnail || "https://via.placeholder.com/80"}" class="me-3 rounded" width="80" alt="">
+              <span>${item.title || "Untitled"}</span>
+            </div>
+          </td>
+          <td>Rs. ${price.toLocaleString()}</td>
+          <td><input type="number" value="${qty}" class="form-control w-50" readonly></td>
+          <td>Rs. ${subtotal.toLocaleString()}</td>
+          <td><button class="btn btn-sm btn-outline-danger" data-id="${item.id}"><i class="bi bi-trash"></i></button></td>
+        </tr>`;
+    })
+    .join("");
+}
+
 /* ===== Add To Cart ===== */
 export async function addToCart(product) {
   const user = auth.currentUser;
@@ -235,15 +270,24 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("✅ Logged in:", user.email);
     await syncUserData();
+
+    // Render both sections
     renderCart();
+
+    const local = getLocalUser();
+    renderUserCollection(local.cart || []);
   } else {
     console.log("🚪 Logged out");
     clearLocalUser();
     renderCart();
+    renderUserCollection([]);
   }
 });
 
 /* ===== Init ===== */
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("cart-table-body")) renderCart();
+  const local = getLocalUser();
+  if (document.querySelector("#yourCollection tbody"))
+    renderUserCollection(local.cart || []);
 });
