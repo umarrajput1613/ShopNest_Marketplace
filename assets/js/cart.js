@@ -353,6 +353,7 @@ export function openPaymentForm() {
   localStorage.setItem("pendingCheckout", JSON.stringify(snapshot));
   window.location.href = "../pages/contact.html#paymentForm";
 }
+window.openPaymentForm = openPaymentForm;
 
 // ===== clear cart after successful checkout (final) =====
 export async function clearCartAfterCheckout() {
