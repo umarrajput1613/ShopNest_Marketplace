@@ -37,10 +37,11 @@ function renderProducts() {
     const div = document.createElement("div");
     div.classList.add("col");
     div.innerHTML = `
-      <div class="card product-card h-100 shadow-sm border-1 rounded-4" data-id="${p.id}"
-     data-title="${p.title}"
-     data-price="${p.price}"
-     data-thumbnail="${p.thumbnail}">
+      <div class="card product-card h-100 shadow-sm border-1 rounded-4"
+           data-id="${p.id}"
+           data-title="${p.title}"
+           data-price="${p.price}"
+           data-thumbnail="${p.thumbnail}">
         <img src="${p.thumbnail}" 
              class="card-img-top"
              alt="${p.title}"
@@ -49,7 +50,8 @@ function renderProducts() {
           <p class="mb-1 small text-primary fw-bold">${p.category}</p>
           <h5 class="product-title">${p.title}</h5>
           <p class="small text-muted">${p.description.slice(0, 70)}...</p>
-          <p class="product-price fw-bold text-success mb-1">$${p.price} 
+          <p class="product-price fw-bold text-success mb-1">
+            $${p.price} 
             <span class="text-danger small">(-${p.discountPercentage || 0}%)</span>
           </p>
           <p class="mb-2">⭐ ${p.rating} / 5</p>
