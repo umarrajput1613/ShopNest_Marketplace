@@ -102,6 +102,241 @@
     </div>
   </nav>
 
+ <section class="container-fluid py-5 bg-light">
+  <div class="container">
+    <h1 class="text-center mb-4 text-primary fw-bold">
+      Get In Touch With ShopNest
+    </h1>
+    <p class="lead text-center text-muted mb-5">
+      We're here to assist you — whether you want to connect, sell, buy, or manage payments easily.
+    </p>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs justify-content-center mb-4" id="contactTabs" role="tablist">
+      <li class="nav-item"><button class="nav-link active fw-bold" id="general-tab" data-bs-toggle="tab" data-bs-target="#generalForm" type="button" role="tab">General Inquiry</button></li>
+      <li class="nav-item"><button class="nav-link fw-bold" id="seller-tab" data-bs-toggle="tab" data-bs-target="#sellerForm" type="button" role="tab">Become a Seller</button></li>
+      <li class="nav-item"><button class="nav-link fw-bold" id="buyer-tab" data-bs-toggle="tab" data-bs-target="#buyerForm" type="button" role="tab">Buyer Account</button></li>
+      <li class="nav-item"><button class="nav-link fw-bold" id="payment-tab" data-bs-toggle="tab" data-bs-target="#paymentForm" type="button" role="tab">Payment Details</button></li>
+      <li class="nav-item"><button class="nav-link fw-bold" id="transfer-tab" data-bs-toggle="tab" data-bs-target="#transferForm" type="button" role="tab">Fund Transfer</button></li>
+      <li class="nav-item"><button class="nav-link fw-bold" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdrawForm" type="button" role="tab">Withdraw</button></li>
+    </ul>
+
+    <div class="tab-content" id="contactTabsContent">
+
+      <!-- 1️⃣ General Inquiry -->
+      <div class="tab-pane fade show active" id="generalForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Send Us a Message</h3>
+          <form id="form-general">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label for="gName" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="gName" required>
+              </div>
+              <div class="col-md-6">
+                <label for="gEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="gEmail" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="gSubject" class="form-label">Subject</label>
+              <select class="form-select" id="gSubject">
+                <option>Complaint</option>
+                <option>Suggestion</option>
+                <option>Inquiry</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label for="gMessage" class="form-label">Message</label>
+              <textarea class="form-control" id="gMessage" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fw-bold">Send Message</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 2️⃣ Become a Seller -->
+      <div class="tab-pane fade" id="sellerForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Become a Seller</h3>
+          <form id="form-seller">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Shop Name</label>
+                <input name="shopName" type="text" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" required>
+              </div>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Category</label>
+                <select class="form-select">
+                  <option>Electronics</option>
+                  <option>Fashion</option>
+                  <option>Home Decor</option>
+                  <option>Grocery</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Bank Account</label>
+              <input type="text" class="form-control" placeholder="Account Number or IBAN" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100 fw-bold">Register as Seller</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 3️⃣ Buyer Account -->
+      <div class="tab-pane fade" id="buyerForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Register Buyer Account</h3>
+          <form id="form-buyer">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input name="fullName" type="text" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Address</label>
+              <textarea class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fw-bold">Register Buyer</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 4️⃣ Payment Details -->
+      <div class="tab-pane fade" id="paymentForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Payment Details</h3>
+          <form id="form-payment">
+            <div class="mb-3">
+              <label class="form-label">Account Title</label>
+              <input name="accountTitle" type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">IBAN</label>
+              <input name="iban" type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Bank Name</label>
+              <input name="bankName" type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Branch Code</label>
+              <input name="branchCode" type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">CNIC</label>
+              <input name="cnic" type="text" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100 fw-bold">Save Payment Info</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 5️⃣ Fund Transfer -->
+      <div class="tab-pane fade" id="transferForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Buy & Sell Fund Transfer</h3>
+          <form id="form-transfer">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Transaction ID</label>
+                <input name="txId" type="text" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Amount (PKR)</label>
+                <input name="amount" type="number" class="form-control" required>
+              </div>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Buyer Name</label>
+                <input name="buyer" type="text" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Seller Name</label>
+                <input name="seller" type="text" class="form-control" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Seller Bank Details</label>
+              <input name="bankDetails" type="text" class="form-control" placeholder="Account Title, IBAN, Bank Name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Upload Proof (optional)</label>
+              <input type="file" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fw-bold">Submit Transfer</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 6️⃣ Withdraw -->
+      <div class="tab-pane fade" id="withdrawForm" role="tabpanel">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h3 class="mb-4 text-primary fw-bold">Withdraw Funds</h3>
+          <form id="form-withdraw">
+            <div class="mb-3">
+              <label class="form-label">Amount (PKR)</label>
+              <input name="amount" type="number" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Bank Name</label>
+              <input name="bank" type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">IBAN</label>
+              <input name="iban" type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Upload Proof (optional)</label>
+              <input type="file" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-warning w-100 fw-bold">Submit Withdrawal</button>
+          </form>
+
+          <!-- Withdraw Table -->
+          <div class="table-responsive mt-4">
+            <table class="table table-bordered text-center">
+              <thead class="table-light">
+                <tr>
+                  <th>Amount</th>
+                  <th>Bank</th>
+                  <th>IBAN</th>
+                  <th>Status</th>
+                  <th>Proof</th>
+                </tr>
+              </thead>
+              <tbody id="withdraw-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 
  
@@ -515,4 +750,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
