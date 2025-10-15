@@ -64,6 +64,25 @@ function renderProducts() {
     productList.appendChild(div);
   });
 }
+// 🛒 Handle Add to Cart Click
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn-add-to-cart")) {
+    const card = e.target.closest(".product-card");
+    if (!card) return;
+
+    const product = {
+      id: card.dataset.id,
+      title: card.dataset.title,
+      price: parseFloat(card.dataset.price) || 0,
+      thumbnail: card.dataset.thumbnail,
+      quantity: 1
+    };
+
+    console.log("🛒 Adding to cart:", product);
+    addToCart(product);
+  }
+});
+
 
 // ===== Pagination =====
 function renderPagination() {
