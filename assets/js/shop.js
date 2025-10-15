@@ -1,3 +1,5 @@
+import { addToCart } from "./cart.js";
+
 const productList = document.getElementById("productList");
 const pagination = document.getElementById("pagination");
 
