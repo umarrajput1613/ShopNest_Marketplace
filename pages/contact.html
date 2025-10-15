@@ -3,79 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ShopNest - Contact Us</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>ShopNest — Home</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="ShopNest - Your one-stop online shop for the best products at unbeatable prices.">
+  <meta name="keywords" content="ShopNest, online shopping, e-commerce, buy online, best deals, discounts">
+  <meta name="author" content="ShopNest Team">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 
-  <style>
-    :root {
-      --sn-primary-blue: #0d6efd;
-      --sn-accent-blue: #0056b3;
-    }
-    body {
-      background: linear-gradient(135deg, #e3f2fd, #ffffff); 
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      /* padding-top: 70px; hataya ja chuka hai */
-    }
-    
-    /* ✅ FIX: Navbar ki height ko compensate karne ke liye margin-top diya gaya hai */
-    .contact-hero-offset {
-        margin-top: 60px; /* Thoda zyada margin diya gaya hai to cover all screen sizes */
-    }
-    
-    .main-content {
-      background-color: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    }
-    .contact-card {
-        background-color: #f8f9fa; /* Light grey background for information box */
-        border-left: 5px solid var(--sn-primary-blue);
-        padding: 25px;
-        border-radius: 8px;
-        height: 100%;
-    }
-    .contact-card h4 {
-        color: var(--sn-accent-blue);
-        font-weight: 600;
-    }
-    .info-item {
-        margin-bottom: 15px;
-    }
-    .info-item i {
-        color: var(--sn-primary-blue);
-        margin-right: 10px;
-        font-size: 1.25rem;
-    }
-    .form-control:focus, .form-select:focus {
-        border-color: var(--sn-primary-blue);
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    }
-    .btn-primary {
-        background-color: var(--sn-accent-blue);
-        border-color: var(--sn-accent-blue);
-        transition: background-color 0.2s;
-    }
-    .btn-primary:hover {
-        background-color: #003c80;
-        border-color: #003c80;
-    }
-    /* Attractive Hero Banner Style */
-    .contact-hero {
-        background-color: var(--sn-primary-blue); /* Fallback */
-        background-size: cover;
-        background-position: center;
-    }
-  </style>
+  <!-- Bootstrap Icons (for bi bi-* classes) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css">
+
+  <!-- Font Awesome (latest, no integrity to avoid mismatch error) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Google Fonts (optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../assets/css/contact.css">
+  <link rel="stylesheet" href="../assets/css/home.css">
+  <!-- FAVICON -->
+ <link rel="shortcut icon" href="../assets/favicon/favicon-32x32.png" type="image/x-icon">
 </head>
 <body>
 
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
     <div class="container">
-     <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center">
       <img src="../assets/favicon/favicon_32x32.png" alt="logo" width="45px"height="25px" class="me-2">
       <a class="navbar-brand fw-bold" href="home.html">ShopNest</a>
     </div>
@@ -89,10 +48,10 @@
       </button>
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav ms-auto align-items-lg-center">
-          <li class="nav-item"><a class="nav-link active" href="./home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="./home.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="./shop.html">Shop</a></li>
           <li class="nav-item"><a class="nav-link" href="./about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="./contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link active" href="./contact.html">Contact</a></li>
           <li class="nav-item"><a class="nav-link" href="cart.html"><i class="fa fa-shopping-cart"></i></a></li>
           <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-heart"></i></a></li>
           <li class="nav-item"><a class="btn btn-outline-light btn-sm ms-2" href="login.html">Login</a></li>
@@ -101,8 +60,26 @@
       </div>
     </div>
   </nav>
+  <!-- heroSection -->
+    <header 
+  class="text-white text-center py-5" 
+  style="min-height:420px; display:flex; align-items:center; 
+         background-image: url('https://picsum.photos/1600/900'); 
+         background-size: cover; 
+         background-position: center; 
+         background-repeat: no-repeat; 
+         width:100%;">
+  <div class="container">
+    <h1 class="display-3 fw-bold text-stroke-2">Get in Touch With ShopNest</h1>
+    <p class="lead text-stroke-1">We’d love to hear from you. Whether you have a question, feedback, or need support, our team is here to help</p>
+    <a href="../pages/contact.html#generalForm" class="btn btn-primary btn-lg me-2">Contact Us Now</a>
+    <a href="../pages/shop.html" class="btn btn-outline-light btn-lg">Shop Collection</a>
+  </div>
+</header>
 
- <section class="container-fluid py-5 bg-light">
+  
+  <!-- Forms Other -->
+  <section class="container-fluid py-5 bg-light">
   <div class="container">
     <h1 class="text-center mb-4 text-primary fw-bold">
       Get In Touch With ShopNest
@@ -339,55 +316,11 @@
 </section>
 
 
- 
-  <div class="container my-5">
-    <div class="main-content">
-      <h1 class="text-center mb-4" style="color: var(--sn-accent-blue); font-weight: 700;">Get In Touch With ShopNest</h1>
-      <p class="lead text-center text-muted mb-5">
-        We're here to answer your questions and assist you quickly. Choose how you'd like to reach us.
-      </p>
-      
-      <div class="row g-5">
-        
-        <div class="col-lg-7">
-            <h3 class="mb-4 text-primary fw-bold">Send Us a Message</h3>
-            <form>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <label for="nameInput" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="nameInput" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="emailInput" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="emailInput" required>
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="subjectSelect" class="form-label">Subject</label>
-                    <select class="form-select" id="subjectSelect">
-                        <option selected value="General">General Inquiry</option>
-                        <option value="Seller">Become a Seller / Partnership</option> 
-                        <option value="Payment">Payment Issue / Refund Details</option> 
-                        <option value="Support">Technical Support</option>
-                        <option value="Order">Order Issue / Return</option>
-                        <option value="Feedback">Business Feedback</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="messageTextarea" class="form-label">Your Message</label>
-                    <textarea class="form-control" id="messageTextarea" rows="5" required></textarea>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">
-                    Submit Inquiry <i class="bi bi-send-fill ms-2"></i>
-                </button>
-            </form>
-        </div>
 
-        <div class="col-lg-5">
-            <div class="contact-card shadow-sm">
-                <h4 class="mb-4">Direct Contact Information</h4>
+<!-- Map Section -->
+ <section class="container-fluid">
+            <div class="contact-card shadow-sm d-flex flex-column flex-lg-row p-4 bg-white rounded gap-4 justify-content-around">
+               <div> <h4 class="mb-4">Direct Contact Information</h4>
                 
                 <div class="info-item">
                     <i class="bi bi-envelope-fill"></i>
@@ -405,19 +338,16 @@
                     <p class="text-secondary small mb-0">ShopNest Corporate HQ <br>123 Commerce Drive, Suite 500, City, State 10001</p>
                 </div>
                 
-                <hr class="my-4">
-
-                <h4 class="mb-3">Find Our Location</h4>
-                <div style="height: 250px; background-color: #ced4da; border-radius: 6px; overflow: hidden;">
-                   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.1148760772285!2d3.343598074132851!3d6.632652321887054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b93761e3f8ac9%3A0x48192ab478903046!2sShopNest%20Africa!5e0!3m2!1sen!2s!4v1760455621245!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
+<div class="c-left-border-i">
+     <div>
+                <h4 class="mb-3">Find Our Location</h4>
+                <div style="height: 60%; background-color: #ced4da; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #495057;">
+                   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.1148760772285!2d3.343598074132851!3d6.632652321887054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b93761e3f8ac9%3A0x48192ab478903046!2sShopNest%20Africa!5e0!3m2!1sen!2s!4v1759406352147!5m2!1sen!2s"  style="border:0; width: 100%; height:auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div> </div> </div>
             </div>
-        </div>
+          </section>
 
-      </div>
-    </div>
-  </div>
-  
    <!-- FAQs Section -->
 <section id="faqs" class="py-5 bg-white">
   <div class="container">
@@ -747,8 +677,5 @@ document.addEventListener("DOMContentLoaded", function () {
 <script type="module" src="../assets/js/app.js"></script>
 <script scr="../assets/js/contact.js"></script>
   <script scr="../assets/js/withdraw.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
