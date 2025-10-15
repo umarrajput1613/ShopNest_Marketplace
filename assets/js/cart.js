@@ -354,40 +354,59 @@ export function openPaymentForm() {
   window.location.href = "../pages/contact.html#paymentForm";
 }
 
+// ===== clear cart after successful checkout (final) =====
 export async function clearCartAfterCheckout() {
   const user = auth.currentUser;
   const local = getLocalUser();
 
   try {
-    // 1️⃣ Clear local cart + storage
+    // 1) Clear local cart + storage keys
     local.cart = [];
     setLocalUser(local);
-
     if (user && user.email) localStorage.removeItem(`cart_${user.email}`);
     localStorage.removeItem("appliedCoupon");
     localStorage.removeItem("pendingCheckout");
 
-    // 2️⃣ Firestore cart clear karna
+    // 2) Clear Firestore: remove subcollection docs AND reset user's cart field
     if (user) {
-      const { getDocs, collection, deleteDoc } = await import(
-        "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
-      );
-      const snap = await getDocs(collection(db, "users", user.uid, "cart"));
-      const deletions = [];
-      snap.forEach((d) => deletions.push(deleteDoc(d.ref)));
-      await Promise.all(deletions);
-      console.log("✅ Firestore cart cleared for:", user.email);
+      try {
+        const { getDocs, collection, deleteDoc, updateDoc } = await import(
+          "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
+        );
+
+        // delete docs in users/{uid}/cart subcollection (if any)
+        const colRef = collection(db, "users", user.uid, "cart");
+        const snap = await getDocs(colRef);
+        const deletions = [];
+        snap.forEach((d) => deletions.push(deleteDoc(d.ref)));
+        if (deletions.length) await Promise.all(deletions);
+
+        // also ensure the parent users/{uid} doc's cart field is emptied
+        try {
+          await updateDoc(doc(db, "users", user.uid), { cart: [], updatedAt: new Date().toISOString() });
+        } catch (errUpdate) {
+          // if update fails (doc missing), create it with empty cart
+          await setDoc(doc(db, "users", user.uid), { cart: [], email: user.email || null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+        }
+
+        console.log("✅ Firestore cart cleared for:", user.email);
+      } catch (errFire) {
+        console.warn("⚠️ Could not fully clear Firestore cart:", errFire);
+      }
     }
 
-    // 3️⃣ UI refresh
-    renderCart();
-    renderUserCollection([]);
-    renderOrderSummary();
+    // 3) UI refresh
+    if (typeof renderCart === "function") renderCart();
+    if (typeof renderUserCollection === "function") renderUserCollection([]);
+    if (typeof renderOrderSummary === "function") renderOrderSummary();
 
-    // 4️⃣ Confirmation + redirect
     console.log("✅ All cart data cleared successfully.");
   } catch (err) {
     console.error("❌ Error clearing cart after checkout:", err);
   }
 }
+
+// expose for non-module usage too
+window.clearCartAfterCheckout = clearCartAfterCheckout;
+
 window.openPaymentForm = openPaymentForm;
