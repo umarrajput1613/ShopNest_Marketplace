@@ -390,3 +390,4 @@ export async function clearCartAfterCheckout() {
     console.error("❌ Error clearing cart after checkout:", err);
   }
 }
+window.openPaymentForm = openPaymentForm;
