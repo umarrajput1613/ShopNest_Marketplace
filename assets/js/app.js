@@ -164,6 +164,20 @@ onAuthStateChanged(auth, async (user) => {
     goTo("home.html");
     return;
   }
+// 🛡️ Extra Security Check - Ensure Firebase user data exists
+if (user) {
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+
+  // If no user document exists in Firestore → force redirect to signup page
+  if (!snap.exists()) {
+    console.warn("⚠️ Unauthorized access detected: User not registered in Firestore!");
+    await signOut(auth);
+    localStorage.removeItem("userData");
+    goTo("signup.html");
+    return;
+  }
+}
 
   // ✅ Auto-restore user data
   if (user) {
