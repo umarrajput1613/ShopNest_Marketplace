@@ -4,42 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ShopNest — Home</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    .category-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.category-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-}
-/* Yeh text-stroke styles background image par text ko readable banate hain */
-.text-stroke-1 {
-  color: white;               
-  -webkit-text-stroke: 1px black; 
-  text-shadow: 0 0 5px rgba(0,0,0,0.8); /* Shadow bhi add kiya */
-font-weight: 500;
-}
-.text-stroke-2 {
-  color: white;               
-  -webkit-text-stroke: 2px black; 
-  text-shadow: 0 0 7px rgba(0,0,0,0.9); /* Shadow bhi add kiya */
-font-weight: 500;
-}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <meta name="description" content="ShopNest - Your one-stop online shop for the best products at unbeatable prices.">
+  <meta name="keywords" content="ShopNest, online shopping, e-commerce, buy online, best deals, discounts">
+  <meta name="author" content="ShopNest Team">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 
-/* Hero Section ka base style */
-.hero-section {
-    min-height:420px; 
-    display:flex; 
-    align-items:center; 
-    background-size: cover; /* Added in CSS for clean up */
-    background-position: center; /* Added in CSS for clean up */
-}
-  </style>
+  <!-- Bootstrap Icons (for bi bi-* classes) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css">
+
+  <!-- Font Awesome (latest, no integrity to avoid mismatch error) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Google Fonts (optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../assets/css/home.css">
+    <!-- FAVICON -->
+ <link rel="shortcut icon" href="../assets/favicon/favicon-32x32.png" type="image/x-icon">
 </head>
 <body>
 
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
     <div class="container">
      <div class="d-flex align-items-center">
@@ -69,81 +60,122 @@ font-weight: 500;
     </div>
   </nav>
 
-  <header id="heroSection" class="hero-section bg-dark text-white text-center py-5">
+  <!-- Hero Section -->
+ <header 
+  class="text-white text-center py-5" 
+  style="min-height:420px; display:flex; align-items:center; 
+         background-image: url('https://picsum.photos/1600/900'); 
+         background-size: cover; 
+         background-position: center; 
+         background-repeat: no-repeat; 
+         width:100%;">
   <div class="container">
     <h1 class="display-3 fw-bold text-stroke-2">New Arrivals 2025</h1>
     <p class="lead text-stroke-1">Shop the latest trends with unbeatable prices.</p>
-    <a href="products.html" class="btn btn-primary btn-lg me-2">Shop Now</a>
-    <a href="products.html" class="btn btn-outline-light btn-lg">Explore Collection</a>
+    <a href="../pages/shop.html" class="btn btn-primary btn-lg me-2">Shop Now</a>
+    <a href="../pages/shop.html" class="btn btn-outline-light btn-lg">Explore Collection</a>
   </div>
 </header>
-  <section class="py-5">
+
+  <!-- Featured Categories -->
+
+   <!-- Featured Categories -->
+<section class="py-5">
   <div class="container">
-    <h2 class="text-center mb-4">Featured Categories</h2>
+    <h2 class="text-center mb-4 fw-bold">Featured Categories</h2>
     <div class="row g-4">
-      
-      <div class="col-md-4 col-6">
-        <a href="./shop.html" class="text-decoration-none">
+
+      <!-- Electronics & Gadgets -->
+      <div class="col-md-3 col-6">
+        <a href="#" class="text-decoration-none">
           <div class="card text-center shadow-sm h-100 category-card">
             <div class="card-body">
-              <i class="fa fa-tv fa-2x mb-2 text-primary"></i>
-              <h5 class="text-dark">Electronics</h5>
+              <i class="fa fa-laptop fa-2x mb-2 text-primary"></i>
+              <h5 class="text-dark">Electronics & Gadgets</h5>
             </div>
           </div>
         </a>
       </div>
 
-      <div class="col-md-4 col-6">
-        <a href="./shop.html" class="text-decoration-none">
+      <!-- Men's Collection -->
+      <div class="col-md-3 col-6">
+        <a href="#" class="text-decoration-none">
           <div class="card text-center shadow-sm h-100 category-card">
             <div class="card-body">
-              <i class="fa fa-tshirt fa-2x mb-2 text-success"></i>
-              <h5 class="text-dark">Fashion</h5>
+              <i class="fa fa-male fa-2x mb-2 text-success"></i>
+              <h5 class="text-dark">Men's Collection</h5>
             </div>
           </div>
         </a>
       </div>
 
-      <div class="col-md-4 col-6">
-        <a href="./shop.html" class="text-decoration-none">
+      <!-- Women's Collection -->
+      <div class="col-md-3 col-6">
+        <a href="#" class="text-decoration-none">
           <div class="card text-center shadow-sm h-100 category-card">
             <div class="card-body">
-              <i class="fa fa-gem fa-2x mb-2 text-warning"></i>
-              <h5 class="text-dark">Beauty</h5>
+              <i class="fa fa-female fa-2x mb-2 text-danger"></i>
+              <h5 class="text-dark">Women's Collection</h5>
             </div>
           </div>
         </a>
       </div>
 
-      <div class="col-md-4 col-6">
-        <a href="./shop.html" class="text-decoration-none">
+      <!-- Home & Furniture -->
+      <div class="col-md-3 col-6">
+        <a href="#" class="text-decoration-none">
           <div class="card text-center shadow-sm h-100 category-card">
             <div class="card-body">
-              <i class="fa fa-couch fa-2x mb-2 text-danger"></i>
-              <h5 class="text-dark">Home & Kitchen</h5>
+              <i class="fa fa-couch fa-2x mb-2 text-warning"></i>
+              <h5 class="text-dark">Home & Furniture</h5>
             </div>
           </div>
         </a>
       </div>
 
-      <div class="col-md-4 col-6">
-        <a href="./shop.html" class="text-decoration-none">
+      <!-- Beauty & Care -->
+      <div class="col-md-3 col-6">
+        <a href="#" class="text-decoration-none">
           <div class="card text-center shadow-sm h-100 category-card">
             <div class="card-body">
-              <i class="fa fa-futbol fa-2x mb-2 text-info"></i>
-              <h5 class="text-dark">Sports</h5>
+              <i class="fa fa-magic fa-2x mb-2 text-pink"></i>
+              <h5 class="text-dark">Beauty & Care</h5>
             </div>
           </div>
         </a>
       </div>
 
-      <div class="col-md-4 col-6">
-        <a href="./shop.html" class="text-decoration-none">
+      <!-- Sports & Vehicles -->
+      <div class="col-md-3 col-6">
+        <a href="#" class="text-decoration-none">
           <div class="card text-center shadow-sm h-100 category-card">
             <div class="card-body">
-          <i class="fa fa-shopping-bag fa-2x mb-2 text-secondary"></i>
-<h5 class="text-dark">Accessories</h5>
+              <i class="fa fa-bicycle fa-2x mb-2 text-info"></i>
+              <h5 class="text-dark">Sports & Vehicles</h5>
+            </div>
+          </div>
+        </a>
+      </div>
 
+      <!-- Groceries -->
+      <div class="col-md-3 col-6">
+        <a href="#" class="text-decoration-none">
+          <div class="card text-center shadow-sm h-100 category-card">
+            <div class="card-body">
+              <i class="fa fa-shopping-basket fa-2x mb-2 text-success"></i>
+              <h5 class="text-dark">Groceries</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Tops & Fashionwear -->
+      <div class="col-md-3 col-6">
+        <a href="#" class="text-decoration-none">
+          <div class="card text-center shadow-sm h-100 category-card">
+            <div class="card-body">
+              <i class="fa fa-tshirt fa-2x mb-2 text-secondary"></i>
+              <h5 class="text-dark">Fashionwear</h5>
             </div>
           </div>
         </a>
@@ -154,102 +186,509 @@ font-weight: 500;
 </section>
 
 
+<!-- Featured Products -->
+<section id="best-sellers-section" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-4">Best Sellers</h2>
+    <div id="best-sellers" class="row row-cols-1 row-cols-md-3 g-4"></div>
+  </div>
+</section>
+
+     
+
+
+  <!-- Featured Products -->
   <section class="py-5 bg-light">
     <div class="container">
       <h2 class="text-center mb-4">Best Sellers</h2>
-      <div class="row g-4">
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm h-100">
-            <img src="https://velocitymicro.com/img/PC/Signature-17-2025/signature17_angle_right_1000.png" class="card-img-top" alt="Modern Laptop">
-            <div class="card-body text-center">
-              <h5 class="card-title">Velocity Laptop X1</h5>
-              <p class="text-primary fw-bold">$1200</p>
-              <button class="btn btn-sm btn-outline-primary">Add to Cart</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm h-100">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_qbYV_XgmOygH3dKKjoag2jwflTaeT5J2LA&s" class="card-img-top" alt="Wireless Headphones">
-            <div class="card-body text-center">
-              <h5 class="card-title">Aura-Sound Pro</h5>
-              <p class="text-primary fw-bold">$200</p>
-              <button class="btn btn-sm btn-outline-primary">Add to Cart</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm h-100">
-            <img src="https://www.shutterstock.com/image-vector/man-classical-black-suit-on-600nw-299231060.jpg" class="card-img-top" alt="Men's Tailored Suit">
-            <div class="card-body text-center">
-              <h5 class="card-title">Men's Tailored Suit</h5>
-              <p class="text-primary fw-bold">$390</p>
-              <button class="btn btn-sm btn-outline-primary">Add to Cart</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm h-100">
-            <img src="https://pakistanstore.pk/wp-content/uploads/2024/09/Watch-9-Max-Series-9-Smart-Watch.jpg" class="card-img-top" alt="Chronos Smart Watch">
-            <div class="card-body text-center">
-              <h5 class="card-title">Chronos Smart Watch</h5>
-              <p class="text-primary fw-bold">$150</p>
-              <button class="btn btn-sm btn-outline-primary">Add to Cart</button>
-            </div>
-          </div>
-        </div>
+      <div id="best-sellers" class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+        
+               <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <img src="https://velocitymicro.com/img/PC/Signature-17-2025/signature17_angle_right_1000.png"
+         class="card-img-top"
+         alt="Laptop"
+         style="height:180px; object-fit:contain; background:#f8f9fa;">
+    <div class="card-body text-center">
+      <p class="mb-1 small text-primary fw-bold">Electronics</p>
+      <h5 class="product-title">Velocity Pro X1</h5>
+      <p class="small text-muted">Powerful laptop with cutting-edge performance for work & gaming.</p>
+      <p class="product-price fw-bold text-success mb-1">$1299 <span class="text-danger small">(-12%)</span></p>
+      <p class="mb-2">⭐ 4.6 / 5</p>
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_qbYV_XgmOygH3dKKjoag2jwflTaeT5J2LA&s"
+         class="card-img-top"
+         alt="Wireless Headphones"
+         style="height:180px; object-fit:contain; background:#f8f9fa;">
+    <div class="card-body text-center">
+      <p class="mb-1 small text-primary fw-bold">Audio</p>
+      <h5 class="product-title">Aura-Sound Headphones</h5>
+      <p class="small text-muted">Crystal clear sound with noise cancellation for music lovers.</p>
+      <p class="product-price fw-bold text-success mb-1">$149 <span class="text-danger small">(-18%)</span></p>
+      <p class="mb-2">⭐ 4.4 / 5</p>
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <img src="https://theperfectjean.nyc/cdn/shop/files/1_CrewComboColorOne_3.jpg?v=1692915415&width=1500"
+         class="card-img-top"
+         alt="Essential T-Shirt"
+         style="height:180px; object-fit:contain; background:#f8f9fa;">
+    <div class="card-body text-center">
+      <p class="mb-1 small text-secondary fw-bold">Apparel</p>
+      <h5 class="product-title">Eco-Cotton Crewneck Tee</h5>
+      <p class="small text-muted">Soft, sustainable cotton T-shirt designed for all-day comfort.</p>
+      <p class="product-price fw-bold text-success mb-1">$34 <span class="text-danger small">(-10%)</span></p>
+      <p class="mb-2">⭐ 4.1 / 5</p>
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <img src="https://pakistanstore.pk/wp-content/uploads/2024/09/Watch-9-Max-Series-9-Smart-Watch.jpg"
+         class="card-img-top"
+         alt="Smart Watch"
+         style="height:180px; object-fit:contain; background:#f8f9fa;">
+    <div class="card-body text-center">
+      <p class="mb-1 small text-primary fw-bold">Wearable Tech</p>
+      <h5 class="product-title">Chronos Smart Watch</h5>
+      <p class="small text-muted">Track your health & stay connected with this sleek smartwatch.</p>
+      <p class="product-price fw-bold text-success mb-1">$199 <span class="text-danger small">(-20%)</span></p>
+      <p class="mb-2">⭐ 4.5 / 5</p>
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
+
+ <!-- card -->
+            <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+
+    <!-- Product Thumbnail -->
+    <img src="https://www.mmxmal.com/cdn/shop/files/AromaPro.png?v=1723192589" 
+         class="card-img-top" 
+         alt="Coffee Maker" 
+         style="height: 180px; object-fit: contain; background:#f8f9fa;">
+
+    <div class="card-body text-center">
+
+      <!-- Category -->
+      <p class="mb-1 small text-info fw-bold">Home Goods</p>
+
+      <!-- Title -->
+      <h5 class="product-title">Aroma-Pro Coffee Brewer</h5>
+
+      <!-- Short Description -->
+      <p class="small text-muted">
+        Brew café-quality coffee at home with Aroma-Pro. Easy to use, durable, and energy efficient for everyday use.
+      </p>
+
+      <!-- Price + Discount -->
+      <p class="product-price fw-bold text-success mb-1">
+        $89 <span class="text-danger small">(-15%)</span>
+      </p>
+
+      <!-- Rating -->
+      <p class="mb-2">⭐ 4.3 / 5</p>
+
+      <!-- Button -->
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+
+    </div>
+  </div>
+</div>
+
+            <!-- card -->
+             <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+
+    <!-- Product Thumbnail -->
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYaLvB6JqsBiEa6I0QXxX6ttzBIUSOtE-p2w&s" 
+         class="card-img-top" 
+         alt="Minimalist Backpack" 
+         style="height: 180px; object-fit: cover;">
+
+    <div class="card-body text-center">
+
+      <!-- Category -->
+      <p class="mb-1 small text-secondary fw-bold">Accessories</p>
+
+      <!-- Title -->
+      <h5 class="product-title">Voyager Minimalist Backpack</h5>
+
+      <!-- Short Description -->
+      <p class="small text-muted">
+        A sleek, durable, and lightweight backpack perfect for travel or daily use. Minimalist design with spacious compartments for essentials.
+      </p>
+
+      <!-- Price + Discount -->
+      <p class="product-price fw-bold text-success mb-1">
+        $65 <span class="text-danger small">(-12%)</span>
+      </p>
+
+      <!-- Rating -->
+      <p class="mb-2">⭐ 4.5 / 5</p>
+
+      <!-- Button -->
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+
+    </div>
+  </div>
+</div>
+
+            <!-- card -->
+           <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    
+    <!-- Product Thumbnail -->
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFSVSz9BJCZhyYyhGyS6YJJnLproer-Sz0mASQ-7DWkDo1ScIGWEhWv5rQ1FgrBCuV-3w&usqp=CAU" 
+         class="card-img-top" 
+         alt="Ergo-Flow Wireless Mouse">
+
+    <div class="card-body text-center">
+      
+      <!-- Category -->
+      <p class="mb-1 small text-primary fw-bold">Electronics</p>
+
+      <!-- Product Title -->
+      <h5 class="product-title">Ergo-Flow Wireless Mouse</h5>
+
+      <!-- Short Description -->
+      <p class="small text-muted">
+        A comfortable and responsive wireless mouse designed for productivity. Lightweight, ergonomic, and built for long usage without strain.
+      </p>
+
+      <!-- Price & Discount -->
+      <p class="product-price fw-bold text-success mb-1">
+        $45 <span class="text-danger small">(-15%)</span>
+      </p>
+
+      <!-- Rating -->
+      <p class="mb-2">
+        ⭐ 4.3 / 5
+      </p>
+
+      <!-- Add to Cart Button -->
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+
+    </div>
+  </div>
+</div>
+
+            <!-- card -->
+           <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <!-- Product Thumbnail -->
+    <img src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp" 
+         class="card-img-top" 
+         alt="Essence Mascara Lash Princess">
+
+    <div class="card-body text-center">
+      <!-- Category -->
+      <p class="mb-1 small text-info fw-bold">Beauty</p>
+
+      <!-- Product Title -->
+      <h5 class="product-title">Essence Mascara Lash Princess</h5>
+
+      <!-- Short Description -->
+      <p class="small text-muted">
+        The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects...
+      </p>
+
+      <!-- Price & Discount -->
+      <p class="product-price fw-bold text-success mb-1">$9.99 
+        <span class="text-danger small">(-10%)</span>
+      </p>
+
+      <!-- Rating -->
+      <p class="mb-2">
+        ⭐ 2.5 / 5
+      </p>
+
+      <!-- CTA Button -->
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
       </div>
     </div>
   </section>
 
-   <section class="py-5">
+ 
+
+  <!-- ✅ New Arrivals -->
+  <section class="py-5">
     <div class="container">
       <h2 class="text-center mb-4">New Arrivals</h2>
-      <div class="row g-4">
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm h-100">
-            <img src="https://www.aero-en.com/cdn/shop/files/Drone_Aeromax_1_4_a6c0bf0b-7415-44b8-a37f-c3b35239755b_2.webp?v=1725046438&width=1445" class="card-img-top" alt="Aero Drone Pro">
-            <div class="card-body text-center">
-              <h5 class="card-title">Aero Drone Pro</h5>
-              <p class="text-primary fw-bold">$499</p>
-              <button class="btn btn-sm btn-outline-primary">Add to Cart</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm h-100">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYaLvB6JqsBiEa6I0QXxX6ttzBIUSOtE-p2w&s" class="card-img-top" alt="Voyager Backpack">
-            <div class="card-body text-center">
-              <h5 class="card-title">Voyager Backpack</h5>
-              <p class="text-primary fw-bold">$80</p>
-              <button class="btn btn-sm btn-outline-primary">Add to Cart</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm h-100">
-            <img src="https://www.mmxmal.com/cdn/shop/files/AromaPro.png?v=1723192589" class="card-img-top" alt="AutoBrew Machine">
-            <div class="card-body text-center">
-              <h5 class="card-title">AutoBrew Machine</h5>
-              <p class="text-primary fw-bold">$130</p>
-              <button class="btn btn-sm btn-outline-primary">Add to Cart</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm h-100">
-            <img src="https://i.etsystatic.com/45045069/r/il/73dcc9/6027066601/il_fullxfull.6027066601_rchn.jpg" class="card-img-top" alt="Leather Biker Jacket">
-            <div class="card-body text-center">
-              <h5 class="card-title">Leather Biker Jacket</h5>
-              <p class="text-primary fw-bold">$180</p>
-              <button class="btn btn-sm btn-outline-primary">Add to Cart</button>
-            </div>
-          </div>
-        </div>
+      <div id="new-arrivals" class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+                   <!-- card -->
+           <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <img src="https://velocitymicro.com/img/PC/Signature-17-2025/signature17_angle_right_1000.png"
+         class="card-img-top"
+         alt="Laptop"
+         style="height:180px; object-fit:contain; background:#f8f9fa;">
+    <div class="card-body text-center">
+      <p class="mb-1 small text-primary fw-bold">Electronics</p>
+      <h5 class="product-title">Velocity Pro X1</h5>
+      <p class="small text-muted">Powerful laptop with cutting-edge performance for work & gaming.</p>
+      <p class="product-price fw-bold text-success mb-1">$1299 <span class="text-danger small">(-12%)</span></p>
+      <p class="mb-2">⭐ 4.6 / 5</p>
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
+           <!-- card -->
+<div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_qbYV_XgmOygH3dKKjoag2jwflTaeT5J2LA&s"
+         class="card-img-top"
+         alt="Wireless Headphones"
+         style="height:180px; object-fit:contain; background:#f8f9fa;">
+    <div class="card-body text-center">
+      <p class="mb-1 small text-primary fw-bold">Audio</p>
+      <h5 class="product-title">Aura-Sound Headphones</h5>
+      <p class="small text-muted">Crystal clear sound with noise cancellation for music lovers.</p>
+      <p class="product-price fw-bold text-success mb-1">$149 <span class="text-danger small">(-18%)</span></p>
+      <p class="mb-2">⭐ 4.4 / 5</p>
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
+           <!-- card -->
+<div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <img src="https://theperfectjean.nyc/cdn/shop/files/1_CrewComboColorOne_3.jpg?v=1692915415&width=1500"
+         class="card-img-top"
+         alt="Essential T-Shirt"
+         style="height:180px; object-fit:contain; background:#f8f9fa;">
+    <div class="card-body text-center">
+      <p class="mb-1 small text-secondary fw-bold">Apparel</p>
+      <h5 class="product-title">Eco-Cotton Crewneck Tee</h5>
+      <p class="small text-muted">Soft, sustainable cotton T-shirt designed for all-day comfort.</p>
+      <p class="product-price fw-bold text-success mb-1">$34 <span class="text-danger small">(-10%)</span></p>
+      <p class="mb-2">⭐ 4.1 / 5</p>
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
+           <!-- card -->
+<div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <img src="https://pakistanstore.pk/wp-content/uploads/2024/09/Watch-9-Max-Series-9-Smart-Watch.jpg"
+         class="card-img-top"
+         alt="Smart Watch"
+         style="height:180px; object-fit:contain; background:#f8f9fa;">
+    <div class="card-body text-center">
+      <p class="mb-1 small text-primary fw-bold">Wearable Tech</p>
+      <h5 class="product-title">Chronos Smart Watch</h5>
+      <p class="small text-muted">Track your health & stay connected with this sleek smartwatch.</p>
+      <p class="product-price fw-bold text-success mb-1">$199 <span class="text-danger small">(-20%)</span></p>
+      <p class="mb-2">⭐ 4.5 / 5</p>
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
+
+           <!-- card -->
+            <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+
+    <!-- Product Thumbnail -->
+    <img src="https://www.mmxmal.com/cdn/shop/files/AromaPro.png?v=1723192589" 
+         class="card-img-top" 
+         alt="Coffee Maker" 
+         style="height: 180px; object-fit: contain; background:#f8f9fa;">
+
+    <div class="card-body text-center">
+
+      <!-- Category -->
+      <p class="mb-1 small text-info fw-bold">Home Goods</p>
+
+      <!-- Title -->
+      <h5 class="product-title">Aroma-Pro Coffee Brewer</h5>
+
+      <!-- Short Description -->
+      <p class="small text-muted">
+        Brew café-quality coffee at home with Aroma-Pro. Easy to use, durable, and energy efficient for everyday use.
+      </p>
+
+      <!-- Price + Discount -->
+      <p class="product-price fw-bold text-success mb-1">
+        $89 <span class="text-danger small">(-15%)</span>
+      </p>
+
+      <!-- Rating -->
+      <p class="mb-2">⭐ 4.3 / 5</p>
+
+      <!-- Button -->
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+
+    </div>
+  </div>
+</div>
+
+            <!-- card -->
+             <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+
+    <!-- Product Thumbnail -->
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYaLvB6JqsBiEa6I0QXxX6ttzBIUSOtE-p2w&s" 
+         class="card-img-top" 
+         alt="Minimalist Backpack" 
+         style="height: 180px; object-fit: cover;">
+
+    <div class="card-body text-center">
+
+      <!-- Category -->
+      <p class="mb-1 small text-secondary fw-bold">Accessories</p>
+
+      <!-- Title -->
+      <h5 class="product-title">Voyager Minimalist Backpack</h5>
+
+      <!-- Short Description -->
+      <p class="small text-muted">
+        A sleek, durable, and lightweight backpack perfect for travel or daily use. Minimalist design with spacious compartments for essentials.
+      </p>
+
+      <!-- Price + Discount -->
+      <p class="product-price fw-bold text-success mb-1">
+        $65 <span class="text-danger small">(-12%)</span>
+      </p>
+
+      <!-- Rating -->
+      <p class="mb-2">⭐ 4.5 / 5</p>
+
+      <!-- Button -->
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+
+    </div>
+  </div>
+</div>
+
+            <!-- card -->
+           <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    
+    <!-- Product Thumbnail -->
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFSVSz9BJCZhyYyhGyS6YJJnLproer-Sz0mASQ-7DWkDo1ScIGWEhWv5rQ1FgrBCuV-3w&usqp=CAU" 
+         class="card-img-top" 
+         alt="Ergo-Flow Wireless Mouse">
+
+    <div class="card-body text-center">
+      
+      <!-- Category -->
+      <p class="mb-1 small text-primary fw-bold">Electronics</p>
+
+      <!-- Product Title -->
+      <h5 class="product-title">Ergo-Flow Wireless Mouse</h5>
+
+      <!-- Short Description -->
+      <p class="small text-muted">
+        A comfortable and responsive wireless mouse designed for productivity. Lightweight, ergonomic, and built for long usage without strain.
+      </p>
+
+      <!-- Price & Discount -->
+      <p class="product-price fw-bold text-success mb-1">
+        $45 <span class="text-danger small">(-15%)</span>
+      </p>
+
+      <!-- Rating -->
+      <p class="mb-2">
+        ⭐ 4.3 / 5
+      </p>
+
+      <!-- Add to Cart Button -->
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+
+    </div>
+  </div>
+</div>
+
+            <!-- card -->
+           <div class="col">
+  <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+    <!-- Product Thumbnail -->
+    <img src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp" 
+         class="card-img-top" 
+         alt="Essence Mascara Lash Princess">
+
+    <div class="card-body text-center">
+      <!-- Category -->
+      <p class="mb-1 small text-info fw-bold">Beauty</p>
+
+      <!-- Product Title -->
+      <h5 class="product-title">Essence Mascara Lash Princess</h5>
+
+      <!-- Short Description -->
+      <p class="small text-muted">
+        The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects...
+      </p>
+
+      <!-- Price & Discount -->
+      <p class="product-price fw-bold text-success mb-1">$9.99 
+        <span class="text-danger small">(-10%)</span>
+      </p>
+
+      <!-- Rating -->
+      <p class="mb-2">
+        ⭐ 2.5 / 5
+      </p>
+
+      <!-- CTA Button -->
+      <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd">
+        <i class="bi bi-cart-fill me-1"></i> Add to Cart
+      </a>
+    </div>
+  </div>
+</div>
+        <!-- More New Products -->
       </div>
     </div>
   </section>
 
+  <!-- ✅ Special Offers -->
   <section class="py-5 bg-warning text-dark text-center">
     <div class="container">
       <h2 class="fw-bold">Special Offers</h2>
@@ -258,60 +697,127 @@ font-weight: 500;
     </div>
   </section>
 
+  <!-- ✅ Why Choose Us -->
   <section class="py-5">
     <div class="container">
       <h2 class="text-center mb-4">Why Choose ShopNest?</h2>
-      <div class="row g-4 text-center">
-        <div class="col-md-3 col-6"><i class="fa fa-truck fa-2x text-primary"></i><p>Free Shipping</p></div>
-        <div class="col-md-3 col-6"><i class="fa fa-sync-alt fa-2x text-success"></i><p>Easy Returns</p></div>
-        <div class="col-md-3 col-6"><i class="fa fa-headset fa-2x text-warning"></i><p>24/7 Support</p></div>
-        <div class="col-md-3 col-6"><i class="fa fa-lock fa-2x text-danger"></i><p>Secure Payment</p></div>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 text-center d-flex justify-content-center">
+        <div class="col bg-light rounded-4 border-0 p-3 m-3 text-center hover-effect" style="width: 18rem;"><i class="fa fa-truck fa-2x text-primary"></i><h3>Free Shipping</h3><p>Enjoy the freedom of shopping without worrying about extra delivery costs. Our Free Shipping service ensures your orders reach you quickly, safely, and without hidden charges. Whether you buy a single item or a big order, you’ll always save more. Shop confidently knowing your products will arrive at your doorstep with zero delivery fees.</p></div>
+        <div class="col bg-light rounded-4 border-0 p-3 m-3 text-center hover-effect" style="width: 18rem;"><i class="fa fa-lock fa-2x text-danger"></i><h3>Secure Payment</h3><p>Your safety comes first. With our Secure Payment system, every transaction is protected by advanced encryption technology. Shop confidently knowing your personal and financial details are always safe. Whether you pay with card, wallet, or bank transfer, our trusted payment gateways ensure a smooth, secure, and worry-free checkout experience every single time.</p></div>
+        <div class="col bg-light rounded-4 border-0 p-3 m-3 text-center hover-effect" style="width: 18rem;"><i class="fa fa-sync-alt fa-2x text-success"></i><h3>Easy Returns</h3><p>Shop with complete peace of mind knowing that our Easy Returns policy has you covered. If something isn’t right, you can return it quickly and hassle-free. No complicated steps, no hidden conditions—just a smooth process designed for your comfort. Your satisfaction matters most, and we make sure every purchase feels risk-free.</p></div>
+        <div class="col bg-light rounded-4 border-0 p-3 m-3 text-center hover-effect" style="width: 18rem;"><i class="fa fa-headset fa-2x text-warning"></i><h3>24/7 Support</h3><p>We’re always here for you—day or night. Our dedicated support team is available 24/7 to answer your questions, resolve issues, and guide you at every step of your shopping journey. Whether it’s tracking an order or product inquiries, help is just a click away. Because your satisfaction never sleeps, and neither do we.</p></div>
+        <div class="col bg-light rounded-4 border-0 p-3 m-3 text-center hover-effect" style="width: 18rem;">
+  <i class="fa fa-certificate fa-2x text-success"></i>
+  <h3>Premium Quality</h3>
+  <p>We never compromise on quality. Every product is carefully sourced and tested to ensure premium durability and satisfaction. Shop with confidence knowing you’ll always receive top-notch products that meet international quality standards.</p>
+</div>
+
+        <div class="col bg-light rounded-4 border-0 p-3 m-3 text-center hover-effect" style="width: 18rem;">
+  <i class="fa fa-smile fa-2x text-primary"></i>
+  <h3>Customer Satisfaction</h3>
+  <p>Your happiness is our top priority. From seamless shopping to reliable after-sales service, we go the extra mile to keep you smiling. Thousands of happy customers trust us—and we’re here to make sure you do too.</p>
+</div>
       </div>
     </div>
   </section>
 
+  <!-- ✅ Testimonials -->
   <section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-4">What Our Customers Say</h2>
+    <div class="row g-4">
+
+      <!-- Testimonial 1 -->
+      <div class="col-md-4 col-sm-6">
+        <div class="card blog-card shadow-sm h-100 border-0 rounded-4">
+          <div class="card-body text-center">
+            <p class="fst-italic">"Amazing products and super fast delivery!"</p>
+            <h6 class="fw-bold mt-3">– Ali R.</h6>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="col-md-4 col-sm-6">
+        <div class="card blog-card shadow-sm h-100 border-0 rounded-4">
+          <div class="card-body text-center">
+            <p class="fst-italic">"Customer support is always helpful and friendly."</p>
+            <h6 class="fw-bold mt-3">– Sara K.</h6>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="col-md-4 col-sm-6">
+        <div class="card blog-card shadow-sm h-100 border-0 rounded-4">
+          <div class="card-body text-center">
+            <p class="fst-italic">"I love the discounts and quality of products."</p>
+            <h6 class="fw-bold mt-3">– Ahmed M.</h6>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 4 -->
+      <div class="col-md-4 col-sm-6">
+        <div class="card blog-card shadow-sm h-100 border-0 rounded-4">
+          <div class="card-body text-center">
+            <p class="fst-italic">"Shopping is so easy and stress-free here."</p>
+            <h6 class="fw-bold mt-3">– Hina L.</h6>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 5 -->
+      <div class="col-md-4 col-sm-6">
+        <div class="card blog-card shadow-sm h-100 border-0 rounded-4">
+          <div class="card-body text-center">
+            <p class="fst-italic">"Secure payments give me peace of mind."</p>
+            <h6 class="fw-bold mt-3">– Bilal A.</h6>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 6 -->
+      <div class="col-md-4 col-sm-6">
+        <div class="card blog-card shadow-sm h-100 border-0 rounded-4">
+          <div class="card-body text-center">
+            <p class="fst-italic">"I always recommend this store to my friends."</p>
+            <h6 class="fw-bold mt-3">– Nadia F.</h6>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+  <!-- ✅ Brand Logos -->
+  <section class="py-5 text-center">
     <div class="container">
-      <h2 class="text-center mb-4">What Our Customers Say</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card shadow-sm h-100">
-            <div class="card-body text-center">
-              <p>"Amazing products and super fast delivery!"</p>
-              <h6 class="fw-bold">– Ali R.</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card shadow-sm h-100">
-            <div class="card-body text-center">
-              <p>"Customer support is always helpful and friendly."</p>
-              <h6 class="fw-bold">– Sara K.</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card shadow-sm h-100">
-            <div class="card-body text-center">
-              <p>"I love the discounts and quality of products."</p>
-              <h6 class="fw-bold">– Ahmed M.</h6>
-            </div>
-          </div>
-        </div>
+      <h2 class="mb-4">Our Partners</h2>
+      <div class="d-flex flex-wrap justify-content-center gap-4">
+        <img src="../assets/images/amazon.png" alt="amazon" class="img-fluid" width="180px" height="auto">
+        <img src="../assets/images/ebay.png" alt="ebay" class="img-fluid" width="180px" height="auto">
+        <img src="../assets/images/shopify.png" alt="shopify" class="img-fluid" width="180px" height="auto">
+        <img src="../assets/images/etsy.png" alt="etsy" class="img-fluid" width="180px" height="auto">
+        
       </div>
     </div>
   </section>
 
-
-
-  <section class="py-5 bg-light">
+  <!-- ✅ Blog / Articles -->
+<section class="py-5 bg-light blog-section">
   <div class="container">
     <h2 class="text-center mb-4">Latest from Our Blog</h2>
     <div class="row g-4">
       
+      <!-- Card 1 -->
       <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-          <img src="https://assets.vogue.com/photos/677840af14ea28329ed732d6/16:9/w_2992,h_1683,c_limit/Collage%20Holding%20(2).jpg" class="card-img-top" alt="Fashion Blog">
+        <div class="card shadow-sm h-100 blog-card">
+          <div class="card-img-wrap">
+            <img src="../assets/images/fashion2025.jpg" class="card-img-top" alt="Fashion Blog">
+          </div>
           <div class="card-body">
             <h5 class="card-title">Top 5 Fashion Trends 2025</h5>
             <p class="card-text">Stay updated with the latest fashion trends of the year.</p>
@@ -320,9 +826,12 @@ font-weight: 500;
         </div>
       </div>
 
+      <!-- Card 2 -->
       <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-          <img src="https://reviewed-com-res.cloudinary.com/image/fetch/s--bubhSnOh--/b_white,c_limit,cs_srgb,f_auto,fl_progressive.strip_profile,g_center,q_auto,w_1200/https://reviewed-production.s3.amazonaws.com/1695411312022/tech_gifts.png" class="card-img-top" alt="Electronics Blog">
+        <div class="card shadow-sm h-100 blog-card">
+          <div class="card-img-wrap">
+            <img src="../assets/images/electronics2025.jpg" class="card-img-top" alt="Electronics Blog">
+          </div>
           <div class="card-body">
             <h5 class="card-title">Best Electronics of the Year</h5>
             <p class="card-text">Discover the top-rated gadgets and devices for 2025.</p>
@@ -331,12 +840,57 @@ font-weight: 500;
         </div>
       </div>
 
+      <!-- Card 3 -->
       <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-          <img src="https://res.cloudinary.com/spacejoy/image/upload/fl_lossy,q_auto/c_scale,w_1500/v1621869345/server/designs/render/60abc31e7c68df0023997ddd.png" class="card-img-top" alt="Home Decor Blog">
+        <div class="card shadow-sm h-100 blog-card">
+          <div class="card-img-wrap">
+            <img src="../assets/images/home2025.jpg" class="card-img-top" alt="Home Decor Blog">
+          </div>
           <div class="card-body">
             <h5 class="card-title">Modern Home Decor Ideas</h5>
             <p class="card-text">Get inspired with stylish home & kitchen decor tips.</p>
+            <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100 blog-card">
+          <div class="card-img-wrap">
+            <img src="../assets/images/beauty2025.jpg" class="card-img-top" alt="Beauty Blog">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Beauty Hacks You Must Try</h5>
+            <p class="card-text">Simple and effective beauty hacks for everyday life.</p>
+            <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100 blog-card">
+          <div class="card-img-wrap">
+            <img src="../assets/images/sports2025.jpg" class="card-img-top" alt="Sports Blog">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Top Sports Gear in 2025</h5>
+            <p class="card-text">Check out the must-have sports and fitness accessories.</p>
+            <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100 blog-card">
+          <div class="card-img-wrap">
+            <img src="../assets/images/lifestyle2025.jpg" class="card-img-top" alt="Lifestyle Blog">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Healthy Lifestyle Tips</h5>
+            <p class="card-text">Practical lifestyle tips to stay fit and productive in 2025.</p>
             <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
           </div>
         </div>
@@ -347,6 +901,8 @@ font-weight: 500;
 </section>
 
 
+
+  <!-- Newsletter -->
   <section class="py-5 bg-primary text-white text-center">
     <div class="container">
       <h3 class="mb-3">Get 10% Off Your First Order</h3>
@@ -361,37 +917,49 @@ font-weight: 500;
     </div>
   </section>
 
-  <footer class="bg-dark text-white text-center py-3">
+  <!-- Footer -->
+  
+  <footer class="app-footer">
     <div class="container">
-      <p class="mb-1">© 2025 ShopNest. All rights reserved.</p>
-      <small>
-        <a href="#" class="text-white text-decoration-none me-2">Privacy</a>|
-        <a href="#" class="text-white text-decoration-none ms-2">Terms</a>
-      </small>
-      <div class="mt-2">
-        <a href="#" class="text-white me-2"><i class="fab fa-facebook"></i></a>
-        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
-        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+      <div class="row g-0">
+        <div class="col-md-4 mb-3">
+          <h5 class="text-light fw-bold">ShopNest</h5>
+           ShopNest is Pakistan’s trusted online shopping destination, bringing you quality products at affordable prices with secure delivery nationwide.  
+    </p>
+          <p class="text-light small">&copy; 2024 ShopNest, Inc. All rights reserved.</p>
+        </div>
+        <div class="col-md-2 mb-3">
+          <h6 class="text-light fw-bold">Company</h6>
+          <ul class="list-unstyled">
+            <li><a href="./about.html">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2 mb-3">
+          <h6 class="text-light fw-bold">Help</h6>
+          <ul class="list-unstyled">
+            <li><a href="./contact.html">Contact</a></li>
+            <li><a href="../pages/contact.html#faqs">FAQs</a></li>
+            <li><a href="#">Shipping</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="text-light fw-bold">Connect</h6>
+          <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-light"><i class="bi bi-instagram"></i></a>
+        </div>
       </div>
     </div>
   </footer>
-  
+
+
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   
 
-<script>
-  // Hero Section ke liye Dynamic Background Image Script (Reliable Unsplash source)
-  const keywords = ["fashion", "shoes", "electronics", "gadgets", "furniture"];
-  const random = keywords[Math.floor(Math.random() * keywords.length)];
-  const hero = document.getElementById("heroSection");
 
-  // Dynamic image link from Unsplash with a random keyword
-  const url = `https://source.unsplash.com/1920x600/?${random}`;
-
-  // Applying background image with a dark overlay (linear-gradient) for better text readability
-  hero.style.backgroundImage =
-    `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${url})`;
-</script>
-
+<script type="module" src="../assets/js/app.js"></script>
 </body>
 </html>
