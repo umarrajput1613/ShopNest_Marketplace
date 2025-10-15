@@ -13,7 +13,7 @@ async function fetchProducts() {
     const res = await fetch("https://dummyjson.com/products?limit=200");
     const data = await res.json();
     products = data.products;
-    window.products = fetchedData;
+   
     renderProducts();
     renderPagination();
   } catch (error) {
