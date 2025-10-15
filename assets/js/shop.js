@@ -56,9 +56,12 @@ function renderProducts() {
             <span class="text-danger small">(-${p.discountPercentage || 0}%)</span>
           </p>
           <p class="mb-2">⭐ ${p.rating} / 5</p>
-          <a href="#" class="btn btn-sm btn-add-to-cart text-white w-100" style="background:#0d6efd;">
-            <i class="bi bi-cart-fill me-1"></i> Add to Cart
-          </a>
+         <a href="#" 
+   class="btn btn-sm btn-add-to-cart text-white w-100" 
+   data-id="${p.id}" 
+   style="background:#0d6efd;">
+   <i class="bi bi-cart-fill me-1"></i> Add to Cart
+</a>
         </div>
       </div>
     `;
