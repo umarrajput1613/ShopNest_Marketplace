@@ -277,13 +277,13 @@ export async function addToCart(product) {
   if (existing) existing.qty += 1;
   else {
     cart.push({
-      id: String(product.id),
-      title: product.title,
-      price: Number(product.price),
-      thumbnail: product.thumbnail || "",
-      qty: 1,
-    });
-  }
+  id: String(product.id),
+  title: product.title || "Untitled Product",
+  // ✅ Fix: remove $ sign and convert safely
+  price: Number(String(product.price).replace(/[^0-9.]/g, "")) || 0,
+  thumbnail: product.thumbnail || "https://via.placeholder.com/80",
+  qty: 1,
+});
 
   const merged = mergeCart(cart);
   await saveCart(merged);
