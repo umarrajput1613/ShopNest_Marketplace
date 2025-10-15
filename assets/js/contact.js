@@ -61,7 +61,7 @@ if (existingSnap.exists()) {
   await setDoc(docRef, {
     ...existingSnap.data(),
     messages: [...prev, newMessage],
-    lastUpdated: serverTimestamp(),
+    lastUpdated: new Date().toISOString(),
   });
 
   console.log("📝 Inquiry updated in Firestore");
@@ -77,7 +77,7 @@ if (existingSnap.exists()) {
     name,
     email,
     messages: [newMessage],
-    createdAt: serverTimestamp(),
+    createdAt: new Date().toISOString(),
   });
 
   console.log("🆕 Inquiry created in Firestore");
