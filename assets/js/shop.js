@@ -37,7 +37,10 @@ function renderProducts() {
     const div = document.createElement("div");
     div.classList.add("col");
     div.innerHTML = `
-      <div class="card product-card h-100 shadow-sm border-1 rounded-4">
+      <div class="card product-card h-100 shadow-sm border-1 rounded-4" data-id="${p.id}"
+     data-title="${p.title}"
+     data-price="${p.price}"
+     data-thumbnail="${p.thumbnail}">
         <img src="${p.thumbnail}" 
              class="card-img-top"
              alt="${p.title}"
