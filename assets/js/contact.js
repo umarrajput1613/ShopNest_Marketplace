@@ -47,40 +47,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 5️⃣ Check if already exists in Firestore
         const docRef = doc(db, "inquiries", userId);
-        const existingSnap = await getDoc(docRef);
+const existingSnap = await getDoc(docRef);
 
-        if (existingSnap.exists()) {
-          // Merge new message with old (array)
-          const prev = existingSnap.data().messages || [];
-          await setDoc(docRef, {
-            ...existingSnap.data(),
-            messages: [
-              ...prev,
-              {
-                subject,
-                message,
-                createdAt: serverTimestamp(),
-              },
-            ],
-            lastUpdated: serverTimestamp(),
-          });
-          console.log("📝 Inquiry updated in Firestore");
-        } else {
-          // New user inquiry doc
-          await setDoc(docRef, {
-            name,
-            email,
-            messages: [
-              {
-                subject,
-                message,
-                createdAt: serverTimestamp(),
-              },
-            ],
-            createdAt: serverTimestamp(),
-          });
-          console.log("🆕 Inquiry created in Firestore");
-        }
+if (existingSnap.exists()) {
+  // Merge new message with old (array)
+  const prev = existingSnap.data().messages || [];
+  const newMessage = {
+    subject,
+    message,
+    createdAt: new Date().toISOString(), // ✅ use JS timestamp instead
+  };
+
+  await setDoc(docRef, {
+    ...existingSnap.data(),
+    messages: [...prev, newMessage],
+    lastUpdated: serverTimestamp(),
+  });
+
+  console.log("📝 Inquiry updated in Firestore");
+} else {
+  // New user inquiry doc
+  const newMessage = {
+    subject,
+    message,
+    createdAt: new Date().toISOString(),
+  };
+
+  await setDoc(docRef, {
+    name,
+    email,
+    messages: [newMessage],
+    createdAt: serverTimestamp(),
+  });
+
+  console.log("🆕 Inquiry created in Firestore");
+}
 
         alert("✅ Message submitted successfully!");
         generalForm.reset();
