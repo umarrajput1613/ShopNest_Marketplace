@@ -1,4 +1,8 @@
-// assets/js/contact.js
+// =======================================================
+// ✅ assets/js/contact.js (Final Optimized Version)
+// Prevents double submit + local + Firestore sync
+// =======================================================
+
 import {
   db,
   auth,
@@ -12,8 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const generalForm = document.getElementById("form-general");
 
   if (generalForm) {
+    let isSubmitting = false; // 🧩 prevent double submits
+
     generalForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      // ⛔ If already submitting, ignore further clicks
+      if (isSubmitting) {
+        console.warn("⚠️ Submission already in progress...");
+        return;
+      }
+      isSubmitting = true; // lock form
 
       // 1️⃣ Get form values
       const name = document.getElementById("gName").value.trim();
@@ -23,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!name || !email || !message) {
         alert("⚠️ Please fill all fields before submitting!");
+        isSubmitting = false;
         return;
       }
 
@@ -41,53 +55,45 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       try {
-        // 4️⃣ Save locally first (for quick restore)
+        // 4️⃣ Save locally first
         localStorage.setItem(`inquiry_${userId}`, JSON.stringify(inquiryData));
         console.log("✅ Inquiry saved locally:", inquiryData);
 
-        // 5️⃣ Check if already exists in Firestore
+        // 5️⃣ Firestore update or create
         const docRef = doc(db, "inquiries", userId);
-const existingSnap = await getDoc(docRef);
+        const existingSnap = await getDoc(docRef);
 
-if (existingSnap.exists()) {
-  // Merge new message with old (array)
-  const prev = existingSnap.data().messages || [];
-  const newMessage = {
-    subject,
-    message,
-    createdAt: new Date().toISOString(), // ✅ use JS timestamp instead
-  };
+        const newMessage = {
+          subject,
+          message,
+          createdAt: new Date().toISOString(),
+        };
 
-  await setDoc(docRef, {
-    ...existingSnap.data(),
-    messages: [...prev, newMessage],
-    lastUpdated: new Date().toISOString(),
-  });
-
-  console.log("📝 Inquiry updated in Firestore");
-} else {
-  // New user inquiry doc
-  const newMessage = {
-    subject,
-    message,
-    createdAt: new Date().toISOString(),
-  };
-
-  await setDoc(docRef, {
-    name,
-    email,
-    messages: [newMessage],
-    createdAt: new Date().toISOString(),
-  });
-
-  console.log("🆕 Inquiry created in Firestore");
-}
+        if (existingSnap.exists()) {
+          const prev = existingSnap.data().messages || [];
+          await setDoc(docRef, {
+            ...existingSnap.data(),
+            messages: [...prev, newMessage],
+            lastUpdated: new Date().toISOString(),
+          });
+          console.log("📝 Inquiry updated in Firestore");
+        } else {
+          await setDoc(docRef, {
+            name,
+            email,
+            messages: [newMessage],
+            createdAt: new Date().toISOString(),
+          });
+          console.log("🆕 Inquiry created in Firestore");
+        }
 
         alert("✅ Message submitted successfully!");
         generalForm.reset();
       } catch (err) {
         console.error("❌ Error saving inquiry:", err);
         alert("Something went wrong. Try again later.");
+      } finally {
+        isSubmitting = false; // 🔓 unlock form
       }
     });
   }
