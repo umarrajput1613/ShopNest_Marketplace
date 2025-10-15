@@ -357,32 +357,36 @@ export function openPaymentForm() {
 export async function clearCartAfterCheckout() {
   const user = auth.currentUser;
   const local = getLocalUser();
-  local.cart = [];
-  setLocalUser(local);
-  if (user && user.email) localStorage.removeItem(`cart_${user.email}`);
 
-  localStorage.removeItem("appliedCoupon");
-  localStorage.removeItem("pendingCheckout");
+  try {
+    // 1️⃣ Clear local cart + storage
+    local.cart = [];
+    setLocalUser(local);
 
-  if (user) {
-    try {
+    if (user && user.email) localStorage.removeItem(`cart_${user.email}`);
+    localStorage.removeItem("appliedCoupon");
+    localStorage.removeItem("pendingCheckout");
+
+    // 2️⃣ Firestore cart clear karna
+    if (user) {
       const { getDocs, collection, deleteDoc } = await import(
         "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
       );
       const snap = await getDocs(collection(db, "users", user.uid, "cart"));
       const deletions = [];
-      snap.forEach(d => deletions.push(deleteDoc(d.ref)));
+      snap.forEach((d) => deletions.push(deleteDoc(d.ref)));
       await Promise.all(deletions);
-    } catch (err) {
-      console.warn("Could not clear Firestore cart:", err);
+      console.log("✅ Firestore cart cleared for:", user.email);
     }
+
+    // 3️⃣ UI refresh
+    renderCart();
+    renderUserCollection([]);
+    renderOrderSummary();
+
+    // 4️⃣ Confirmation + redirect
+    console.log("✅ All cart data cleared successfully.");
+  } catch (err) {
+    console.error("❌ Error clearing cart after checkout:", err);
   }
-
-  renderCart();
-  renderUserCollection([]);
-  renderOrderSummary();
 }
-
-// In case the module system doesn’t auto-expose:
-window.openPaymentForm = openPaymentForm;
-window.clearCartAfterCheckout = clearCartAfterCheckout;
