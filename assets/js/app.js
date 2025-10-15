@@ -105,10 +105,15 @@ async function syncUserData() {
   if (!local || Object.keys(local).length === 0) return;
 
   try {
-    await updateDoc(doc(db, "users", user.uid), {
-      ...local,
-      updatedAt: new Date().toISOString()
-    });
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        ...local,
+        updatedAt: new Date().toISOString()
+      },
+      { merge: true } // ✅ ensures create OR update safely
+    );
+
     console.log("Synced user data ✅");
   } catch (err) {
     console.error("Sync failed:", err);
