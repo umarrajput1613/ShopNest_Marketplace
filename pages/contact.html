@@ -3,38 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ShopNest — Home</title>
+  <title>ShopNest - Contact Us</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <meta name="description" content="ShopNest - Your one-stop online shop for the best products at unbeatable prices.">
-  <meta name="keywords" content="ShopNest, online shopping, e-commerce, buy online, best deals, discounts">
-  <meta name="author" content="ShopNest Team">
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Bootstrap Icons (for bi bi-* classes) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css">
-
-  <!-- Font Awesome (latest, no integrity to avoid mismatch error) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-  <!-- Google Fonts (optional) -->
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
-  
-  <!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css">
-
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="../assets/css/contact.css">
-  <link rel="stylesheet" href="../assets/css/home.css">
-  <!-- FAVICON -->
- <link rel="shortcut icon" href="../assets/favicon/favicon-32x32.png" type="image/x-icon">
+  <style>
+    :root {
+      --sn-primary-blue: #0d6efd;
+      --sn-accent-blue: #0056b3;
+    }
+    body {
+      background: linear-gradient(135deg, #e3f2fd, #ffffff); 
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      /* padding-top: 70px; hataya ja chuka hai */
+    }
+    
+    /* ✅ FIX: Navbar ki height ko compensate karne ke liye margin-top diya gaya hai */
+    .contact-hero-offset {
+        margin-top: 60px; /* Thoda zyada margin diya gaya hai to cover all screen sizes */
+    }
+    
+    .main-content {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    .contact-card {
+        background-color: #f8f9fa; /* Light grey background for information box */
+        border-left: 5px solid var(--sn-primary-blue);
+        padding: 25px;
+        border-radius: 8px;
+        height: 100%;
+    }
+    .contact-card h4 {
+        color: var(--sn-accent-blue);
+        font-weight: 600;
+    }
+    .info-item {
+        margin-bottom: 15px;
+    }
+    .info-item i {
+        color: var(--sn-primary-blue);
+        margin-right: 10px;
+        font-size: 1.25rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--sn-primary-blue);
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    .btn-primary {
+        background-color: var(--sn-accent-blue);
+        border-color: var(--sn-accent-blue);
+        transition: background-color 0.2s;
+    }
+    .btn-primary:hover {
+        background-color: #003c80;
+        border-color: #003c80;
+    }
+    /* Attractive Hero Banner Style */
+    .contact-hero {
+        background-color: var(--sn-primary-blue); /* Fallback */
+        background-size: cover;
+        background-position: center;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
     <div class="container">
-      <div class="d-flex align-items-center">
+     <div class="d-flex align-items-center">
       <img src="../assets/favicon/favicon_32x32.png" alt="logo" width="45px"height="25px" class="me-2">
       <a class="navbar-brand fw-bold" href="home.html">ShopNest</a>
     </div>
@@ -48,279 +89,70 @@
       </button>
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav ms-auto align-items-lg-center">
-          <li class="nav-item"><a class="nav-link" href="./home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="./home.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="./shop.html">Shop</a></li>
           <li class="nav-item"><a class="nav-link" href="./about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link active" href="./contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="./contact.html">Contact</a></li>
           <li class="nav-item"><a class="nav-link" href="cart.html"><i class="fa fa-shopping-cart"></i></a></li>
           <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-heart"></i></a></li>
           <li class="nav-item"><a class="btn btn-outline-light btn-sm ms-2" href="login.html">Login</a></li>
-          <li class="nav-item"><a class="btn btn-danger btn-sm ms-2" id="logoutBtn">Logout</a></li>
+          <li class="nav-item"><a class="btn btn-primary btn-sm ms-2" href="signup.html">Register</a></li>
         </ul>
       </div>
     </div>
   </nav>
-  <!-- heroSection -->
-    <header 
-  class="text-white text-center py-5" 
-  style="min-height:420px; display:flex; align-items:center; 
-         background-image: url('https://picsum.photos/1600/900'); 
-         background-size: cover; 
-         background-position: center; 
-         background-repeat: no-repeat; 
-         width:100%;">
-  <div class="container">
-    <h1 class="display-3 fw-bold text-stroke-2">Get in Touch With ShopNest</h1>
-    <p class="lead text-stroke-1">We’d love to hear from you. Whether you have a question, feedback, or need support, our team is here to help</p>
-    <a href="../pages/contact.html#generalForm" class="btn btn-primary btn-lg me-2">Contact Us Now</a>
-    <a href="../pages/shop.html" class="btn btn-outline-light btn-lg">Shop Collection</a>
-  </div>
-</header>
 
-  
-  <!-- Forms Other -->
-  <section class="container-fluid py-5 bg-light">
-  <div class="container">
-    <h1 class="text-center mb-4 text-primary fw-bold">
-      Get In Touch With ShopNest
-    </h1>
-    <p class="lead text-center text-muted mb-5">
-      We're here to assist you — whether you want to connect, sell, buy, or manage payments easily.
-    </p>
 
-    <!-- Tabs -->
-    <ul class="nav nav-tabs justify-content-center mb-4" id="contactTabs" role="tablist">
-      <li class="nav-item"><button class="nav-link active fw-bold" id="general-tab" data-bs-toggle="tab" data-bs-target="#generalForm" type="button" role="tab">General Inquiry</button></li>
-      <li class="nav-item"><button class="nav-link fw-bold" id="seller-tab" data-bs-toggle="tab" data-bs-target="#sellerForm" type="button" role="tab">Become a Seller</button></li>
-      <li class="nav-item"><button class="nav-link fw-bold" id="buyer-tab" data-bs-toggle="tab" data-bs-target="#buyerForm" type="button" role="tab">Buyer Account</button></li>
-      <li class="nav-item"><button class="nav-link fw-bold" id="payment-tab" data-bs-toggle="tab" data-bs-target="#paymentForm" type="button" role="tab">Payment Details</button></li>
-      <li class="nav-item"><button class="nav-link fw-bold" id="transfer-tab" data-bs-toggle="tab" data-bs-target="#transferForm" type="button" role="tab">Fund Transfer</button></li>
-      <li class="nav-item"><button class="nav-link fw-bold" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdrawForm" type="button" role="tab">Withdraw</button></li>
-    </ul>
 
-    <div class="tab-content" id="contactTabsContent">
-
-      <!-- 1️⃣ General Inquiry -->
-      <div class="tab-pane fade show active" id="generalForm" role="tabpanel">
-        <div class="bg-white p-4 rounded shadow-sm">
-          <h3 class="mb-4 text-primary fw-bold">Send Us a Message</h3>
-          <form id="form-general">
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label for="gName" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="gName" required>
-              </div>
-              <div class="col-md-6">
-                <label for="gEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="gEmail" required>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="gSubject" class="form-label">Subject</label>
-              <select class="form-select" id="gSubject">
-                <option>Complaint</option>
-                <option>Suggestion</option>
-                <option>Inquiry</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="mb-4">
-              <label for="gMessage" class="form-label">Message</label>
-              <textarea class="form-control" id="gMessage" rows="4" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 fw-bold">Send Message</button>
-          </form>
+ 
+  <div class="container my-5">
+    <div class="main-content">
+      <h1 class="text-center mb-4" style="color: var(--sn-accent-blue); font-weight: 700;">Get In Touch With ShopNest</h1>
+      <p class="lead text-center text-muted mb-5">
+        We're here to answer your questions and assist you quickly. Choose how you'd like to reach us.
+      </p>
+      
+      <div class="row g-5">
+        
+        <div class="col-lg-7">
+            <h3 class="mb-4 text-primary fw-bold">Send Us a Message</h3>
+            <form>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="nameInput" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="nameInput" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="emailInput" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="emailInput" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="subjectSelect" class="form-label">Subject</label>
+                    <select class="form-select" id="subjectSelect">
+                        <option selected value="General">General Inquiry</option>
+                        <option value="Seller">Become a Seller / Partnership</option> 
+                        <option value="Payment">Payment Issue / Refund Details</option> 
+                        <option value="Support">Technical Support</option>
+                        <option value="Order">Order Issue / Return</option>
+                        <option value="Feedback">Business Feedback</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="messageTextarea" class="form-label">Your Message</label>
+                    <textarea class="form-control" id="messageTextarea" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">
+                    Submit Inquiry <i class="bi bi-send-fill ms-2"></i>
+                </button>
+            </form>
         </div>
-      </div>
 
-      <!-- 2️⃣ Become a Seller -->
-      <div class="tab-pane fade" id="sellerForm" role="tabpanel">
-        <div class="bg-white p-4 rounded shadow-sm">
-          <h3 class="mb-4 text-primary fw-bold">Become a Seller</h3>
-          <form id="form-seller">
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label">Shop Name</label>
-                <input name="shopName" type="text" class="form-control" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" required>
-              </div>
-            </div>
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label">Phone</label>
-                <input type="tel" class="form-control" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Category</label>
-                <select class="form-select">
-                  <option>Electronics</option>
-                  <option>Fashion</option>
-                  <option>Home Decor</option>
-                  <option>Grocery</option>
-                  <option>Other</option>
-                </select>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Bank Account</label>
-              <input type="text" class="form-control" placeholder="Account Number or IBAN" required>
-            </div>
-            <button type="submit" class="btn btn-success w-100 fw-bold">Register as Seller</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- 3️⃣ Buyer Account -->
-      <div class="tab-pane fade" id="buyerForm" role="tabpanel">
-        <div class="bg-white p-4 rounded shadow-sm">
-          <h3 class="mb-4 text-primary fw-bold">Register Buyer Account</h3>
-          <form id="form-buyer">
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label">Full Name</label>
-                <input name="fullName" type="text" class="form-control" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" required>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Address</label>
-              <textarea class="form-control" rows="3" required></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Phone</label>
-              <input type="tel" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 fw-bold">Register Buyer</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- 4️⃣ Payment Details -->
-      <div class="tab-pane fade" id="paymentForm" role="tabpanel">
-        <div class="bg-white p-4 rounded shadow-sm">
-          <h3 class="mb-4 text-primary fw-bold">Payment Details</h3>
-          <form id="form-payment">
-            <div class="mb-3">
-              <label class="form-label">Account Title</label>
-              <input name="accountTitle" type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">IBAN</label>
-              <input name="iban" type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Bank Name</label>
-              <input name="bankName" type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Branch Code</label>
-              <input name="branchCode" type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">CNIC</label>
-              <input name="cnic" type="text" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-success w-100 fw-bold">Save Payment Info</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- 5️⃣ Fund Transfer -->
-      <div class="tab-pane fade" id="transferForm" role="tabpanel">
-        <div class="bg-white p-4 rounded shadow-sm">
-          <h3 class="mb-4 text-primary fw-bold">Buy & Sell Fund Transfer</h3>
-          <form id="form-transfer">
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label">Transaction ID</label>
-                <input name="txId" type="text" class="form-control" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Amount (PKR)</label>
-                <input name="amount" type="number" class="form-control" required>
-              </div>
-            </div>
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label">Buyer Name</label>
-                <input name="buyer" type="text" class="form-control" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Seller Name</label>
-                <input name="seller" type="text" class="form-control" required>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Seller Bank Details</label>
-              <input name="bankDetails" type="text" class="form-control" placeholder="Account Title, IBAN, Bank Name" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Upload Proof (optional)</label>
-              <input type="file" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary w-100 fw-bold">Submit Transfer</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- 6️⃣ Withdraw -->
-      <div class="tab-pane fade" id="withdrawForm" role="tabpanel">
-        <div class="bg-white p-4 rounded shadow-sm">
-          <h3 class="mb-4 text-primary fw-bold">Withdraw Funds</h3>
-          <form id="form-withdraw">
-            <div class="mb-3">
-              <label class="form-label">Amount (PKR)</label>
-              <input name="amount" type="number" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Bank Name</label>
-              <input name="bank" type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">IBAN</label>
-              <input name="iban" type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Upload Proof (optional)</label>
-              <input type="file" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-warning w-100 fw-bold">Submit Withdrawal</button>
-          </form>
-
-          <!-- Withdraw Table -->
-          <div class="table-responsive mt-4">
-            <table class="table table-bordered text-center">
-              <thead class="table-light">
-                <tr>
-                  <th>Amount</th>
-                  <th>Bank</th>
-                  <th>IBAN</th>
-                  <th>Status</th>
-                  <th>Proof</th>
-                </tr>
-              </thead>
-              <tbody id="withdraw-table-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-
-<!-- Map Section -->
- <section class="container-fluid">
-            <div class="contact-card shadow-sm d-flex flex-column flex-lg-row p-4 bg-white rounded gap-4 justify-content-around">
-               <div> <h4 class="mb-4">Direct Contact Information</h4>
+        <div class="col-lg-5">
+            <div class="contact-card shadow-sm">
+                <h4 class="mb-4">Direct Contact Information</h4>
                 
                 <div class="info-item">
                     <i class="bi bi-envelope-fill"></i>
@@ -338,16 +170,19 @@
                     <p class="text-secondary small mb-0">ShopNest Corporate HQ <br>123 Commerce Drive, Suite 500, City, State 10001</p>
                 </div>
                 
-                </div>
-<div class="c-left-border-i">
-     <div>
-                <h4 class="mb-3">Find Our Location</h4>
-                <div style="height: 60%; background-color: #ced4da; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #495057;">
-                   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.1148760772285!2d3.343598074132851!3d6.632652321887054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b93761e3f8ac9%3A0x48192ab478903046!2sShopNest%20Africa!5e0!3m2!1sen!2s!4v1759406352147!5m2!1sen!2s"  style="border:0; width: 100%; height:auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div> </div> </div>
-            </div>
-          </section>
+                <hr class="my-4">
 
+                <h4 class="mb-3">Find Our Location</h4>
+                <div style="height: 250px; background-color: #ced4da; border-radius: 6px; overflow: hidden;">
+                   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.1148760772285!2d3.343598074132851!3d6.632652321887054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b93761e3f8ac9%3A0x48192ab478903046!2sShopNest%20Africa!5e0!3m2!1sen!2s!4v1760455621245!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
    <!-- FAQs Section -->
 <section id="faqs" class="py-5 bg-white">
   <div class="container">
@@ -675,155 +510,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 <script type="module" src="../assets/js/app.js"></script>
-<script type="module">
-import { auth, db, doc, setDoc } from "../assets/js/firebase.js"; // path: adjust if needed
+<script scr="../assets/js/contact.js"></script>
+  <script scr="../assets/js/withdraw.js"></script>
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Show pending checkout summary on the payment tab (optional)
-  const pending = JSON.parse(localStorage.getItem("pendingCheckout") || "{}");
-  const place = document.getElementById("paymentSummary");
-  if (place && pending && Object.keys(pending).length) {
-    place.innerHTML = `
-      <div class="mb-3">
-        <p>Subtotal: PKR ${Number(pending.subtotal || 0).toLocaleString()}</p>
-        <p>Shipping: PKR ${Number(pending.shipping || 0).toLocaleString()}</p>
-        <p>Tax: PKR ${Number(pending.tax || 0).toLocaleString()}</p>
-        ${pending.discount ? `<p class="text-success">Discount: -PKR ${Number(pending.discount).toLocaleString()}</p>` : ''}
-        <p class="fw-bold">Total: PKR ${Number(pending.total || 0).toLocaleString()}</p>
-      </div>
-    `;
-  }
-
-  const form = document.getElementById("form-payment");
-  if (!form) return;
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Please log in to complete checkout.");
-      return;
-    }
-
-    // Collect payment/account fields (accountTitle, iban, bankName, branchCode, cnic)
-    const data = Object.fromEntries(new FormData(form).entries());
-    const pendingCheckout = JSON.parse(localStorage.getItem("pendingCheckout") || "{}");
-
-    const order = {
-      paymentInfo: {
-        accountTitle: data.accountTitle || null,
-        iban: data.iban ? String(data.iban) : null,
-        bankName: data.bankName || null,
-        branchCode: data.branchCode || null,
-        cnic: data.cnic || null
-      },
-      orderSummary: pendingCheckout || {},
-      status: "Payment Info Saved",
-      createdAt: new Date().toISOString()
-    };
-
-    try {
-      const orderId = Date.now().toString();
-      // Save under users/{uid}/orders/{orderId}
-      await setDoc(doc(db, "users", user.uid, "orders", orderId), order);
-
-      // Optional admin-friendly top-level copy
-      await setDoc(doc(db, "orders", orderId), {
-        uid: user.uid,
-        ...order
-      });
-
-      // Clear pending and cart
-      localStorage.removeItem("pendingCheckout");
-      const localUser = JSON.parse(localStorage.getItem("userData") || "{}");
-      localUser.cart = [];
-      localStorage.setItem("userData", JSON.stringify(localUser));
-      localStorage.removeItem(`cart_${user.email}`);
-      localStorage.removeItem("appliedCoupon");
-
-      // If you exported clearCartAfterCheckout function and can import it, call it here.
-      // Otherwise above localStorage clears suffice for frontend.
-
-      // Redirect to confirmation page with orderId
-      window.location.href = "../pages/checkout-confirmation.html?orderId=" + orderId;
-    } catch (err) {
-      console.error("Save order failed:", err);
-      alert("Could not save order. Try again.");
-    }
-  });
-});
-</script>
-  <script type="module">
-import { auth, db, doc, setDoc } from "../assets/js/firebase.js"; // adjust path
-import { clearCartAfterCheckout } from "../assets/js/cart.js";     // adjust path
-
-document.addEventListener("DOMContentLoaded", () => {
-  const pending = JSON.parse(localStorage.getItem("pendingCheckout") || "{}");
-  const place = document.getElementById("paymentSummary");
-  if (place && pending && Object.keys(pending).length) {
-    place.innerHTML = `
-      <p>Subtotal: PKR ${Number(pending.subtotal || 0).toLocaleString()}</p>
-      <p>Shipping: PKR ${Number(pending.shipping || 0).toLocaleString()}</p>
-      <p>Tax: PKR ${Number(pending.tax || 0).toLocaleString()}</p>
-      ${pending.discount ? `<p class="text-success">Discount: -PKR ${Number(pending.discount).toLocaleString()}</p>` : ''}
-      <p class="fw-bold">Total: PKR ${Number(pending.total).toLocaleString()}</p>
-    `;
-  }
-
-  const form = document.getElementById("form-payment");
-  if (!form) return;
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Please log in to complete checkout.");
-      return;
-    }
-
-    const formData = Object.fromEntries(new FormData(form).entries());
-
-    const pendingCheckout = JSON.parse(localStorage.getItem("pendingCheckout") || "{}");
-    const orderId = Date.now().toString();
-
-    const orderDoc = {
-      paymentInfo: {
-        accountTitle: formData.accountTitle || null,
-        iban: formData.iban || null,
-        bankName: formData.bankName || null,
-        branchCode: formData.branchCode || null,
-        cnic: formData.cnic || null
-      },
-      orderSummary: pendingCheckout || {},
-      status: "Payment Info Saved",
-      createdAt: new Date().toISOString(),
-      userEmail: user.email || null,
-      uid: user.uid
-    };
-
-    try {
-      // save under users/{uid}/orders/{orderId}
-      await setDoc(doc(db, "users", user.uid, "orders", orderId), orderDoc);
-
-      // optional: top-level orders for admin
-      await setDoc(doc(db, "orders", orderId), { uid: user.uid, ...orderDoc });
-
-      // clear cart everywhere
-      await clearCartAfterCheckout();
-
-      // redirect to confirmation page (order id)
-      window.location.href = "../pages/checkout-confirmation.html?orderId=" + orderId;
-    } catch (err) {
-      console.error("Save order failed:", err);
-      alert("Could not save order. Try again.");
-    }
-  });
-});
-</script>
-<script type="module" src="../assets/js/contact.js"></script>
-  <script type="module" src="../assets/js/firebase.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
