@@ -1,9 +1,9 @@
 // =======================================================
 // ✅ assets/js/firebase.js
-// Centralized Firebase Config + Helper Setup
+// Centralized Firebase Config + Helper Setup (Fixed Version)
 // =======================================================
 
-// Import Firebase SDK Modules (Latest v12+)
+// 🔥 Import Firebase SDK Modules (Latest v12+)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
   getAuth,
@@ -22,7 +22,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 // =======================================================
-// 🔥 Your Firebase Configuration (Project Settings → Config)
+// 🔧 Firebase Config
 // =======================================================
 const firebaseConfig = {
   apiKey: "AIzaSyCZUQ5Y5NrUw8O8qhN8EuNgV32AqAG13pA",
@@ -35,23 +35,23 @@ const firebaseConfig = {
 };
 
 // =======================================================
-// 🚀 Initialize Firebase Core Services
+// 🚀 Initialize Firebase
 // =======================================================
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 // =======================================================
-// 🧠 Firestore Helper Functions
+// 🧠 CART — Save & Fetch from Firestore
 // =======================================================
 
 /**
  * Save or update user's cart in Firestore.
- * Automatically merges if the document already exists.
+ * Creates new document if it doesn't exist.
  */
 export async function saveCartToFirestore(cart) {
   const user = auth.currentUser;
-  if (!user) return console.warn("User not logged in, skipping Firestore cart save.");
+  if (!user) return console.warn("⚠️ User not logged in, skipping Firestore cart save.");
 
   const userRef = doc(db, "users", user.uid);
 
@@ -60,14 +60,16 @@ export async function saveCartToFirestore(cart) {
       cart,
       updatedAt: new Date().toISOString(),
     });
+    console.log("🛒 Cart updated in Firestore ✅");
   } catch (err) {
-    // If user document doesn't exist, create one
+    console.warn("Document not found — creating new user doc...");
     await setDoc(userRef, {
       email: user.email,
       cart,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
+    console.log("🆕 New user document created ✅");
   }
 }
 
@@ -83,24 +85,54 @@ export async function getCartFromFirestore() {
     const snap = await getDoc(userRef);
     if (snap.exists()) return snap.data().cart || [];
   } catch (err) {
-    console.error("Failed to get Firestore cart:", err);
+    console.error("❌ Failed to get Firestore cart:", err);
   }
   return [];
 }
 
 // =======================================================
-// 🧩 Auth State Listener (optional global use)
+// 🔄 SYNC — Local User Data ↔ Firestore
+// =======================================================
+export async function syncUserData() {
+  const user = auth.currentUser;
+  if (!user) return console.warn("⚠️ No user logged in. Sync skipped.");
+
+  const local = JSON.parse(localStorage.getItem("userData") || "{}");
+  if (!local || Object.keys(local).length === 0) return console.warn("⚠️ No local data to sync.");
+
+  const userRef = doc(db, "users", user.uid);
+
+  try {
+    await updateDoc(userRef, {
+      ...local,
+      updatedAt: new Date().toISOString(),
+    });
+    console.log("✅ Synced user data with Firestore");
+  } catch (err) {
+    console.warn("User doc not found — creating new one...");
+    await setDoc(userRef, {
+      email: user.email,
+      ...local,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    console.log("🆕 Created user document & synced data ✅");
+  }
+}
+
+// =======================================================
+// 👥 Auth State Listener (optional global)
 // =======================================================
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("✅ User logged in:", user.email);
+    console.log("✅ Logged in:", user.email);
   } else {
-    console.log("🚪 User logged out");
+    console.log("🚪 Logged out");
   }
 });
 
 // =======================================================
-// ✅ Exports
+// 📦 Exports
 // =======================================================
 export {
   app,
