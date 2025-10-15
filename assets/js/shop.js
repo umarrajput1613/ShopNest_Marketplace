@@ -200,17 +200,21 @@ function getLocalCart() {
 }
 
 // --- Add Product to Cart ---
-function addToCart(product) {
-  const cart = getLocalCart();
-  const exists = cart.find((item) => item.id === product.id);
-  if (exists) {
-    alert("This product is already in your cart!");
-    return;
+// 🛒 Add To Cart Event
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".btn-add-to-cart")) {
+    e.preventDefault();
+    const card = e.target.closest(".product-card");
+
+    const title = card.querySelector(".product-title").textContent;
+    const price = Number(card.querySelector(".product-price").textContent.replace("$", ""));
+    const thumbnail = card.querySelector("img").src;
+    const id = Date.now();
+
+    addToCart({ id, title, price, thumbnail }); // ✅ Imported function used here
   }
-  cart.push({ ...product, qty: 1 });
-  setLocalCart(cart);
-  alert("✅ Added to Cart Successfully!");
-}
+});
+
 
 // --- Attach Event Listeners after render ---
 function setupAddToCartButtons() {
