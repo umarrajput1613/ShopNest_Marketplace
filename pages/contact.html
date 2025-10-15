@@ -753,6 +753,75 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+  <script type="module">
+import { auth, db, doc, setDoc } from "../assets/js/firebase.js"; // adjust path
+import { clearCartAfterCheckout } from "../assets/js/cart.js";     // adjust path
+
+document.addEventListener("DOMContentLoaded", () => {
+  const pending = JSON.parse(localStorage.getItem("pendingCheckout") || "{}");
+  const place = document.getElementById("paymentSummary");
+  if (place && pending && Object.keys(pending).length) {
+    place.innerHTML = `
+      <p>Subtotal: PKR ${Number(pending.subtotal || 0).toLocaleString()}</p>
+      <p>Shipping: PKR ${Number(pending.shipping || 0).toLocaleString()}</p>
+      <p>Tax: PKR ${Number(pending.tax || 0).toLocaleString()}</p>
+      ${pending.discount ? `<p class="text-success">Discount: -PKR ${Number(pending.discount).toLocaleString()}</p>` : ''}
+      <p class="fw-bold">Total: PKR ${Number(pending.total).toLocaleString()}</p>
+    `;
+  }
+
+  const form = document.getElementById("form-payment");
+  if (!form) return;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Please log in to complete checkout.");
+      return;
+    }
+
+    const formData = Object.fromEntries(new FormData(form).entries());
+
+    const pendingCheckout = JSON.parse(localStorage.getItem("pendingCheckout") || "{}");
+    const orderId = Date.now().toString();
+
+    const orderDoc = {
+      paymentInfo: {
+        accountTitle: formData.accountTitle || null,
+        iban: formData.iban || null,
+        bankName: formData.bankName || null,
+        branchCode: formData.branchCode || null,
+        cnic: formData.cnic || null
+      },
+      orderSummary: pendingCheckout || {},
+      status: "Payment Info Saved",
+      createdAt: new Date().toISOString(),
+      userEmail: user.email || null,
+      uid: user.uid
+    };
+
+    try {
+      // save under users/{uid}/orders/{orderId}
+      await setDoc(doc(db, "users", user.uid, "orders", orderId), orderDoc);
+
+      // optional: top-level orders for admin
+      await setDoc(doc(db, "orders", orderId), { uid: user.uid, ...orderDoc });
+
+      // clear cart everywhere
+      await clearCartAfterCheckout();
+
+      // redirect to confirmation page (order id)
+      window.location.href = "../pages/checkout-confirmation.html?orderId=" + orderId;
+    } catch (err) {
+      console.error("Save order failed:", err);
+      alert("Could not save order. Try again.");
+    }
+  });
+});
+</script>
+
 
 </body>
 </html>
