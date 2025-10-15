@@ -92,6 +92,7 @@ async function deleteCartItem(itemId) {
 
     renderCart();
     renderUserCollection(updated);
+    toggleEmptyCartSection();
   } catch (err) {
     console.error("❌ Delete item error:", err);
   }
@@ -293,6 +294,7 @@ export async function addToCart(product) {
   renderCart();
   renderUserCollection(merged);
   showMsg(existing ? "Quantity updated 🛒" : "Added to cart ✅");
+  toggleEmptyCartSection();
 }
 
 /* ===== Auth State Sync ===== */
@@ -314,6 +316,7 @@ onAuthStateChanged(auth, async (user) => {
 document.addEventListener("DOMContentLoaded", () => {
   renderCart();
   renderOrderSummary();
+  toggleEmptyCartSection();
 });
 
 
@@ -415,7 +418,8 @@ function toggleEmptyCartSection() {
   const emptySection = document.getElementById("emptyCart");
   if (!emptySection) return; // if the element isn't found, exit safely
 
-  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const local = JSON.parse(localStorage.getItem("userData") || "{}");
+const cart = Array.isArray(local.cart) ? local.cart : [];
 
   if (cart.length > 0) {
     // hide empty cart section
