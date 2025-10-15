@@ -19,7 +19,7 @@
 
   <!-- Google Fonts (optional) -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
-  
+
   <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css">
 
@@ -38,7 +38,7 @@
       <img src="../assets/favicon/favicon_32x32.png" alt="logo" width="45px"height="25px" class="me-2">
       <a class="navbar-brand fw-bold" href="home.html">ShopNest</a>
     </div>
-      
+
       <form class="d-none d-lg-flex mx-3">
         <input class="form-control form-control-sm me-2" type="search" placeholder="Search products..." id="searchBox">
         <button class="btn btn-outline-light btn-sm">Search</button>
@@ -56,6 +56,7 @@
           <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart-fill"></i></a></li>
           <li class="nav-item"><a class="btn btn-outline-light btn-sm ms-2" href="login.html">Login</a></li>
           <li class="nav-item"><a class="btn btn-primary btn-sm ms-2" href="signup.html">Register</a></li>
+          <li class="nav-item"><a class="btn btn-danger btn-sm ms-2" id="logoutBtn">Logout</a></li>
         </ul>
       </div>
     </div>
@@ -63,7 +64,7 @@
 <header id="heroSection" class="bg-dark text-white text-center py-5" 
   style="min-height:420px; display:flex; align-items:center; transition: background-image 1s ease-in-out; background-image: url('https://picsum.photos/1600/900'); background-size: cover; background-position: center;">
   <div class="container">
-    
+
     <h1 class="display-3 fw-bold text-stroke-2">Shop The Collection</h1>
     <p class="lead text-stroke-1">Find the best deals, hand-picked for you.</p>
     <a href="../pages/cart.html" class="btn btn-primary btn-lg me-2">Go To Cart</a>
@@ -73,11 +74,11 @@
   <!-- Main Content -->
   <section class="container-fluid p-0">
     <div class="main-content mx-auto px-3 py-4">
-      
 
 
-      
-      
+
+
+
       <div class="row g-4">
         <!-- Sidebar Filters -->
        <div class="col-lg-3 index-10">
@@ -305,14 +306,14 @@
             <!-- card -->
            <div class="col">
   <div class="card product-card h-100 shadow-sm border-1 rounded-4">
-    
+
     <!-- Product Thumbnail -->
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFSVSz9BJCZhyYyhGyS6YJJnLproer-Sz0mASQ-7DWkDo1ScIGWEhWv5rQ1FgrBCuV-3w&usqp=CAU" 
          class="card-img-top" 
          alt="Ergo-Flow Wireless Mouse">
 
     <div class="card-body text-center">
-      
+
       <!-- Category -->
       <p class="mb-1 small text-primary fw-bold">Electronics</p>
 
@@ -407,10 +408,10 @@
       <a href="products.html" class="btn btn-dark btn-lg">Up to 50% Off → Shop Now</a>
     </div>
   </section>
-  
-    
-    
-  
+
+
+
+
 
   <!-- Recommended Section -->
 <section class="container-fluid my-5">
@@ -565,7 +566,7 @@
       currentPrice.textContent = priceRange.value;
     });
   </script>
-  <script src="../assets/js/shop.js"></script>
+  <script type="module" src="../assets/js/shop.js"></script>
 
 </body>
 </html>
