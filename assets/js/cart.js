@@ -101,9 +101,11 @@ async function deleteCartItem(itemId) {
 function mergeCart(cart) {
   const merged = [];
   for (const item of cart) {
-    const existing = merged.find((p) => String(p.id) === String(item.id));
-    if (existing) existing.qty += Number(item.qty);
-    else merged.push({ ...item, qty: Number(item.qty) });
+    const id = String(item.id);
+    const existing = merged.find(p => p.id === id);
+    const cleanPrice = Number(String(item.price).replace(/[^0-9.]/g, "")) || 0;
+    if (existing) existing.qty += Number(item.qty) || 1;
+    else merged.push({ ...item, id, price: cleanPrice, qty: Number(item.qty) || 1 });
   }
   return merged;
 }
