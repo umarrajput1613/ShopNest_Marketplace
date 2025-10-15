@@ -410,6 +410,23 @@ export async function clearCartAfterCheckout() {
   }
 }
 
+// ====== 🧩 Toggle Empty Cart Section ======
+function toggleEmptyCartSection() {
+  const emptySection = document.getElementById("emptyCart");
+  if (!emptySection) return; // if the element isn't found, exit safely
+
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+  if (cart.length > 0) {
+    // hide empty cart section
+    emptySection.style.display = "none";
+  } else {
+    // show empty cart section
+    emptySection.style.display = "block";
+  }
+}
+
+
 // expose for non-module usage too
 window.clearCartAfterCheckout = clearCartAfterCheckout;
 
