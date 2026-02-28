@@ -85,6 +85,7 @@ async function loginFunc(e) {
   } catch (err) {
     console.error(err);
     showMsg(err.message);
+    alert(err.message);
   }
 }
 
