@@ -47,7 +47,7 @@ function renderProducts() {
              class="card-img-top"
              alt="${p.title}"
              style="height:180px; object-fit:contain; background:#f8f9fa;">
-        <div class="card-body text-center" style="display:flex;align-item:space-between;">
+        <div class="card-body text-center" style="display:flex;justify-content:space-between;">
           <p class="mb-1 small text-primary fw-bold">${p.category}</p>
           <h5 class="product-title">${p.title}</h5>
           <p class="small text-muted">${p.description.slice(0, 70)}...</p>
