@@ -47,7 +47,7 @@ function renderProducts() {
              class="card-img-top"
              alt="${p.title}"
              style="height:180px; object-fit:contain; background:#f8f9fa;">
-        <div class="card-body text-center">
+        <div class="card-body text-center" style="display:flex;align-item:space-between;">
           <p class="mb-1 small text-primary fw-bold">${p.category}</p>
           <h5 class="product-title">${p.title}</h5>
           <p class="small text-muted">${p.description.slice(0, 70)}...</p>
@@ -56,12 +56,12 @@ function renderProducts() {
             <span class="text-danger small">(-${p.discountPercentage || 0}%)</span>
           </p>
           <p class="mb-2">⭐ ${p.rating} / 5</p>
-        <div style="margin:0px; display:flex; align-items:end; justify-content:center;"> <a href="#" 
+        <a href="#" 
    class="btn btn-sm btn-add-to-cart text-white w-100" 
    data-id="${p.id}" 
    style="background:#0d6efd;">
    <i class="bi bi-cart-fill me-1"></i> Add to Cart
-</a></div>
+</a>
         </div>
       </div>
     `;
